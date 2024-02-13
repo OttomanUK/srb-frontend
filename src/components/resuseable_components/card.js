@@ -4,8 +4,7 @@ import './card.css'; // Import a CSS file for styling (create Card.css in the sa
 const Card = ({ title, content }) => {
   return (
     <div className="card-container">
-      <div className="card-header">
-      <h1>{title}</h1> 
+      <div className="card-header">{title}
       </div>
       <div className="card-content">
         <p>{content}</p>
