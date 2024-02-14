@@ -3,7 +3,7 @@ import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
 import PiePlot from '../components/plots/pie_plots.jsx';
 import BarPlot from '../components/plots/barplot.jsx';
 import Card from "../components/resuseable_components/card.jsx";
-import jsonData from '../components/plots/dummyData.json';
+import jsonData from '../data/dummyData.json';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
 import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';

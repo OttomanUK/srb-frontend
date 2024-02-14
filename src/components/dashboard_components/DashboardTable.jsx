@@ -18,270 +18,56 @@ import {
   IconButton,
   Tooltip,
 } from "@material-tailwind/react";
- 
-const TABS = [
-  {
-    label: "All",
-    value: "all",
-  },
-  {
-    label: "Anomalous",
-    value: "anomalous",
-  },
-  {
-    label: "Non Anomalous",
-    value: "non-anomalous",
-  },
-];
- 
-const TABLE_HEAD = [  
-    'srb_invoice_id',
-    'pos_id',
-    'ntn',
-    'name',
-    'invoice_date',
-    'invoice_no',
-    'rate_value',
-    'sales_value',
-    'sales_tax',
-    'consumer_name',
-    'consumer_ntn',
-    'consumer_address',
-    'tariff_code',
-    'extra_info',
-    'pos_user',
-    'pos_pass',
-    'is_active',
-    'created_date_time',
-    'invoice_type',
-    'consider_for_Annex',
-];
- 
-const TABLE_ROWS = [
-    {
-        srb_invoice_id: 1,
-        pos_id: 'POS123',
-        ntn: 'NTN123',
-        name: 'Company A',
-        invoice_date: '2024-02-12',
-        invoice_no: 'INV001',
-        rate_value: 100,
-        sales_value: 120,
-        sales_tax: 20,
-        consumer_name: 'John Doe',
-        consumer_ntn: 'NTN456',
-        consumer_address: '123 Main St',
-        tariff_code: 'TC123',
-        extra_info: 'Additional info',
-        pos_user: 'user123',
-        pos_pass: 'pass123',
-        is_active: true,
-        created_date_time: '2024-02-12T12:00:00',
-        invoice_type: 'TypeA',
-        consider_for_Annex: true,
-      },
-      {
-        srb_invoice_id: 2,
-        pos_id: 'POS456',
-        ntn: 'NTN789',
-        name: 'Company B',
-        invoice_date: '2024-02-15',
-        invoice_no: 'INV002',
-        rate_value: 150,
-        sales_value: 180,
-        sales_tax: 25,
-        consumer_name: 'Jane Doe',
-        consumer_ntn: 'NTN101',
-        consumer_address: '456 Oak St',
-        tariff_code: 'TC456',
-        extra_info: 'Additional details',
-        pos_user: 'user456',
-        pos_pass: 'pass456',
-        is_active: false,
-        created_date_time: '2024-02-15T14:30:00',
-        invoice_type: 'TypeB',
-        consider_for_Annex: false,
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      {
-        "srb_invoice_id": 2,
-        "pos_id": "POS124",
-        "ntn": "NTN124",
-        "name": "Company B",
-        "invoice_date": "2024-02-13",
-        "invoice_no": "INV002",
-        "rate_value": 95,
-        "sales_value": 110,
-        "sales_tax": 15,
-        "consumer_name": "Jane Smith",
-        "consumer_ntn": "NTN457",
-        "consumer_address": "456 Oak Ave",
-        "tariff_code": "TC124",
-        "extra_info": "Additional details",
-        "pos_user": "user124",
-        "pos_pass": "pass124",
-        "is_active": true,
-        "created_date_time": "2024-02-13T12:00:00",
-        "invoice_type": "TypeB",
-        "consider_for_Annex": false
-      },
-      
-];
+
+
  
 export function MembersTable() {
+  const TABS = [
+    {
+      label: "All",
+      value: "all",
+    },
+    {
+      label: "Anomalous",
+      value: "anomalous",
+    },
+    {
+      label: "Non Anomalous",
+      value: "non-anomalous",
+    },
+  ];
+   
+  const TABLE_HEAD = [  
+      'pos_id',
+      'ntn',
+      'rate_value',
+      'sales_value',
+      'consumer_name',
+      'consumer_address',
+      'extra_info',
+      'is_active',
+      'created_date_time',
+      'invoice_type',
+      'consider_for_Annex',
+      'month',
+      'weekday',
+      'day',
+      'time_seconds',
+      'anomaly'
+  
+  
+  ];
+  
+  const jsonData = JSON.stringify([{"pos_id":395,"ntn":55,"rate_value":13,"sales_value":1327.44,"consumer_name":0,"consumer_ntn":0,"consumer_address":0,"extra_info":0,"is_active":1,"created_date_time":1699967059000,"invoice_type":1,"consider_for_Annex":1,"month":11,"weekday":1,"day":14,"time_seconds":47059,"anomaly":0},
+  {"pos_id":395,"ntn":55,"rate_value":13,"sales_value":1327.44,"consumer_name":0,"consumer_ntn":0,"consumer_address":0,"extra_info":0,"is_active":1,"created_date_time":1699967059000,"invoice_type":1,"consider_for_Annex":1,"month":11,"weekday":1,"day":14,"time_seconds":47059,"anomaly":0}])
+  
+  const text = JSON.parse(jsonData)
+  console.log(text)
+  
+  const TableRows = [
+    text[0],
+    text[1]
+  ]
   return (
     <Card className='dark:border-slate-700 dark:bg-slate-800' >
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -334,15 +120,15 @@ export function MembersTable() {
             </tr>
           </thead>
           <tbody>
-            {TABLE_ROWS.map(
-              ({ name, srb_invoice_id, pos_id, ntn, invoice_date, invoice_no, rate_value, sales_value, sales_tax, consumer_name, consumer_ntn, consumer_address, tariff_code, extra_info, pos_user, pos_pass, is_active, created_date_time, invoice_type, consider_for_Annex }, index) => {
-                const isLast = index === TABLE_ROWS.length - 1;
+            {TableRows.map(
+              ({ pos_id, ntn, rate_value, sales_value, consumer_name, consumer_ntn, consumer_address, extra_info, is_active, created_date_time, invoice_type, consider_for_Annex, month, weekday, day, time_seconds, anomaly}, index) => {
+                const isLast = index === TableRows - 1;
                 const classes = isLast
                   ? "p-4"
                   : "p-4 border-b border-blue-gray-50";
  
                 return (
-                  <tr key={name}>
+                  <tr key={pos_id}>
                     <td className={classes}>
                       <div className="flex items-center gap-3">
                         <div className="flex flex-col">
@@ -351,7 +137,7 @@ export function MembersTable() {
                             color="blue-gray"
                             className="font-normal"
                           >
-                            {name}
+                            {pos_id}
                           </Typography>
                         </div>
                       </div>
@@ -363,7 +149,7 @@ export function MembersTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {srb_invoice_id}
+                          {ntn}
                         </Typography>
                       </div>
                     </td>
@@ -374,7 +160,7 @@ export function MembersTable() {
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {pos_id}
+                          {rate_value}
                         </Typography>
                       </div>
                     </td>
@@ -384,61 +170,7 @@ export function MembersTable() {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {ntn}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {invoice_date}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {invoice_no}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {rate_value}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
                         {sales_value}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {sales_tax}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {consumer_name}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -465,34 +197,7 @@ export function MembersTable() {
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {tariff_code}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
                         {extra_info}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {pos_user}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {pos_pass}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -531,7 +236,51 @@ export function MembersTable() {
                         {consider_for_Annex}
                       </Typography>
                     </td>
-                 
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {month}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {weekday}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {day}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {time_seconds}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {anomaly}
+                      </Typography>
+                    </td>
                   </tr>
                 );
               },

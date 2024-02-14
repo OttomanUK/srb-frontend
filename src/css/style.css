@@ -8,3 +8,7 @@
 @import 'additional-styles/flatpickr.css';
 
 @import 'tailwindcss/utilities';
+
+td{
+    padding: 16px;
+}
