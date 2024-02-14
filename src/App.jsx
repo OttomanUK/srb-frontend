@@ -1,19 +1,21 @@
 import React, { useEffect } from 'react';
-import {
-  Routes,
-  Route,
-  useLocation
-} from 'react-router-dom';
+// import {
+//   Routes,
+//   Route,
+//   useLocation
+// } from 'react-router-dom';
+import {  BrowserRouter as Router,Routes, Route, useNavigate, useLocation } from "react-router-dom";
 
 import './css/style.css';
+import './components/charts/ChartjsConfig';
+import Analytics from './pages/Analytics';
 
-import './charts/ChartjsConfig';
 
 // Import pages
 import Dashboard from './pages/Dashboard';
 
 function App() {
-
+ 
   const location = useLocation();
 
   useEffect(() => {
@@ -23,11 +25,11 @@ function App() {
   }, [location.pathname]); // triggered on route change
 
   return (
-    <>
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
+        {/* <Route exact path="/" element={<Dashboard />} /> */}
+        <Route exact path="/" element={<Analytics />} />
+        {/* <Route exact path="/" element={<LoginForm />} /> */}
       </Routes>
-    </>
   );
 }
 

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Transition from '../utils/Transition';
 
-import UserAvatar from '../images/srb-logo.png';
+import UserAvatar from '../../images/srb-logo.png';
 
 function DropdownProfile({
   align

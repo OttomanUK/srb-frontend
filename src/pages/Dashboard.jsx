@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 
-import Sidebar from '../partials/Sidebar';
-import Header from '../partials/Header';
-import WelcomeBanner from '../partials/dashboard/WelcomeBanner';
-import DashboardAvatars from '../partials/dashboard/DashboardAvatars';
-import FilterButton from '../components/DropdownFilter';
-import Datepicker from '../components/Datepicker';
-import MembersTable from '../partials/dashboard/DashboardTable';
+import Sidebar from '../components/resuseable_components/Sidebar';
+import Header from '../components/resuseable_components/Header';
+import WelcomeBanner from '../components/dashboard_components/WelcomeBanner';
+import DashboardAvatars from '../components/dashboard_components/DashboardAvatars';
+import FilterButton from '../components/resuseable_components/DropdownFilter';
+import Datepicker from '../components/resuseable_components/Datepicker';
+import MembersTable from '../components/dashboard_components/DashboardTable';
 
 
 
