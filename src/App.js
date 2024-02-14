@@ -5,7 +5,7 @@ import Analytics from "./components/plots/showAll.js"
 import styled from "styled-components";
 import AccountBox from "./components/resuseable_components/accountBox/index.jsx"
 import InvoiceDetails from "./components/pages/invoice_detail/invoice_detail.js"
-import {data} from "./data/singleData.js"
+import {data1} from "./data/singleData.js"
 
 const AppContainer = styled.div`
   width: 100vw;
@@ -23,7 +23,7 @@ export default function App() {
           <Route exact path="/" element={<AccountBox />} />
           
           <Route exact path="/Analytics" element={<Analytics  />} />
-          <Route exact path="/InvoiceDetails" element={<InvoiceDetails data={data}  />} />
+          <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails data1={data1}  />} />
           
         </Routes>
         </Router>

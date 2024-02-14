@@ -10,10 +10,11 @@ import {
 } from "../../resuseable_components/accountBox/common";
 import { Marginer } from "../../resuseable_components/marginer";
 import { AccountContext } from '../../resuseable_components/accountBox/accountContext';
-
+import {login,getPosInvoice,submit_data,getSingleInvoice} from "../../action/action";
+import { useDispatch } from "react-redux";
 export function LoginForm(props) {
   const { switchToSignup } = useContext(AccountContext);
-
+  const dispatch=useDispatch()
   // State variables for storing input values
   const [formData, setFormData] = useState({
     email: "",
@@ -28,12 +29,16 @@ export function LoginForm(props) {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit =  (e) =>  {
     e.preventDefault();
-
+    // dispatch(getPosInvoice(387))
+    // dispatch(login(formData))
+    // dispatch(submit_data(formData))
+    dispatch(getSingleInvoice(1))
+console.log(formData)
     // Use the 'email' and 'password' variables as needed
-    console.log("Email:", formData.email);
-    console.log("Password:", formData.password);
+    // console.log("Email:", formData.email);
+    // console.log("Password:", formData.password);
 
     // Add your authentication logic or data submission logic here
   };
