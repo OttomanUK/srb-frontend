@@ -1,5 +1,5 @@
 import React from 'react';
-import LineChart from '../../charts/LineChart02';
+import LineChart from '../charts/LineChart02';
 
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';

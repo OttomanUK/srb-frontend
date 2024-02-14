@@ -47,14 +47,9 @@ function Dashboard() {
 
             {/* Cards */}
             <div>
-
               {/* Line chart (Acme Plus) */}
               <MembersTable/>
-            
-              {/* Line chart (Acme Advanced) */}
-         
-             
-              
+              {/* Line chart (Acme Advanced) */} 
             </div>
 
           </div>

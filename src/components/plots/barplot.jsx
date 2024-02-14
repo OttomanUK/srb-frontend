@@ -49,7 +49,7 @@ const BarPlot = ({ data, chartBy }) => {
   }, [data, chartBy]);
 
   return (
-    <div className='flex flex-col col-span-full sm:col-span-6 xl:col-span-4'>
+    <div>
       <h2>Top 5 Anomalies by {chartBy}</h2>
 
       <Plot

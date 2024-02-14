@@ -1,6 +1,6 @@
 import React from 'react';
-import Tooltip from '../../components/Tooltip';
-import BarChart from '../../charts/BarChart02';
+import Tooltip from '../../components/resuseable_components/Tooltip';
+import BarChart from '../charts/BarChart02';
 
 // Import utilities
 import { tailwindConfig } from '../../utils/Utils';

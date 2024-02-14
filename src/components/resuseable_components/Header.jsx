@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import SearchModal from './ModalSearch';
-import Notifications from './DropdownNotifications';
-import Help from './DropdownHelp';
-import UserMenu from './DropdownProfile';
-import ThemeToggle from './ThemeToggle';
+import SearchModal from '../resuseable_components/ModalSearch';
+import Notifications from '../resuseable_components/DropdownNotifications';
+import Help from '../resuseable_components/DropdownHelp';
+import UserMenu from '../resuseable_components/DropdownProfile';
+import ThemeToggle from '../resuseable_components/ThemeToggle';
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
