@@ -13,6 +13,9 @@ import Analytics from './pages/Analytics';
 
 // Import pages
 import Dashboard from './pages/Dashboard';
+import Login from './pages/Login';
+import Register from './pages/Register';
+
 
 function App() {
  
@@ -27,8 +30,11 @@ function App() {
   return (
       <Routes>
         {/* <Route exact path="/" element={<Dashboard />} /> */}
-        <Route exact path="/" element={<Analytics />} />
+        {/* <Route exact path="/" element={<Analytics />} /> */}
         {/* <Route exact path="/" element={<LoginForm />} /> */}
+        {/* <Route exact path="/" element={<Settings/>} /> */}
+        {/* <Route exact path="/" element={<Login/>} /> */}
+        <Route exact path="/" element={<Register/>} />
       </Routes>
   );
 }

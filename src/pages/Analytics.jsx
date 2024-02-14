@@ -5,6 +5,9 @@ import BarPlot from '../components/plots/barplot.jsx';
 import Card from "../components/resuseable_components/card.jsx";
 import jsonData from '../components/plots/dummyData.json';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
+import Header from '../components/resuseable_components/Header.jsx';
+import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
+
 // Adjust the path based on your project structure
 // import PiePlot from './pie_plots';
 
@@ -38,16 +41,20 @@ const Analytics = () => {
     <div className="flex h-screen overflow-hidden">
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-          {/* Other components */}
-          {/* <Card title={"100"} content={"Anomaly"} /> */}
-          <TimeSeriesPlot data={dummyData} />
-          {/* <Card title={"100"} content={"Anomaly"} /> */}
+          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+            <WelcomeBanner/>
+              {/* Other components */}
+              {/* <Card title={"100"} content={"Anomaly"} /> */}
+            <TimeSeriesPlot data={dummyData} />
+            {/* <Card title={"100"} content={"Anomaly"} /> */}
 
-          <PiePlot data={dummyData} chartBy="ntn" />
-          <BarPlot data={dummyData} chartBy="ntn" />
-          {/* or */}
-          <PiePlot data={dummyData} chartBy="pos_id" />
-          <BarPlot data={dummyData} chartBy="pos_id" />
+            <PiePlot data={dummyData} chartBy="ntn" />
+            <BarPlot data={dummyData} chartBy="ntn" />
+            {/* or */}
+            <PiePlot data={dummyData} chartBy="pos_id" />
+            <BarPlot data={dummyData} chartBy="pos_id" />
+          </div>
         </div>
     </div>
   );

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import Tooltip from '../../components/Tooltip';
-import RealtimeChart from '../../charts/RealtimeChart';
+import Tooltip from '../resuseable_components/Tooltip';
+import RealtimeChart from '../charts/RealtimeChart';
 
 // Import utilities
-import { tailwindConfig, hexToRGB } from '../../utils/Utils';
+import { tailwindConfig, hexToRGB } from '../utils/Utils';
 
 function DashboardCard05() {
 

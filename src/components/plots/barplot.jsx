@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
+import { tailwindConfig, hexToRGB } from '../utils/Utils';
 
 const BarPlot = ({ data, chartBy }) => {
   const [topAnomalyData, setTopAnomalyData] = useState([]);
@@ -48,7 +49,7 @@ const BarPlot = ({ data, chartBy }) => {
   }, [data, chartBy]);
 
   return (
-    <div>
+    <div className='flex flex-col col-span-full sm:col-span-6 xl:col-span-4'>
       <h2>Top 5 Anomalies by {chartBy}</h2>
 
       <Plot
