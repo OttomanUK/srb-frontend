@@ -5,16 +5,17 @@ import React, { useEffect } from 'react';
 //   useLocation
 // } from 'react-router-dom';
 import {  BrowserRouter as Router,Routes, Route, useNavigate, useLocation } from "react-router-dom";
-
+import InvoiceDetails from "../src/pages/invoice_detail/invoice_detail.jsx"
 import './css/style.css';
 import './components/charts/ChartjsConfig';
 import Analytics from './pages/Analytics';
 
-
+import Settings from './pages/Settings';
 // Import pages
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import {data1} from "./data/singleData.js"
 
 
 function App() {
@@ -30,11 +31,12 @@ function App() {
   return (
       <Routes>
         <Route exact path="/" element={<Dashboard />} />
-        {/* <Route exact path="/" element={<Analytics />} /> */}
-        {/* <Route exact path="/" element={<LoginForm />} /> */}
-        {/* <Route exact path="/" element={<Settings/>} /> */}
+        <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails data1={data1}  />} />
+        <Route exact path="/Analytics" element={<Analytics />} />
+        <Route exact path="/login" element={<Login />} />
+        <Route exact path="/setting" element={<Settings/>} />
         {/* <Route exact path="/" element={<Login/>} /> */}
-        {/* <Route exact path="/" element={<Register/>} /> */}
+        <Route exact path="/register" element={<Register/>} />
       </Routes>
   );
 }
