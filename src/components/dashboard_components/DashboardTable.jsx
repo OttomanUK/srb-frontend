@@ -1,73 +1,47 @@
-import React from 'react'; 
+import React,{useState,useEffect} from 'react'; 
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { PencilIcon, UserPlusIcon } from "@heroicons/react/24/solid";
-
+import Footer from './DashboardFooter';
+import TableRow from './DashboardTableRow';
 import {
   Card,
   CardHeader,
   Input,
   Typography,
-  Button,
   CardBody,
-  Chip,
-  CardFooter,
   Tabs,
   TabsHeader,
   Tab,
-  Avatar,
-  IconButton,
-  Tooltip,
 } from "@material-tailwind/react";
 
 
  
 export function MembersTable() {
   const TABS = [
-    {
-      label: "All",
-      value: "all",
-    },
-    {
-      label: "Anomalous",
-      value: "anomalous",
-    },
-    {
-      label: "Non Anomalous",
-      value: "non-anomalous",
-    },
+    { label: "Anomalous", value: "True" },
+    { label: "Non Anomalous", value: "False" },
   ];
-   
-  const TABLE_HEAD = [  
-      'pos_id',
-      'ntn',
-      'rate_value',
-      'sales_value',
-      'consumer_name',
-      'consumer_address',
-      'extra_info',
-      'is_active',
-      'created_date_time',
-      'invoice_type',
-      'consider_for_Annex',
-      'month',
-      'weekday',
-      'day',
-      'time_seconds',
-      'anomaly'
-  
-  
+  const [anomalous,setAnomolous]=useState("True");
+
+  const TABLE_HEAD = [
+    'pos_id', 'ntn', 'rate_value', 'sales_value', 'consumer_name', 'consumer_address', 'extra_info', 'is_active', 'created_date_time', 'invoice_type', 'consider_for_Annex', 'month', 'weekday', 'day', 'time_seconds', 'anomaly'
   ];
+
+  const [tableData, setTableData] = useState([]);
+  useEffect(() => {
+    try {
+      const jsonData = JSON.stringify([
+        {"pos_id": 395, "ntn": 55, "rate_value": 13, "sales_value": 1327.44, "consumer_name": 0, "consumer_ntn": 0, "consumer_address": 0, "extra_info": 0, "is_active": 1, "created_date_time": 1699967059000, "invoice_type": 1, "consider_for_Annex": 1, "month": 11, "weekday": 1, "day": 14, "time_seconds": 47059, "anomaly": 0},
+        {"pos_id": 395, "ntn": 55, "rate_value": 13, "sales_value": 1327.44, "consumer_name": 0, "consumer_ntn": 0, "consumer_address": 0, "extra_info": 0, "is_active": 1, "created_date_time": 1699967059000, "invoice_type": 1, "consider_for_Annex": 1, "month": 11, "weekday": 1, "day": 14, "time_seconds": 47059, "anomaly": 1}
+      ]);
+      const parsedData = JSON.parse(jsonData);
+      console.log("hi")
+      setTableData(parsedData);
+    } catch (error) {
+      console.error('Error parsing JSON data:', error.message);
+      // Handle error as needed
+    }
+  }, [anomalous]);
   
-  const jsonData = JSON.stringify([{"pos_id":395,"ntn":55,"rate_value":13,"sales_value":1327.44,"consumer_name":0,"consumer_ntn":0,"consumer_address":0,"extra_info":0,"is_active":1,"created_date_time":1699967059000,"invoice_type":1,"consider_for_Annex":1,"month":11,"weekday":1,"day":14,"time_seconds":47059,"anomaly":0},
-  {"pos_id":395,"ntn":55,"rate_value":13,"sales_value":1327.44,"consumer_name":0,"consumer_ntn":0,"consumer_address":0,"extra_info":0,"is_active":1,"created_date_time":1699967059000,"invoice_type":1,"consider_for_Annex":1,"month":11,"weekday":1,"day":14,"time_seconds":47059,"anomaly":0}])
-  
-  const text = JSON.parse(jsonData)
-  console.log(text)
-  
-  const TableRows = [
-    text[0],
-    text[1]
-  ]
   return (
     <Card className='dark:border-slate-700 dark:bg-slate-800' >
       <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -85,8 +59,8 @@ export function MembersTable() {
         }}
       >
               {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value}>
-                  {label}
+                <Tab key={value} value={value} onClick={()=>setAnomolous(value)}>
+                  {label} 
                 </Tab>
               ))}
             </TabsHeader>
@@ -104,15 +78,8 @@ export function MembersTable() {
           <thead>
             <tr>
               {TABLE_HEAD.map((head) => (
-                <th
-                  key={head}
-                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-70"
-                  >
+                <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                     {head}
                   </Typography>
                 </th>
@@ -120,187 +87,14 @@ export function MembersTable() {
             </tr>
           </thead>
           <tbody>
-            {TableRows.map(
-              ({ pos_id, ntn, rate_value, sales_value, consumer_name, consumer_ntn, consumer_address, extra_info, is_active, created_date_time, invoice_type, consider_for_Annex, month, weekday, day, time_seconds, anomaly}, index) => {
-                const isLast = index === TableRows - 1;
-                const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-blue-gray-50";
- 
-                return (
-                  <tr key={pos_id}>
-                    <td className={classes}>
-                      <div className="flex items-center gap-3">
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {pos_id}
-                          </Typography>
-                        </div>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <div className="flex flex-col">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {ntn}
-                        </Typography>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <div className="flex flex-col">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {rate_value}
-                        </Typography>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {sales_value}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {consumer_ntn}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {consumer_address}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {extra_info}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {is_active}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {created_date_time}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {invoice_type}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {consider_for_Annex}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {month}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {weekday}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {day}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {time_seconds}
-                      </Typography>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {anomaly}
-                      </Typography>
-                    </td>
-                  </tr>
-                );
-              },
-            )}
+            {tableData.map((rowData, index) => (
+              <TableRow key={index} rowData={rowData} />
+            ))}
           </tbody>
         </table>
       </CardBody>
-      <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-        <Typography variant="small" color="blue-gray" className="font-normal">
-          Page 1 of 10
-        </Typography>
-        <div className="flex gap-2">
-          <Button variant="outlined" size="sm">
-            Previous
-          </Button>
-          <Button variant="outlined" size="sm">
-            Next
-          </Button>
-        </div>
-      </CardFooter>
+
+      <Footer/>
     </Card>
   );
 }
