@@ -3,15 +3,34 @@ import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
 import PiePlot from '../components/plots/pie_plots.jsx';
 import BarPlot from '../components/plots/barplot.jsx';
 import Card from "../components/resuseable_components/card.jsx";
-import jsonData from '../data/dummyData.json';
+// import jsonData from  '../data/dummyData.json';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
 import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
+import {useDispatch,useSelector} from 'react-redux'
+import {useLocation,useNavigate} from 'react-router-dom'
 
 // Adjust the path based on your project structure
 // import PiePlot from './pie_plots';
 
 const Analytics = () => {
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);}
+    const dispatch=useDispatch()
+    const {posts,isLoading}=useSelector(state=>state.centralStore)
+   const query=useQuery()
+   const page=query.get('page')||1
+   const search=query.get('search')
+   
+    useEffect(()=>{
+      if(search){
+      }
+      else{
+  
+      }
+    },[page,search])
+
+
   const [data, setData] = useState([]);
   const [dummyData, setDummyData] = useState([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,9 +64,9 @@ const Analytics = () => {
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <WelcomeBanner/>
               {/* Other components */}
-              {/* <Card title={"100"} content={"Anomaly"} /> */}
+              <Card title={"100"} content={"Anomaly"} />
             <TimeSeriesPlot data={dummyData} />
-            {/* <Card title={"100"} content={"Anomaly"} /> */}
+            <Card title={"100"} content={"Anomaly"} />
 
             <PiePlot data={dummyData} chartBy="ntn" />
             <BarPlot data={dummyData} chartBy="ntn" />
