@@ -1,7 +1,7 @@
 import axios from "axios";
-export const baseURL = "https://upgraded-space-sniffle-p6g69vv76rx294vp-8001.app.github.dev";
-// export const baseURL = "https://76ae-115-186-48-54.ngrok-free.app/";
-// const API = axios.create({ baseURL: "http://127.0.0.1:8000/" });
+// export const baseURL = "https://upgraded-space-sniffle-p6g69vv76rx294vp-8001.app.github.dev";
+export const baseURL = "http://127.0.0.1:8000";
+
 const API = axios.create({ baseURL: baseURL });
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("authToken")) {
@@ -17,7 +17,7 @@ API.interceptors.request.use((req) => {
 export const fetchAllProducts = async () => await API.get(`/products`);
 export const getSingleInvoice = async (id) => await API.get(`/filter?anomaly=True&srb_invoice_id=${id}`);
 export const getAllNtn = async () => await API.get(`/AllNtn`);
-export const getAllInvoice = async () => await API.get(`/AllInvoice`);
+export const getAllInvoice = async () => await API.get(`/filter?anomaly=True`);
 export const getNtnInvoice = async (id) => await API.get(`/NtnInvoice/${id}`);
 export const getPosInvoice = async (id) => await API.get(`/filter?anomaly=True&pos=${id}`);
 export const getNtnPos = async (id) => await API.get(`/NtnPos/${id}`);

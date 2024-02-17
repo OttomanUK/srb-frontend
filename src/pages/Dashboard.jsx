@@ -1,18 +1,42 @@
-import React, { useState } from 'react';
-
+import React, { useState,useEffect } from 'react';
+import {useDispatch,useSelector} from 'react-redux'
 import Sidebar from '../components/resuseable_components/Sidebar';
 import Header from '../components/resuseable_components/Header';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner';
 import DashboardAvatars from '../components/dashboard_components/DashboardAvatars';
+import DashoardCardHeader from '../components/dashboard_components/DashboardCardHeader';
 import FilterButton from '../components/resuseable_components/DropdownFilter';
 import Datepicker from '../components/resuseable_components/Datepicker';
 import MembersTable from '../components/dashboard_components/DashboardTable';
-
+import {  useLocation } from 'react-router-dom';
+import { getAllInvoice } from '../action/action.js';
+import Footer from '../components/dashboard_components/DashboardFooter';
+import {dummy} from "../data/dummyData.js"
 
 
 
 
 function Dashboard() {
+ 
+  function useQuery() {
+    return new URLSearchParams(useLocation().search);}
+    const dispatch=useDispatch()
+    const {isLoading}=useSelector(state=>state.centralStore)
+    const [anomalous,setAnomalous]=useState(true)
+    const [pageno,setPageno]=useState(1)
+   const query=useQuery()
+   const page=query.get('page')||1
+   const [data,setData]=useState(null)
+   const [search,setSearch]=useState(null)
+   
+    useEffect(()=>{
+      
+  setData(dummy)
+  setSearch(dummy)
+        // dispatch(getAllInvoice())
+    },[page,anomalous])
+
+
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -48,7 +72,9 @@ function Dashboard() {
             {/* Cards */}
             <div>
               {/* Line chart (Acme Plus) */}
-              <MembersTable/>
+              <DashoardCardHeader setAnomalous={setAnomalous} setTableData={setData} tableData={data} searchData={search} setSearchData={setSearch}/>
+              <MembersTable tableData={search}/>
+              <Footer/>
               {/* Line chart (Acme Advanced) */} 
             </div>
 
