@@ -17,9 +17,9 @@ API.interceptors.request.use((req) => {
 export const fetchAllProducts = async () => await API.get(`/products`);
 export const getSingleInvoice = async (id) => await API.get(`/filter?anomaly=True&srb_invoice_id=${id}`);
 export const getAllNtn = async () => await API.get(`/AllNtn`);
-export const getAllInvoice = async () => await API.get(`/filter?anomaly=True`);
-export const getNtnInvoice = async (id) => await API.get(`/NtnInvoice/${id}`);
-export const getPosInvoice = async (id) => await API.get(`/filter?anomaly=True&pos=${id}`);
+export const getAllInvoice = async (anomaly) => await API.get(`/filter?anomaly=${anomaly}`);
+export const getNtnInvoice = async (id,anomaly) => await API.get(`filter?anomaly=${anomaly}&ntn=${id}`);
+export const getPosInvoice = async (id,anomaly) => await API.get(`/filter?anomaly=${anomaly}&pos=${id}`);
 export const getNtnPos = async (id) => await API.get(`/NtnPos/${id}`);
 export const login = async (body) => await API.post(`/dj-rest-auth/login/`,body);
 export const submit_data = async (body) => await API.post(`/submit_data/`,body);

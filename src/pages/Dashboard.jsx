@@ -8,30 +8,43 @@ import DashoardCardHeader from '../components/dashboard_components/DashboardCard
 import FilterButton from '../components/resuseable_components/DropdownFilter';
 import Datepicker from '../components/resuseable_components/Datepicker';
 import MembersTable from '../components/dashboard_components/DashboardTable';
-import {  useLocation } from 'react-router-dom';
-import { getAllInvoice } from '../action/action.js';
+import {  useNavigate,useLocation } from 'react-router-dom';
+import { getAllInvoice,getNtnInvoice,getPosInvoice } from '../action/action.js';
 import Footer from '../components/dashboard_components/DashboardFooter';
 import {dummy} from "../data/dummyData.js"
 
 
+function useQuery() {
+  return new URLSearchParams(useLocation().search);}
 
 
 function Dashboard() {
- 
-  function useQuery() {
-    return new URLSearchParams(useLocation().search);}
+
     const dispatch=useDispatch()
     const {isLoading}=useSelector(state=>state.centralStore)
     const [anomalous,setAnomalous]=useState(true)
     const [pageno,setPageno]=useState(1)
    const query=useQuery()
    const page=query.get('page')||1
+   const ntn=query.get('ntn')||null
+   const pos=query.get('pos')||null
    const [data,setData]=useState(null)
    const [search,setSearch]=useState(null)
    
     useEffect(()=>{
-      
-  setData(dummy)
+      if(ntn!=null){
+        
+        // data=dispatch(getNtnInvoice(ntn,anomalous))
+      }
+      if(pos!=null && ntn!=null){
+        // data=dispatch(getPosInvoice(pos,anomalous))
+
+      }
+      if(ntn==null){
+
+        // dispatch(getAllInvoice(anomalous))
+      }
+      setData(dummy)
   setSearch(dummy)
         // dispatch(getAllInvoice())
     },[page,anomalous])

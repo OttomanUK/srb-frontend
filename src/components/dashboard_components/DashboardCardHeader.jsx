@@ -54,7 +54,14 @@ const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,s
         }}
       >
               {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value} onClick={()=>setAnomalous(value)}>
+                <Tab key={value} value={value} onClick={()=>{
+                  if(anomalous!=value){
+                    setAnomalous(value)
+                  }
+
+                }
+                }>
+                
                   {label} 
                 </Tab>
               ))}
