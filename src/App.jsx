@@ -17,6 +17,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import {data1} from "./data/singleData.js"
 import Query from './pages/Query.jsx';
+import MissingInvoice from './pages/MissingInvoice.jsx';
 
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
   return (
       <Routes>
         <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/Missing" element= {<MissingInvoice/>} />
         <Route exact path="/Query" element={<Query/>} />
         <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails data1={data1}  />} />
         <Route exact path="/Analytics" element={<Analytics />} />
