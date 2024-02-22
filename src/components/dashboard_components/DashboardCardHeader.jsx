@@ -42,7 +42,7 @@ const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,s
     <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className=" dark:border-slate-700 dark:bg-slate-800 flex justify-evenly">
           <div>
-            <Typography color="gray" className="mt-1 font-normal ">
+            <Typography color="gray" className="mt-1 font-normal dark:text-white">
               Filter anomalous data based on your preference
             </Typography>
           </div>
@@ -50,7 +50,7 @@ const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,s
         <div className=" dark:border-slate-700 dark:bg-slate-800 flex flex-col items-center justify-between gap-4 md:flex-row">
           <Tabs value="all" className="dark:border-slate-700 dark:bg-slate-800 w-full md:w-max">
           <TabsHeader
-        className="rounded-none bg-transparent p-0" indicatorProps={{className:"bg-transparent border-b-4 border-gray-900 shadow-none rounded-none",
+        className="rounded-none bg-transparent p-0 dark:text-white" indicatorProps={{className:"bg-transparent border-b-4 border-gray-900 shadow-none rounded-none",
         }}
       >
               {TABS.map(({ label, value }) => (
@@ -67,7 +67,7 @@ const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,s
               ))}
             </TabsHeader>
           </Tabs>
-          <div className=" mb-8 flex gap-8 mx-3 dark:border-slate-700 dark:bg-slate-800">
+          <div className=" mb-8 flex gap-8 mx-3 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
             <Input
               label="Search"
               icon={<MagnifyingGlassIcon className="h-10 w-10" /> }
