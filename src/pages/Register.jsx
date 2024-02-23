@@ -1,46 +1,43 @@
 import React, { useState } from "react";
 import { TERipple } from "tw-elements-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { register } from "../action/action";
 
 export default function Register(){
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const customControlStyles = base => ({
         height: 5,
         minHeight: 5
     });
-    const [fullName, setFullName] = useState('');
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [selectedCountry, setSelectedCountry] = useState('');
-    const [selectedOption, setSelectedOption] = useState('staff');
-
-    const handleFullNameChange = (event) => {
-        setFullName(event.target.value);
+    const initialFormState = {
+        username: '',
+        email: '',
+        password1: '',
+        password2: '',
+        // phone: '',
+        // selectedCountry: '',
+        // selectedOption: 'staff',
       };
+    
+      const [formValues, setFormValues] = useState(initialFormState);
+    
+      const handleChange = (event) => {
+          const { name, value } = event.target;
+        
+        setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
+      };
+    
+      const handleSubmit = (event) => {
+        event.preventDefault();
+        console.log('Form submitted:', formValues);
 
-    const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-    };
-
-    const handlePasswordChange = (event) => {
-    setPassword(event.target.value);
-    };
-
-    const handleCountryChange = (event) => {
-    setSelectedCountry(event.target.value);
-    };
-
-    const handleOptionChange = (event) => {
-        setSelectedOption(event.target.value);
-    };
-
-
-    const handleSubmit = (event) => {
-    event.preventDefault();
-    // You can perform signup logic here using the collected data
-    console.log('Full Name:', fullName);
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Selected Country:', selectedCountry);
-    };
+        const a= dispatch(register(formValues));
+        // if(a){
+        //     navigate('/login');
+        // }
+      };
     return (
         <div className="flex flex-wrap justify-center h-screen items-center text-neutral-800 dark:text-neutral-200">
             <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
@@ -59,7 +56,7 @@ export default function Register(){
                                 />
                             </div>
 
-                            <form onSubmit={handleSubmit}>
+                            {/* <form onSubmit={handleSubmit}> */}
                                 <div className="text-center">
                                     <p className="mb-12 pb-1 text-2xl font-semibold">Account Creation</p>
                                 </div>
@@ -70,6 +67,8 @@ export default function Register(){
                                         <input type="text"
                                             className="mb-4 mx-5"
                                             required
+                                            name="username"
+                                            value={formValues.username} onChange={handleChange}
                                         />
                                     </div>
                                 {/* <!--Password input--> */}
@@ -79,17 +78,31 @@ export default function Register(){
                                             type="email"
                                             className="mb-5 mx-5"
                                             required
+                                            name="email"
+                                            value={formValues.email} onChange={handleChange}
                                         />
                                     </div>
-                                </div>
-
-                                <div className="text-center flex flex-row">
                                     <div>
                                         <p>Enter password</p>
                                             <input
                                                 type="email"
                                                 className="mb-5 mx-5"
                                                 required
+                                                name="password1"
+                                                value={formValues.password1} onChange={handleChange}
+                                            />
+                                    </div>
+                                </div>
+
+                                <div className="text-center flex flex-row items-center">
+                                    <div>
+                                        <p>Confirm Password</p>
+                                            <input
+                                                type="email"
+                                                className="mb-5 mx-5"
+                                                required
+                                                name="password2"
+                                                value={formValues.password2} onChange={handleChange}
                                             />
                                     </div>
                                     <div>
@@ -98,6 +111,8 @@ export default function Register(){
                                                 type="tel"
                                                 className="mb-5 mx-5"
                                                 required
+                                                name="phone"
+                                                // value={formValues.phone} onChange={handleChange}
                                             />
                                     </div>
                                 </div>
@@ -106,8 +121,8 @@ export default function Register(){
                                     className="ml-5 mr-2"
                                     type="radio"
                                     value="staff"
-                                    checked={selectedOption === 'staff'}
-                                    onChange={handleOptionChange}
+                                    // checked={selectedOption === 'staff'}
+                                    // onChange={handleOptionChange}
                                     />
                                     <p className="mr-5 inline">Staff</p>
                                 </label>
@@ -117,8 +132,8 @@ export default function Register(){
                                     className="mr-2"
                                     type="radio"
                                     value="management"
-                                    checked={selectedOption === 'management'}
-                                    onChange={handleOptionChange}
+                                    // checked={selectedOption === 'management'}
+                                    // onChange={handleOptionChange}
                                     />
                                     Management
                                 </label>
@@ -134,6 +149,7 @@ export default function Register(){
                                         background:
                                             "linear-gradient(to right, #009739, #006a33, #005c2e, #004726)",
                                         }}
+                                         onClick={handleSubmit }
                                     >
                                         Create Account
                                     </button>
@@ -146,14 +162,15 @@ export default function Register(){
                                     <p className="mb-0 mr-2">Have an account?</p>
                                     <TERipple rippleColor="light">
                                     <button
-                                        type="button"
+                                        
                                         className="inline-block rounded border-2 border-danger px-6 pb-[6px] pt-2 text-xs font-medium uppercase leading-normal text-danger transition duration-150 ease-in-out hover:border-danger-600 hover:bg-neutral-500 hover:bg-opacity-10 hover:text-danger-600 focus:border-danger-600 focus:text-danger-600 focus:outline-none focus:ring-0 active:border-danger-700 active:text-danger-700 dark:hover:bg-neutral-100 dark:hover:bg-opacity-10"
+                                      
                                     >
                                         Login
                                     </button>
                                     </TERipple>
                                 </div>
-                            </form>
+                            {/* </form> */}
                         </div>
                         </div>
 

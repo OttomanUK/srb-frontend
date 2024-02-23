@@ -86,15 +86,28 @@ import reducer from "../redux_store/reducer.js";
       }
     };
   export const login = (body) => async (dispatch) => {
-    try {
-      dispatch(startLoading());
-      const { data } = await api.login(body);
-        dispatch(endLoading());
+    // try {
+      // dispatch(startLoading());
+      const  {data}  = await api.login(body);
+        // dispatch(endLoading());
         console.log(data)
         localStorage.setItem("authToken", JSON.stringify(data.key));
-        return data;
+        return true;
+      // } catch (error) {
+        console.log(error.message);
+      // }
+    };
+  export const register = (body) => async (dispatch) => {
+    try {
+      dispatch(startLoading());
+      const  data  = await api.register(body);
+        dispatch(endLoading());
+        console.log(data)
+        // localStorage.setItem("authToken", JSON.stringify(data.key));
+        return true;
       } catch (error) {
         console.log(error.message);
+        return false
       }
     };
   export const submit_data = (body) => async (dispatch) => {
