@@ -47,7 +47,7 @@ export function MembersTable({tableData}) {
           <thead>
             <tr>
               {tableHead.map((head) => (
-                <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4 dark:text-white">
                   <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                     {head}
                   </Typography>
