@@ -19,6 +19,7 @@ export const getAllInvoice = async (offset,anomaly) => await API.get(`/filter?an
 export const getNtnInvoice = async (id,offset,anomaly) => await API.get(`filter?anomaly=${anomaly}&ntn=${id}&offset=${offset}`);
 export const getPosInvoice = async (id,ntn,offset,anomaly) => await API.get(`/filter?anomaly=${anomaly}&pos=${id}&ntn=${ntn}&offset=${offset}`);
 export const getNtnPos = async (id) => await API.get(`/NtnPos/${id}`);
+export const getMissingInvoice = async (id) => await API.get(`/filter?missing_invoice_by_ntn=${id}`);
 export const login = async (body) => await API.post(`/dj-rest-auth/login/`,body);
 export const register = async (body) => await API.post(`/dj-rest-auth/registration/`,body);
 

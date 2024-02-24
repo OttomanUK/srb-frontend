@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { TERipple } from "tw-elements-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login,submit_data } from "../action/action";
+import { login,submit_data,getMissingInvoice } from "../action/action";
 
 export default function Login(){
   const navigate = useNavigate();
@@ -27,8 +27,9 @@ export default function Login(){
     event.preventDefault();
     console.log('Form submitted:', formValues);
 
-    // const a= dispatch(login(formValues));
-    const a= dispatch(submit_data(formValues));
+    const a= dispatch(login(formValues));P
+    // const a= dispatch(submit_data(formValues));
+    // const a= dispatch(getMissingInvoice(55));
     // if(a){
     //     navigate('/login');
     // }
