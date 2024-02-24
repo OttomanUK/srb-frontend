@@ -30,7 +30,7 @@ function App() {
 
   return (
       <Routes>
-        <Route exact path="/" element={<Dashboard />} />
+        <Route exact path="/dashboard" element={<Dashboard />} />
         <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails data1={data1}  />} />
         <Route exact path="/Analytics" element={<Analytics />} />
         <Route exact path="/login" element={<Login />} />

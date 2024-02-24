@@ -28,7 +28,7 @@ export function MembersTable({tableData}) {
   useEffect(() => {
     try {
       
-      if (tableData!=null) {
+      if (tableData!=null && tableData.length > 0) {
         setTableHead(Object.keys(tableData[0]));
       }
       // Handle data as needed
@@ -37,8 +37,9 @@ export function MembersTable({tableData}) {
       // Handle error as needed
     }
   }, [tableData]);
-  if(tableData==null){
-    return  <><h1>Hello</h1></>
+
+  if (!tableData || tableData.length === 0) {
+    return <><h1>No Data</h1></>;
   }
   return (
     <Card className='dark:border-slate-700 dark:bg-slate-800' >
@@ -46,8 +47,8 @@ export function MembersTable({tableData}) {
         <table className="mt-4 w-full min-w-max table-auto text-left">
           <thead>
             <tr>
-              {tableHead.map((head) => (
-                <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+              {tableHead.map((head,i) => (
+                <th key={i} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                   <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                     {head}
                   </Typography>
@@ -56,9 +57,18 @@ export function MembersTable({tableData}) {
             </tr>
           </thead>
           <tbody>
-            {tableData.map((rowData, index) => (
+            
+          {Array.isArray(tableData) ? (
+            tableData.map((rowData, index) => (
               <TableRow key={index} rowData={rowData} />
-            ))}
+            ))
+          ) : (
+            <tr>
+              <td colSpan={tableHead.length}>
+                <h1>No Data</h1>
+              </td>
+            </tr>
+          )}
           </tbody>
         </table>
       </CardBody>

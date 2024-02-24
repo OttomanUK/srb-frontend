@@ -37,8 +37,9 @@ import reducer from "../redux_store/reducer.js";
   export const getAllInvoice = (anomaly) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getAllInvoice(anomaly);
+      const { data } = await api.getAllInvoice(offset,anomaly);
         dispatch(endLoading());
+        console.log(data.results)
         return data;
       } catch (error) {
         console.log(error.message);
@@ -47,17 +48,18 @@ import reducer from "../redux_store/reducer.js";
   export const getNtnInvoice = (id,anomaly) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getNtnInvoice(id,anomaly);
+      const { data } = await api.getNtnInvoice(id,offset,anomaly);
         dispatch(endLoading());
-        return data;
+        console.log(data)
+        return data
       } catch (error) {
         console.log(error.message);
       }
     };
-  export const getPosInvoice = (id,anomaly) => async (dispatch) => {
+  export const getPosInvoice = (id,ntn,offset,anomaly) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getPosInvoice(id,anomaly);
+      const { data } = await api.getPosInvoice(id,ntn,offset,anomaly);
       console.log(data)
         dispatch(endLoading());
         return data;

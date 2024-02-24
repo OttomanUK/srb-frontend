@@ -12,6 +12,9 @@ import {  useNavigate,useLocation } from 'react-router-dom';
 import { getAllInvoice,getNtnInvoice,getPosInvoice } from '../action/action.js';
 import Footer from '../components/dashboard_components/DashboardFooter';
 import {dummy} from "../data/dummyData.js"
+import {
+  addData
+} from "../redux_store/reducer.js";
 
 
 function useQuery() {
@@ -20,38 +23,52 @@ function useQuery() {
 
 function Dashboard() {
 
+  // const [data,setData]=useState([])
+  const [anomalous,setAnomalous]=useState("True")
+  const [count,setCount]=useState("True")
+  const [limit,setLimit]=useState(1)
+  // const [pageno,setPageno]=useState(1)
+  const [search,setSearch]=useState([])
+  const query=useQuery()
+  const offset=parseInt(query.get('offset'))||1
+  const ntn=query.get('ntn')||null
+  const pos=query.get('pos')||null
     const dispatch=useDispatch()
-    const {isLoading}=useSelector(state=>state.centralStore)
-    const [anomalous,setAnomalous]=useState(true)
-    const [pageno,setPageno]=useState(1)
-   const query=useQuery()
-   const page=query.get('page')||1
-   const ntn=query.get('ntn')||null
-   const pos=query.get('pos')||null
-   const [data,setData]=useState(null)
-   const [search,setSearch]=useState(null)
+    const {isLoading,data}=useSelector(state=>state.centralStore)
    
-    useEffect(()=>{
-      if(ntn!=null){
-        
-        // data=dispatch(getNtnInvoice(ntn,anomalous))
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          let results
+          if(ntn!=null){
+            results = await dispatch(getNtnInvoice(ntn,offset,anomalous))
       }
-      if(pos!=null && ntn!=null){
-        // data=dispatch(getPosInvoice(pos,anomalous))
-
+      if(pos!=null && ntn!=null){   
+         results = await dispatch(getPosInvoice(pos,ntn,offset,anomalous))
       }
       if(ntn==null){
-
-        // dispatch(getAllInvoice(anomalous))
+         results = await dispatch(getAllInvoice(offset,anomalous));  
       }
-      setData(dummy)
-  setSearch(dummy)
-        // dispatch(getAllInvoice())
-    },[page,anomalous])
+      dispatch(addData(results.results))
+      setSearch(results.results);
+      const limitMatch = results.next.match(/limit=(\d+)/);
+      setLimit( limitMatch ? parseInt(limitMatch[1], 10) : 1)
+      setCount(results.count)
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+    
+      fetchData();
+    }, [anomalous,offset]);
+    
+
+if(isLoading  ){ 
+  return <><h1>fhj</h1></>
+} 
 
 
-
-  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -64,7 +81,6 @@ function Dashboard() {
 
         {/*  Site header */}
         <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             {/* Welcome banner */}
@@ -85,9 +101,9 @@ function Dashboard() {
             {/* Cards */}
             <div>
               {/* Line chart (Acme Plus) */}
-              <DashoardCardHeader setAnomalous={setAnomalous} setTableData={setData} tableData={data} searchData={search} setSearchData={setSearch}/>
+              <DashoardCardHeader setAnomalous={setAnomalous} searchData={search} setSearchData={setSearch} anomalous={anomalous}/>
               <MembersTable tableData={search}/>
-              <Footer/>
+              <Footer pos={pos} ntn={ntn} offset={offset} total={ limit ? Math.ceil(limit/count ) : null}/>
               {/* Line chart (Acme Advanced) */} 
             </div>
 

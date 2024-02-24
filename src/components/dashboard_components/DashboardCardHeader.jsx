@@ -10,31 +10,31 @@ import {
   Tab,
 } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {useDispatch,useSelector} from 'react-redux'
 
-
-const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,setSearchData}) => {
+const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous}) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredData, setFilteredData] = useState([]);
+  const {isLoading,data}=useSelector(state=>state.centralStore)
   const TABS = [
     { label: "Anomalous", value: "True" },
     { label: "Non Anomalous", value: "False" },
   ];
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState([]);
   useEffect(() => {
-    if(tableData==null){
-      return 
-    }
-    // Filter data based on search term
-    const searchResult = tableData.filter(item =>
-      Object.values(item).some(value =>
-        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    if (Array.isArray(data) && data.length > 0) {
+      // Filter data based on search term
+      const searchResult = data.filter((item) =>
+        Object.values(item).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
-        );
-        setFilteredData(searchResult);
-        setSearchData(searchResult)
-      }, [searchTerm]);
+      );
+      setFilteredData(searchResult);
+      setSearchData(searchResult);
+    }
+        }, [searchTerm,data]);
       
       
-      if(tableData==null)
+      if(data==null)
       {
         return "hello"
       }

@@ -4,7 +4,7 @@ const initialState = {
   cart: JSON.parse(localStorage.getItem("cart")) || [],
   isLoading: false,
   userData: null,
-  productList: [],
+  data: [],
 };
 
 export const centralStore = createSlice({
@@ -18,21 +18,10 @@ export const centralStore = createSlice({
       state.isLoading = false;
     },
 
-    addProductQuantity: (state, action) => {
-      const { product } = action.payload;
-      const { quantity } = action.payload;
-
-      const existingProductIndex = state.cart.findIndex(
-        (item) => item.id === product.id
-      );
-      if (existingProductIndex !== -1) {
-        if (quantity > 0) {
-          state.cart[existingProductIndex].quantity = quantity;
-        }
-      } else {
-        product.quantity = quantity;
-        state.cart.push(product);
-      }
+    addData: (state, action) => {
+      const data = action.payload;
+      state.data=data
+      
     },
   
   },
@@ -42,7 +31,7 @@ export const {
   startLoading,
   endLoading,
 
-  addProductQuantity,
+  addData,
 } = centralStore.actions;
 
 export default centralStore.reducer;
