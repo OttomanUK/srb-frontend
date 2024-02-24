@@ -54,7 +54,7 @@ const BarPlot = ({ data, chartBy }) => {
 
       <Plot
         data={topAnomalyData}
-        layout={{ title: `Top 5 Anomalies by ${chartBy}`, xaxis: { title: chartBy }, yaxis: { title: 'Total Anomaly' } }}
+        layout={{ title: `Top 5 Anomalies by ${chartBy}`, xaxis: { title: chartBy }, yaxis: { title: 'Total Anomaly' }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'  }}
       />
     </div>
   );
