@@ -22,6 +22,8 @@ function useQuery() {
 
 
 function Dashboard() {
+  const customGreeting = 'Good Morning, SRB👋'
+  const customText = 'Here is the latest sales data with anomalies:'
 
   // const [data,setData]=useState([])
   const [anomalous,setAnomalous]=useState("True")
@@ -84,7 +86,7 @@ if(isLoading  ){
         <main>
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             {/* Welcome banner */}
-            <WelcomeBanner />
+            <WelcomeBanner greeting={customGreeting} text={customText}/>
             {/* Dashboard actions */}
             <div className="sm:flex sm:justify-between sm:items-center mb-8">
               {/* Right: Actions */}
