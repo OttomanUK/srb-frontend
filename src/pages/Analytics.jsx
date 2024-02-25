@@ -20,7 +20,7 @@ const Analytics = () => {
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
     const dispatch=useDispatch()
-    const {isLoading,graphData,data}=useSelector(state=>state.centralStore)
+    const {isLoading,graphData,anomaly}=useSelector(state=>state.centralStore)
    const query=useQuery()
    const page=query.get('page')||1
    const search=query.get('search')
@@ -33,7 +33,6 @@ const Analytics = () => {
 
  
    useEffect(() => {
-     console.log(graphData)
      const fetchData = async () => {
        // Extracting required information
        const { results: initialResults, next } = graphData;
@@ -45,9 +44,8 @@ const Analytics = () => {
 
 // Extract the pathname
           const pathWithQuery = parsedUrl.pathname + parsedUrl.search
-         const nextResponse = await API.get(pathWithQuery);
-         console.log(nextResponse)
-         const { results: nextResults, next: newNextPage } = nextResponse.data;
+         const {data:nextResponse} = await API.get(pathWithQuery);
+         const { results: nextResults, next: newNextPage } = nextResponse;
          setResults((prevResults) => [...prevResults, ...nextResults]);
          setNextPage(newNextPage);
          pageCount++;
@@ -55,33 +53,13 @@ const Analytics = () => {
      };
  
      fetchData();
-     console.log(results)
+
    }, [])
 
-   if(data.length===0){
+   if(results.length===0){
     return <div>Loading...</div>
    }
-   
-  useEffect(() => {
-    const generateDummyData = () => {
-      const startDate = new Date('2023-11-01T00:00:00');
-      const endDate = new Date('2023-11-30T23:59:59');
-      const dateRange = endDate - startDate;
-
-      const dummyData = Array.from({ length: 100 }, (_, index) => {
-        const randomDate = new Date(startDate.getTime() + Math.random() * dateRange);
-        return {
-          pos_id: Math.floor(Math.random() * 10),
-          ntn: Math.floor(Math.random() * 5),
-          anomaly: Math.floor(Math.random() * 10),
-          created_date_time: randomDate.toISOString(),
-        };
-      });
-
-      setDummyData(dummyData);
-    };
-    generateDummyData();
-  }, []);
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -92,16 +70,14 @@ const Analytics = () => {
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <WelcomeBanner greeting={customGreeting} text={customText}/>
               {/* Other components */}
-              <Card title={"100"} content={"Anomaly" } color="bg-gray-200"/>
-            <TimeSeriesPlot data={dummyData} />
-            <Card title={"100"} content={"Anomaly"} color="bg-gray-200"  />
+            <TimeSeriesPlot data={results} showAnomalyCount={true} anomaly1={anomaly}/>
+            <TimeSeriesPlot data={results} showAnomalyCount={false} anomaly1={anomaly}/>
 
-            <PiePlot data={dummyData} chartBy="ntn"/>
-            <BarPlot data={dummyData} chartBy="ntn"/>
+            <PiePlot anomaly1={anomaly} data={results} chartBy="ntn"/>
+            <BarPlot anomaly1={anomaly} data={results} chartBy="ntn"/>
             {/* or */}
-            <div onClick={()=>console.log(graphData)}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam blanditiis fuga asperiores ratione earum ad at distinctio, delectus alias quas quidem, deserunt exercitationem ipsa reiciendis aliquam eum assumenda facere mollitia?</div>
-            <PiePlot data={dummyData} chartBy="pos_id"/>
-            <BarPlot data={dummyData} chartBy="pos_id"/>
+            <PiePlot anomaly1={anomaly} data={results} chartBy="pos_id"/>
+            <BarPlot anomaly1={anomaly} data={results} chartBy="pos_id"/>
           </div>
         </div>
     </div>

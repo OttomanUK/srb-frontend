@@ -11,7 +11,7 @@ import {
 } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {useDispatch,useSelector} from 'react-redux'
-
+import { setAnomaly } from '../../redux_store/reducer';
 const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
@@ -60,6 +60,12 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
         key={value} 
         value={value} 
         onClick={() => {
+          if(value==="True"){
+            dispatch(setAnomaly("Anomaly"))
+          }else{
+            dispatch(setAnomaly("Non-Anomaly"))
+
+          }
           setAnomalous(value);
         }}
       >

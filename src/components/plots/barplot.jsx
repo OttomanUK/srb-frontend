@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
 import { tailwindConfig, hexToRGB } from '../utils/Utils';
 
-const BarPlot = ({ data, chartBy }) => {
+const BarPlot = ({ data, chartBy,anomaly1 }) => {
   const [topAnomalyData, setTopAnomalyData] = useState([]);
 
   useEffect(() => {
@@ -45,11 +45,11 @@ const BarPlot = ({ data, chartBy }) => {
 
   return (
     <div>
-      <h2>Top 5 Anomalies by {chartBy}</h2>
+      <h2>Top 5 {anomaly1} by {chartBy}</h2>
 
       <Plot
         data={topAnomalyData}
-        layout={{ title: `Top 5 Anomalies by ${chartBy}`, xaxis: { title: chartBy }, yaxis: { title: 'Total Anomaly' }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'  }}
+        layout={{ title: `Top 5 ${anomaly1} by ${chartBy}`, xaxis: { title: chartBy }, yaxis: { title: `Total ${anomaly1}` }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'  }}
       />
     </div>
   );

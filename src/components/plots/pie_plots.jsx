@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
-const PiePlot = ({ data, chartBy }) => {
+const PiePlot = ({ data, chartBy,anomaly1 }) => {
   const [pieData, setPieData] = useState([]);
 
   useEffect(() => {
@@ -30,11 +30,11 @@ const PiePlot = ({ data, chartBy }) => {
 
   return (
     <div>
-      <h2>Anomaly Pie Plot</h2>
+      <h2>{anomaly1} Pie Plot</h2>
 
       <Plot 
         data={pieData}
-        layout={{ title: `Anomaly Distribution by ${chartBy}`, showlegend: true, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
+        layout={{ title: `${anomaly1} Distribution by ${chartBy}`, showlegend: true, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
       />
     </div>
   );

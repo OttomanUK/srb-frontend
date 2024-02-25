@@ -1,42 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
-const TimeSeriesPlot = ({ data }) => {
+const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
   const [timeSeriesData, setTimeSeriesData] = useState([]);
-  const [dailyAnomalyData, setDailyAnomalyData] = useState([]);
+  const [dailyCountData, setDailyCountData] = useState([]);
 
   useEffect(() => {
     if (data.length > 0) {
-      // Assuming your data has 'created_date_time' and 'anomaly' fields
       const timeSeries = data.map((entry) => ({
         x: new Date(entry.created_date_time),
-        y: entry.anomaly,
+        y: showAnomalyCount ? entry.anomaly : entry.sales_value,
       }));
 
-      const dailyAnomalies = data.reduce((acc, entry) => {
+      const dailyCounts = data.reduce((acc, entry) => {
         const date = new Date(entry.created_date_time).toLocaleDateString();
 
         if (!acc[date]) {
           acc[date] = 0;
         }
 
-        acc[date] += entry.anomaly;
+        // Count anomalies or sum sales based on showAnomalyCount prop
+        acc[date] += showAnomalyCount ? (entry.anomaly ? 1 : 0) : entry.sales_value;
         return acc;
       }, {});
 
-      const dailyAnomalyArray = Object.keys(dailyAnomalies).map((date) => ({
+      const dailyCountArray = Object.keys(dailyCounts).map((date) => ({
         x: new Date(date),
-        y: dailyAnomalies[date],
+        y: dailyCounts[date],
       }));
 
       setTimeSeriesData(timeSeries);
-      setDailyAnomalyData(dailyAnomalyArray);
+      setDailyCountData(dailyCountArray);
     }
-  }, [data]);
+  }, [data, showAnomalyCount]);
 
   return (
     <div>
-      <h2>Anomaly Time Series Plot</h2>
+      <h2>{showAnomalyCount ? `${anomaly1}` : 'Sales'} Time Series Plot</h2>
 
       <Plot
         data={[
@@ -45,22 +45,34 @@ const TimeSeriesPlot = ({ data }) => {
             mode: 'markers',
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
-            name: 'Total Anomaly over Time',
+            name: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} over Time`,
           },
         ]}
-        layout={{ title: 'Total Anomaly over Time', xaxis: { title: 'Time' }, yaxis: { title: 'Total Anomaly' }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
+        layout={{
+          title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} over Time`,
+          xaxis: { title: 'Time' },
+          yaxis: { title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'}` },
+          paper_bgcolor: '#EEEEEE',
+          plot_bgcolor: '#EEEEEE',
+        }}
       />
 
       <Plot
         data={[
           {
             type: 'bar',
-            x: dailyAnomalyData.map((entry) => entry.x),
-            y: dailyAnomalyData.map((entry) => entry.y),
-            name: 'Total Anomaly per Day',
+            x: dailyCountData.map((entry) => entry.x),
+            y: dailyCountData.map((entry) => entry.y),
+            name: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} per Day`,
           },
         ]}
-        layout={{ title: 'Total Anomaly per Day', xaxis: { title: 'Day' }, yaxis: { title: 'Total Anomaly' }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
+        layout={{
+          title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} per Day`,
+          xaxis: { title: 'Day' },
+          yaxis: { title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'}` },
+          paper_bgcolor: '#EEEEEE',
+          plot_bgcolor: '#EEEEEE',
+        }}
       />
     </div>
   );
