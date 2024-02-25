@@ -15,6 +15,8 @@ import {data1} from "./data/singleData.js"
 import Query from './pages/Query.jsx';
 import MissingInvoice from './pages/MissingInvoice.jsx';
 import UserProfile from './pages/User_Profile/UserProfile.jsx';
+import NtnList from './pages/NtnList.jsx';
+import Loader from './components/utils/Loader.jsx';
 
 function App() {
  
@@ -38,6 +40,8 @@ function App() {
         <Route exact path="/Query" element={<Query/>} />
         <Route exact path="/UserProfile" element={<UserProfile/>}/>
         <Route exact path="/register" element={<Register/>} />
+        <Route exact path="/NtnList" element={<NtnList/>} />
+        {/* <Route exact path="/Loader" element={<Loader/>} /> */}
       </Routes>
   );
 }

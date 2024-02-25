@@ -32,9 +32,9 @@ const PiePlot = ({ data, chartBy }) => {
     <div>
       <h2>Anomaly Pie Plot</h2>
 
-      <Plot
+      <Plot 
         data={pieData}
-        layout={{ title: `Anomaly Distribution by ${chartBy}`, showlegend: true }}
+        layout={{ title: `Anomaly Distribution by ${chartBy}`, showlegend: true, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
       />
     </div>
   );
