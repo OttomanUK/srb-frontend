@@ -48,7 +48,7 @@ const TimeSeriesPlot = ({ data }) => {
             name: 'Total Anomaly over Time',
           },
         ]}
-        layout={{ title: 'Total Anomaly over Time', xaxis: { title: 'Time' }, yaxis: { title: 'Total Anomaly' } }}
+        layout={{ title: 'Total Anomaly over Time', xaxis: { title: 'Time' }, yaxis: { title: 'Total Anomaly' }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
       />
 
       <Plot
@@ -60,7 +60,7 @@ const TimeSeriesPlot = ({ data }) => {
             name: 'Total Anomaly per Day',
           },
         ]}
-        layout={{ title: 'Total Anomaly per Day', xaxis: { title: 'Day' }, yaxis: { title: 'Total Anomaly' } }}
+        layout={{ title: 'Total Anomaly per Day', xaxis: { title: 'Day' }, yaxis: { title: 'Total Anomaly' }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'}}
       />
     </div>
   );

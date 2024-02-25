@@ -12,6 +12,7 @@ import {  useNavigate,useLocation } from 'react-router-dom';
 import { getAllInvoice,getNtnInvoice,getPosInvoice } from '../action/action.js';
 import Footer from '../components/dashboard_components/DashboardFooter';
 import {dummy} from "../data/dummyData.js"
+import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
 
 
 function useQuery() {
@@ -81,11 +82,13 @@ function Dashboard() {
               </div>
 
             </div>
-
-            <div></div>
-
             {/* Cards */}
             <div>
+              <div className='flex flex-row space-x-4'>
+              <DashboardCard title={'Total Anomaly'} value={92}/>
+              <DashboardCard title={'Total POS'} value={95}/>
+              <DashboardCard title={'Total NTN'} value={96}/>
+              </div>
               {/* Line chart (Acme Plus) */}
               <DashoardCardHeader setAnomalous={setAnomalous} setTableData={setData} tableData={data} searchData={search} setSearchData={setSearch}/>
               <MembersTable tableData={search}/>
