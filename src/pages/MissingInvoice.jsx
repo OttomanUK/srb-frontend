@@ -4,14 +4,15 @@ import Sidebar from "../components/resuseable_components/Sidebar";
 import Header from "../components/resuseable_components/Header";
 import WelcomeBanner from "../components/dashboard_components/WelcomeBanner";
 import { useParams } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import {getMissingInvoice} from "../action/action";
-
+import Loader from '../components/utils/Loader';
 
 
 function MissingInvoice(){
   const dispatch = useDispatch();
   const {id} = useParams();
+  const {isLoading} = useSelector(state=>state.centralStore)
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const customGreeting = 'Missing Invoices'
     const [data,setData]=useState([])
@@ -24,15 +25,18 @@ function MissingInvoice(){
     ]
     useEffect(()=>{
       const fetchData =async()=>{
-        // if(id==null){
-        //   return
-        // }
+        if(id==null){
+          return
+        }
        const a=await dispatch(getMissingInvoice(id));
        setData(a.results);
        console.log(a)
       }
       fetchData();
     },[])
+    if(isLoading){
+      return <><Loader/></>
+    }
     if(data==null){
       return <><h1>No Data</h1></>
     }

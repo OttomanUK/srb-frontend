@@ -42,7 +42,7 @@ const TimeSeriesPlot = ({ data }) => {
         data={[
           {
             type: 'scatter',
-            mode: 'lines',
+            mode: 'markers',
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
             name: 'Total Anomaly over Time',

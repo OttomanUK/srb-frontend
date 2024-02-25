@@ -9,34 +9,59 @@ import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
 import {useDispatch,useSelector} from 'react-redux'
 import {useLocation,useNavigate} from 'react-router-dom'
+import {API} from "../api/index.js"
 
 // Adjust the path based on your project structure
 // import PiePlot from './pie_plots';
+function useQuery() {
+  return new URLSearchParams(useLocation().search);}
 
 const Analytics = () => {
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-  function useQuery() {
-    return new URLSearchParams(useLocation().search);}
     const dispatch=useDispatch()
-    const {posts,isLoading}=useSelector(state=>state.centralStore)
+    const {isLoading,graphData,data}=useSelector(state=>state.centralStore)
    const query=useQuery()
    const page=query.get('page')||1
    const search=query.get('search')
+   const [results, setResults] = useState([]);
+   const [nextPage, setNextPage] = useState(null);
+  //  const [data, setData] = useState([]);
+   const [dummyData, setDummyData] = useState([]);
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+
+ 
+   useEffect(() => {
+     console.log(graphData)
+     const fetchData = async () => {
+       // Extracting required information
+       const { results: initialResults, next } = graphData;
+       setResults(initialResults);
+       setNextPage(next);
+       let pageCount = 1;
+       while (nextPage && pageCount < 5) {
+        const parsedUrl = new URL(next);
+
+// Extract the pathname
+          const pathWithQuery = parsedUrl.pathname + parsedUrl.search
+         const nextResponse = await API.get(pathWithQuery);
+         console.log(nextResponse)
+         const { results: nextResults, next: newNextPage } = nextResponse.data;
+         setResults((prevResults) => [...prevResults, ...nextResults]);
+         setNextPage(newNextPage);
+         pageCount++;
+        }
+     };
+ 
+     fetchData();
+     console.log(results)
+   }, [])
+
+   if(data.length===0){
+    return <div>Loading...</div>
+   }
    
-    useEffect(()=>{
-      if(search){
-      }
-      else{
-  
-      }
-    },[page,search])
-
-
-  const [data, setData] = useState([]);
-  const [dummyData, setDummyData] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
   useEffect(() => {
     const generateDummyData = () => {
       const startDate = new Date('2023-11-01T00:00:00');
@@ -60,19 +85,21 @@ const Analytics = () => {
 
   return (
     <div className="flex h-screen overflow-hidden">
+
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <WelcomeBanner greeting={customGreeting} text={customText}/>
               {/* Other components */}
-              <Card title={"100"} content={"Anomaly"} color="bg-gray-200"/>
+              <Card title={"100"} content={"Anomaly" } color="bg-gray-200"/>
             <TimeSeriesPlot data={dummyData} />
             <Card title={"100"} content={"Anomaly"} color="bg-gray-200"  />
 
             <PiePlot data={dummyData} chartBy="ntn"/>
             <BarPlot data={dummyData} chartBy="ntn"/>
             {/* or */}
+            <div onClick={()=>console.log(graphData)}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam blanditiis fuga asperiores ratione earum ad at distinctio, delectus alias quas quidem, deserunt exercitationem ipsa reiciendis aliquam eum assumenda facere mollitia?</div>
             <PiePlot data={dummyData} chartBy="pos_id"/>
             <BarPlot data={dummyData} chartBy="pos_id"/>
           </div>

@@ -3,14 +3,16 @@ import './invoice_detail.css'; // Import the CSS file
 import InvoiceField from './invoice_field';
 import { useParams } from "react-router-dom"
 import {login,getPosInvoice,submit_data,getSingleInvoice} from "../../action/action";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import Sidebar from '../../components/resuseable_components/Sidebar';
 import Header from '../../components/resuseable_components/Header';
 import WelcomeBanner from '../../components/dashboard_components/WelcomeBanner';
+import Loader from '../../components/utils/Loader';
 
 const InvoiceDetails = ({ data1 }) => {
   const customGreeting = 'Specific Invoice'
   const [data,setData]=useState({})
+  const {isLoading}=useSelector(state=>state.centralStore)
     // navigate(`/orderDetail/${order.id}`) }
   const { id } = useParams();
   const dispatch=useDispatch()
@@ -25,7 +27,8 @@ const InvoiceDetails = ({ data1 }) => {
       };
       fetchData();
     }, [id, dispatch]);
-  
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
     const fields = [
       'srb_invoice_id', 'pos_id', 'ntn', 'name', 'invoice_date',
       'invoice_no', 'rate_value', 'sales_value', 'sales_tax', 'consumer_name',
@@ -34,8 +37,11 @@ const InvoiceDetails = ({ data1 }) => {
       'invoice_type', 'consider_for_Annex'
     ];
 
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+  if(isLoading){
+    return <Loader/>
+  }
 
+  
   return (
     <div className="flex h-screen overflow-hidden">
     {/* Sidebar */}

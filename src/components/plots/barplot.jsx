@@ -7,11 +7,6 @@ const BarPlot = ({ data, chartBy }) => {
   const [topAnomalyData, setTopAnomalyData] = useState([]);
 
   useEffect(() => {
-    if (!data || data.length === 0 || !chartBy) {
-      console.error('Invalid data or chartBy prop provided.');
-      return;
-    }
-
     const generateTopAnomalyData = () => {
       const anomalyDistribution = data.reduce((acc, entry) => {
         const key = entry[chartBy];

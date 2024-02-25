@@ -12,18 +12,16 @@ const TableRow = ({ rowData }) => {
         {Object.values(rowData).map((value, index) => (
           <td key={index} className={classes}>
             <div className="flex flex-col">
-              <Typography key={index} variant="small" color="blue-gray" className="font-normal hover:cursor:pointer" onClick={()=>{
-                if(index==1){
-
-                  navigate(`/dashboard/?ntn=${rowData.ntn_id}&pos=${value}`)
-                }
-                if(index==19){
-                  navigate(`/dashboard/?ntn=${value}`)
-                }
-              
-              }} style={{cursor:"pointer"}}>
-                {value}
-              </Typography>
+            <Typography key={index} variant="small" color="blue-gray" className="font-normal hover:cursor:pointer" onClick={() => {
+  if (index === 1) {
+    navigate(`/dashboard/?ntn=${rowData.ntn_id}&pos=${value}`);
+  }
+  if (index === 19) {
+    navigate(`/dashboard/?ntn=${value}`);
+  }
+}} style={{ cursor: "pointer" }}>
+  {value}
+</Typography>
             </div>
           </td>
         ))}

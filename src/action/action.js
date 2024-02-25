@@ -39,7 +39,7 @@ import reducer from "../redux_store/reducer.js";
       dispatch(startLoading());
       const { data } = await api.getAllInvoice(offset,anomaly);
         dispatch(endLoading());
-        console.log(data.results)
+        console.log(data)
         return data;
       } catch (error) {
         console.log(error.message);
@@ -100,9 +100,9 @@ import reducer from "../redux_store/reducer.js";
     };
   export const login = (body) => async (dispatch) => {
     // try {
-      // dispatch(startLoading());
+      dispatch(startLoading());
       const  {data}  = await api.login(body);
-        // dispatch(endLoading());
+        dispatch(endLoading());
         console.log(data)
         localStorage.setItem("authToken", JSON.stringify(data.key));
         return true;

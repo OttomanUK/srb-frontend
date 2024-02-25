@@ -1,8 +1,8 @@
 import axios from "axios";
-export const baseURL = "https://upgraded-space-sniffle-p6g69vv76rx294vp-8000.app.github.dev";
-// export const baseURL = "http://127.0.0.1:8000";
+// export const baseURL = "https://upgraded-space-sniffle-p6g69vv76rx294vp-8000.app.github.dev";
+export const baseURL = "http://127.0.0.1:8000";
 
-const API = axios.create({ baseURL: baseURL });
+export const API = axios.create({ baseURL: baseURL });
 API.interceptors.request.use((req) => {
   if (localStorage.getItem("authToken")) {
     req.headers.Authorization = `Token ${JSON.parse(

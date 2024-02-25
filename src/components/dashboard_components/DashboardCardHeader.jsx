@@ -34,9 +34,9 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
         }, [searchTerm,data]);
       
       
-      if(data==null)
+      if(data.lenght===0)
       {
-        return "hello"
+        return 
       }
   return (
     <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -48,25 +48,27 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
           </div>
         </div>
         <div className=" dark:border-slate-700 dark:bg-slate-800 flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs value="all" className="dark:border-slate-700 dark:bg-slate-800 w-full md:w-max">
-          <TabsHeader
-        className="rounded-none bg-transparent p-0 dark:text-white" indicatorProps={{className:"bg-transparent border-b-4 border-gray-900 shadow-none rounded-none",
+          <Tabs value={anomalous} className="dark:border-slate-700 dark:bg-slate-800 w-full md:w-max">
+  <TabsHeader
+    className="rounded-none bg-transparent p-0 dark:text-white" 
+    indicatorProps={{
+      className:"bg-transparent border-b-4 border-gray-900 shadow-none rounded-none",
+    }}
+  >
+    {TABS.map(({ label, value }) => (
+      <Tab 
+        key={value} 
+        value={value} 
+        onClick={() => {
+          setAnomalous(value);
         }}
       >
-              {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value} onClick={()=>{
-                  if(anomalous!=value){
-                    setAnomalous(value)
-                  }
+        {label} 
+      </Tab>
+    ))}
+  </TabsHeader>
+</Tabs>
 
-                }
-                }>
-                
-                  {label} 
-                </Tab>
-              ))}
-            </TabsHeader>
-          </Tabs>
           <div className=" mb-8 flex gap-8 mx-3 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
             <Input
               label="Search"

@@ -5,6 +5,8 @@ const initialState = {
   isLoading: false,
   userData: null,
   data: [],
+  graphData: {},
+next:null,
 };
 
 export const centralStore = createSlice({
@@ -23,6 +25,11 @@ export const centralStore = createSlice({
       state.data=data
       
     },
+    addGraphData: (state, action) => {
+      const data = action.payload;
+      state.graphData=data
+      
+    },
   
   },
 });
@@ -30,8 +37,8 @@ export const centralStore = createSlice({
 export const {
   startLoading,
   endLoading,
-
   addData,
+  addGraphData,
 } = centralStore.actions;
 
 export default centralStore.reducer;
