@@ -37,47 +37,52 @@ const Analytics = () => {
     const fetchData = async () => {
       setResultsFinal([]);
       setLoading(true);
-
+    
       const storedData = localStorage.getItem('nextUrl');
-      const nextUrl = JSON.parse(storedData);
+      let nextUrl = JSON.parse(storedData);
       let page = 1;
-
-      do {
+    
+      while (page <= 5) {
         try {
+          console.log(nextUrl+" "+page)
           const modifiedUrl = new URL(nextUrl);
           modifiedUrl.searchParams.set('page', page.toString());
-
-          const { data: nextResponse } = await API.get(modifiedUrl.toString());
-          const { results: nextResults, next: newNextPage } = nextResponse;
-
-          setNextPage(newNextPage);
-          setResultsFinal((prevResults) => [...prevResults, ...nextResults]);
-          page++;
+    
+          const { data } = await API.get(`/filter/${modifiedUrl.search}`);
+          setResultsFinal((prevResults) => [...prevResults, ...data.results]);
+    
+          if (data.next) {
+            nextUrl = data.next;
+            setNextPage(data.next);
+            page++;
+          } else {
+            break;
+          }
         } catch (error) {
           break; // Break the loop if an error occurs
         }
-      } while (nextPage && page <= 5);
-
-      const {
-        averageRate,
-        averageSalesTax,
-        totalSales,
-        averageDelayMinutes
-      } = calculateStatistics(resultsfinal);
-      setAverageRate(averageRate)
-      setDelayAverage(delayAverage)
-      setTotalSales(totalSales)
-
-
+      }
+    
+      if (page > 2) {
+        const {
+          averageRate,
+          averageSalesTax,
+          totalSales,
+          averageDelayMinutes
+        } = calculateStatistics(resultsfinal);
+        setAverageRate(averageRate);
+        setDelayAverage(delayAverage);
+        setTotalSales(totalSales);
+      }
+    
       dispatch(endLoading());
       setLoading(false);
     };
-
+    console.log('i fire once');
     fetchData();
-    return () => {
-    };
+    console.log('i fire once');
   }, []);
-      if(loading){
+     if(loading){
         return <Loader/>
 }
    if(resultsfinal.length===0){
@@ -93,7 +98,7 @@ const Analytics = () => {
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner greeting={customGreeting} text={customText}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
               <DashboardCard title={'Average Delay'} value={delayAverage}/>

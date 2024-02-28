@@ -1,6 +1,6 @@
 import React from 'react';
 
-function WelcomeBanner({greeting, text,ntn,pos}) {
+function WelcomeBanner({greeting, text,ntn,pos,show=false}) {
   return (
     <div className="relative bg-indigo-200 dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
@@ -50,9 +50,19 @@ function WelcomeBanner({greeting, text,ntn,pos}) {
         <div className="flex flex-rows gap-20" >
 
         <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1  mr-px10 flex-2">{greeting}</h1>
-        <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">{ntn?"Ntn Number : "+ntn:"Overall Ntns"}</h1>
-        {pos?<h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">{"Pos Number: "+pos}</h1>:null}
-        </div>
+        {show && (
+  <>
+    <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+      {ntn ? `Ntn Number: ${ntn}` : 'Overall Ntns'}
+    </h1>
+    {pos ? (
+      <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+        Pos Number: {pos}
+      </h1>
+    ) : null}
+  </>
+)}
+  </div>
         <p className="dark:text-indigo-200">{text}</p>
       </div>
     </div>
