@@ -2,7 +2,8 @@ import React,{useState} from "react";
 import { TERipple } from "tw-elements-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login,submit_data,getMissingInvoice } from "../action/action";
+import { login,submit_data,getMissingInvoice,getAllNtn } from "../action/action";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Login(){
   const navigate = useNavigate();
@@ -27,14 +28,20 @@ export default function Login(){
     event.preventDefault();
     console.log('Form submitted:', formValues);
 
-    const a= dispatch(login(formValues));P
+    const a= dispatch(login(formValues));
+    // const a= dispatch(getAllNtn());
     // const a= dispatch(submit_data(formValues));
+
     // const a= dispatch(getMissingInvoice(55));
-    // if(a){
-    //     navigate('/login');
+    // if(false){
+    //     navigate('/dashboard');
+    // }else{
+      toast.error('Oops! Something went wrong.');
     // }
   };
   return (
+           <>
+           {/* <ToastContainer /> */}
         <div className="flex flex-wrap justify-center h-screen items-center text-neutral-800 dark:text-neutral-200">
             <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
               <div>
@@ -137,8 +144,10 @@ export default function Login(){
                     </p>
                   </div>
                 </div> */}
+                
               </div>
             </div>
           </div>
+          </>
   );
 }

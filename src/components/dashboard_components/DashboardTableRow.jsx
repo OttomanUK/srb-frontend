@@ -10,16 +10,19 @@ const TableRow = ({ rowData }) => {
     return (
       <tr className='dark:text-white'>
         {Object.values(rowData).map((value, index) => (
-          <td key={index} className={classes}>
+          <td key={index} className={classes} onClick={() => {
+            if (index === 1) {
+              navigate(`/dashboard/?ntn=${rowData.ntn}&pos=${value}`);
+            }
+            else if (index === 19) {
+              navigate(`/dashboard/?ntn=${value}`);
+            }else{
+              
+              navigate(`/InvoiceDetails/${rowData.srb_invoice_id}`);
+            }
+          }} style={{ cursor: "pointer" }}>
             <div className="flex flex-col">
-            <Typography key={index} variant="small" color="blue-gray" className="font-normal hover:cursor:pointer" onClick={() => {
-  if (index === 1) {
-    navigate(`/dashboard/?ntn=${rowData.ntn_id}&pos=${value}`);
-  }
-  if (index === 19) {
-    navigate(`/dashboard/?ntn=${value}`);
-  }
-}} style={{ cursor: "pointer" }}>
+            <Typography  variant="small" color="blue-gray" className="font-normal hover:cursor:pointer" >
   {value}
 </Typography>
             </div>

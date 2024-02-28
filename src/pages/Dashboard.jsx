@@ -8,14 +8,14 @@ import DashoardCardHeader from '../components/dashboard_components/DashboardCard
 import FilterButton from '../components/resuseable_components/DropdownFilter';
 import Datepicker from '../components/resuseable_components/Datepicker';
 import MembersTable from '../components/dashboard_components/DashboardTable';
-import {  useNavigate,useLocation } from 'react-router-dom';
+import {  useNavigate,useLocation} from 'react-router-dom';
 import { getAllInvoice,getNtnInvoice,getPosInvoice } from '../action/action.js';
 import Footer from '../components/dashboard_components/DashboardFooter';
 import {dummy} from "../data/dummyData.js"
-import {addData,addGraphData} from "../redux_store/reducer.js"
+import {addData,addGraphData,addNtn} from "../redux_store/reducer.js"
 import Loader from "../components/utils/Loader"
 import DashboardCard from '../components/dashboard_components/DashboardCard'; 
-
+import { Card, CardBody } from '@material-tailwind/react';
 function useQuery() {
   return new URLSearchParams(useLocation().search);}
 
@@ -24,7 +24,7 @@ function Dashboard() {
   const customGreeting = 'Good Morning, SRB👋'
   const customText = 'Here is the latest sales data with anomalies:'
 
-  const {isLoading,data,graphData}=useSelector(state=>state.centralStore)
+  const {isLoading,data,graphData,reduxNtn}=useSelector(state=>state.centralStore)
   // const [data,setData]=useState([])
   const [anomalous,setAnomalous]=useState("True")
   const [totalPos,setTotalPos]=useState(0)
@@ -35,32 +35,34 @@ function Dashboard() {
   // const [pageno,setPageno]=useState(1)
   const [search,setSearch]=useState([])
   const query=useQuery()
-  const offset=parseInt(query.get('offset'))||1
+  const page=parseInt(query.get('page'))||1
+  const date=parseInt(query.get('date'))||"None"
   const ntn=query.get('ntn')||null
   const pos=query.get('pos')||null
     const dispatch=useDispatch()
+    const navigate=useNavigate()
    
     const [sidebarOpen, setSidebarOpen] = useState(false);
     useEffect(() => {
       const fetchData = async () => {
         try {
           let results
+          dispatch(addNtn(ntn))
            if(pos!=null && ntn!=null){   
-            results = await dispatch(getPosInvoice(pos,ntn,offset,anomalous))
+            results = await dispatch(getPosInvoice(pos,ntn,page,anomalous,date))
           }
           else if(ntn!=null){
-            results = await dispatch(getNtnInvoice(ntn,offset,anomalous))
+            results = await dispatch(getNtnInvoice(ntn,page,anomalous,date))
       }
      else if(ntn==null){
-         results = await dispatch(getAllInvoice(offset,anomalous));  
+         results = await dispatch(getAllInvoice(page,anomalous,date));  
       }
       dispatch(addData(results.results))
-      dispatch(addGraphData(results))
-      dispatch(addGraphData(results))
       dispatch(addGraphData(results))
       setSearch(results.results);
       const limitMatch =results.next?.match(/limit=(\d+)/);
       setLimit( limitMatch ? parseInt(limitMatch[1], 10) : 1)
+      console.log(limit)
       setCount(results.count)
       const uniqueNtnIds = new Set(results?.results.map(item => item.ntn_id));
       const totalUniqueNtnIds = uniqueNtnIds.size;
@@ -76,7 +78,7 @@ function Dashboard() {
       };
     
       fetchData();
-    }, [anomalous,offset]);
+    }, [anomalous,page,ntn,pos,date]);
     
 
 if(isLoading  ){ 
@@ -116,11 +118,21 @@ if(isLoading  ){
               <DashboardCard title={'Total Anomaly'} value={totalAnomaly}/>
               <DashboardCard title={'Total POS'} value={totalPos}/>
               <DashboardCard title={'Total NTN'} value={totalNtn}/>
+              { ntn &&
+
+                <Card className='dark:border-slate-700 dark:bg-slate-800 w-full min-w-max '>
+      <CardBody className="dark:border-slate-700 dark:bg-slate-800 flex items-center justify-center h-24">
+        <div className="text-xl font-bold flex flex-row dark:text-white" onClick={()=>navigate(`/missing/${ntn}`)}>
+          Missing Invoice
+        </div>
+      </CardBody>
+    </Card>
+              }
               </div>
               {/* Line chart (Acme Plus) */}
               <DashoardCardHeader setAnomalous={setAnomalous} searchData={search} setSearchData={setSearch} anomalous={anomalous}/>
               <MembersTable tableData={search}/>
-              <Footer pos={pos} ntn={ntn} offset={offset} total={ limit ? Math.ceil(limit/count ) : 1}/>
+              <Footer pos={pos} ntn={ntn} page={page} total={ Math.ceil(count/2) }/>
               {/* Line chart (Acme Advanced) */} 
             </div>
 

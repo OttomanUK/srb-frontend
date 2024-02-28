@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
-const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
+const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
   const [timeSeriesData, setTimeSeriesData] = useState([]);
   const [dailyCountData, setDailyCountData] = useState([]);
 
@@ -10,6 +10,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
       const timeSeries = data.map((entry) => ({
         x: new Date(entry.created_date_time),
         y: showAnomalyCount ? entry.anomaly : entry.sales_value,
+        text: `Invoice Number: ${entry.srb_invoice_id}, Ntn : ${entry.ntn} ,POS ID: ${entry.pos_id}`,
       }));
 
       const dailyCounts = data.reduce((acc, entry) => {
@@ -19,7 +20,6 @@ const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
           acc[date] = 0;
         }
 
-        // Count anomalies or sum sales based on showAnomalyCount prop
         acc[date] += showAnomalyCount ? (entry.anomaly ? 1 : 0) : entry.sales_value;
         return acc;
       }, {});
@@ -27,6 +27,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
       const dailyCountArray = Object.keys(dailyCounts).map((date) => ({
         x: new Date(date),
         y: dailyCounts[date],
+        text: `Invoice Number: ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.srb_invoice_id},Ntn : ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.ntn} ,POS ID: ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.pos_id}`,
       }));
 
       setTimeSeriesData(timeSeries);
@@ -45,13 +46,14 @@ const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
             mode: 'markers',
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
-            name: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} over Time`,
+            text: timeSeriesData.map((entry) => entry.text),
+            name: `Total ${showAnomalyCount ? anomaly1 : 'Sales'} over Time`,
           },
         ]}
         layout={{
-          title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} over Time`,
+          title: `Total ${showAnomalyCount ? anomaly1 : 'Sales'} over Time`,
           xaxis: { title: 'Time' },
-          yaxis: { title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'}` },
+          yaxis: { title: `Total ${showAnomalyCount ? anomaly1 : 'Sales'}` },
           paper_bgcolor: '#EEEEEE',
           plot_bgcolor: '#EEEEEE',
         }}
@@ -63,13 +65,14 @@ const TimeSeriesPlot = ({ data, showAnomalyCount,anomaly1 }) => {
             type: 'bar',
             x: dailyCountData.map((entry) => entry.x),
             y: dailyCountData.map((entry) => entry.y),
-            name: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} per Day`,
+            // text: dailyCountData.map((entry) => entry.text),
+            name: `Total ${showAnomalyCount ? anomaly1 : 'Sales'} per Day`,
           },
         ]}
         layout={{
-          title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'} per Day`,
+          title: `Total ${showAnomalyCount ? anomaly1 : 'Sales'} per Day`,
           xaxis: { title: 'Day' },
-          yaxis: { title: `Total ${showAnomalyCount ? {anomaly1} : 'Sales'}` },
+          yaxis: { title: `Total ${showAnomalyCount ? anomaly1 : 'Sales'}` },
           paper_bgcolor: '#EEEEEE',
           plot_bgcolor: '#EEEEEE',
         }}

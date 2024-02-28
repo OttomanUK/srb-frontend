@@ -41,7 +41,6 @@ function App() {
         <Route exact path="/UserProfile" element={<UserProfile/>}/>
         <Route exact path="/register" element={<Register/>} />
         <Route exact path="/NtnList" element={<NtnList/>} />
-        {/* <Route exact path="/Loader" element={<Loader/>} /> */}
       </Routes>
   );
 }

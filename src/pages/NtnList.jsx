@@ -3,13 +3,20 @@ import Sidebar from '../components/resuseable_components/Sidebar';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner';
 import Header from '../components/resuseable_components/Header';
 import { Card, CardBody } from '@material-tailwind/react';
-
+import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllNtn } from '../action/action';
+import Loader from '../components/utils/Loader';
 
 
 function NtnList(){
     const customGreeting = 'NTN Lookup'
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const sampleData = [
+    const {isLoading} = useSelector(state => state.centralStore);
+    const [data, setData] = useState([]);
+    const dispatch=useDispatch()
+    const navigate=useNavigate()
+    const data1 = [
         { ntnNo: '123456', name: 'John Doe', address: '123 Main Street', posNumber: 'POS-001' },
         { ntnNo: '789012', name: 'Jane Doe', address: '456 Oak Avenue', posNumber: 'POS-002' },
         { ntnNo: '345678', name: 'Bob Smith', address: '789 Pine Lane', posNumber: 'POS-003' },
@@ -18,6 +25,17 @@ function NtnList(){
         { ntnNo: '112233', name: 'Eva Martinez', address: '303 Maple Avenue', posNumber: 'POS-006' },
         // Add more data as needed
     ];
+    useEffect(() => {
+const fetchData = async () => {
+    const {results}= await dispatch(getAllNtn());
+setData(results);
+}
+fetchData()
+}
+    , [])
+    if(isLoading){
+        return <><Loader/></>
+    }
 
     return(
         <div className="flex h-screen overflow-hidden">
@@ -45,14 +63,14 @@ function NtnList(){
                                     <th className="text-gray-700 dark:text-white font-bold mr-2">Company Name</th>
                                     <th className="text-gray-700 dark:text-white font-bold mr-2">Address</th>
                                     <th className="text-gray-700 dark:text-white font-bold">POS Number</th>
-                                </tr>
+                                </tr> 
                                 </thead>
                                 <tbody>
-                                    {sampleData.map((item, index) => (
+                                    {data.map((item, index) => (
                                         <tr key={index} className='text-center text-gray-700 dark:text-white'>
-                                        <td className="py-2 px-4 border-b">{item.ntnNo}</td>
+                                        <td className="py-2 px-4 border-b" onClick={()=>navigate(`/dashboard?ntn=${item.ntn}`)}>{item.ntn}</td>
                                         <td className="py-2 px-4 border-b">{item.name}</td>
-                                        <td className="py-2 px-4 border-b">{item.address}</td>
+                                        <td className="py-2 px-4 border-b">{item.location}</td>
                                         <td className="py-2 px-4 border-b">{item.posNumber}</td>
                                         </tr>
                                     ))}

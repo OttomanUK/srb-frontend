@@ -8,43 +8,43 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 
-const Footer = ({pos,ntn,offset,total}) => {
+const Footer = ({pos,ntn,page,total}) => {
   const navigate=useNavigate();
 const previous=()=>{
-  if(offset===1){
+  if(page===1){
     return 
   }
   if(pos!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&offset=${offset-1}`)
+    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
   return }
   if(ntn!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&offset=${offset-1}`)
+    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
     return }
   if(ntn==null){
-    navigate(`/dashboard/?offset=${offset-1}`)
+    navigate(`/dashboard/?page=${page-1}`)
     return  } 
 }
 const next=()=>{
-  if(offset==total){
+  if(page==total){
     return 
   }
   // console.log("kjer")
   if(pos!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&offset=${offset+1}`)
+    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
   return }
   if(ntn!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&offset=${offset+1}`)
+    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
     return 
   }
   if(ntn==null){
-    navigate(`/dashboard/?offset=${offset+1}`)
+    navigate(`/dashboard/?page=${page+1}`)
     return 
   }
 }
 return (
     <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
         <Typography variant="small" color="blue-gray" className="font-normal">
-          Page {offset} of {total}
+          Page {page} of {total}
         </Typography>
         <div className="flex gap-2">
           <Button variant="outlined" size="sm" onClick={()=>{

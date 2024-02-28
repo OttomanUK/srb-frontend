@@ -15,6 +15,7 @@ import { setAnomaly } from '../../redux_store/reducer';
 const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const dispatch=useDispatch()
   const {isLoading,data}=useSelector(state=>state.centralStore)
   const TABS = [
     { label: "Anomalous", value: "True" },
