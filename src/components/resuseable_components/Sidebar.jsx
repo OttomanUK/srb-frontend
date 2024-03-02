@@ -345,6 +345,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                     </React.Fragment>
                   );
                 }}
+
               </SidebarLinkGroup>
               {/* Extras */}
               <SidebarLinkGroup>
@@ -421,7 +422,9 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                   );
                 }}
               </SidebarLinkGroup>
-              
+        
+              </SidebarLinkGroup>    
+
             </ul>
           </div>
         </div>
