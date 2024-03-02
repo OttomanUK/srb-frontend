@@ -9,72 +9,139 @@ import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
 import {useDispatch,useSelector} from 'react-redux'
 import {useLocation,useNavigate} from 'react-router-dom'
-
+import {API} from "../api/index.js"
+import {getMissingInvoice} from "../action/action.js"
+import { startLoading,endLoading } from '../redux_store/reducer.js';
+import Loader from '../components/utils/Loader.jsx';
+import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
+import MissingBarPlot from '../components/plots/missingbar.jsx';
 // Adjust the path based on your project structure
 // import PiePlot from './pie_plots';
 
+
 const Analytics = () => {
+  const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-  function useQuery() {
-    return new URLSearchParams(useLocation().search);}
-    const dispatch=useDispatch()
-    const {posts,isLoading}=useSelector(state=>state.centralStore)
-   const query=useQuery()
-   const page=query.get('page')||1
-   const search=query.get('search')
+    const {isLoading,reduxNtn,reduxPos,anomaly,graphData}=useSelector(state=>state.centralStore)
+   const [resultsfinal, setResultsFinal] = useState([]);
+   const [loading,setLoading]=useState(false)
+   const [nextPage, setNextPage] = useState(1);
+   const [missing, setMissing] = useState([]);
+   const [delayAverage, setDelayAverage] = useState(0);
+   const [averageRate, setAverageRate] = useState(0);
+   const [totalSales,setTotalSales] = useState(0);
    
-    useEffect(()=>{
-      if(search){
+   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+
+   useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true)
+      setResultsFinal([])
+      
+      const storedData = localStorage.getItem('nextUrl');
+      let nextUrl = JSON.parse(storedData);
+      let page = 1;
+      
+      while (page <= 10) {
+        try {
+          const modifiedUrl = new URL(nextUrl);
+          modifiedUrl.searchParams.set('page', page.toString());
+          
+          const { data } = await API.get(`/filter/${modifiedUrl.search}`);
+          setResultsFinal((prevResults) => [...prevResults, ...data.results]);
+          
+          if (data.next) {
+            nextUrl = data.next;
+            setNextPage(data.next);
+            ++page;
+          } else {
+            break;
+          }
+        } catch (error) {
+          break; // Break the loop if an error occurs
+        }
       }
-      else{
-  
-      }
-    },[page,search])
-
-
-  const [data, setData] = useState([]);
-  const [dummyData, setDummyData] = useState([]);
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  useEffect(() => {
-    const generateDummyData = () => {
-      const startDate = new Date('2023-11-01T00:00:00');
-      const endDate = new Date('2023-11-30T23:59:59');
-      const dateRange = endDate - startDate;
-
-      const dummyData = Array.from({ length: 100 }, (_, index) => {
-        const randomDate = new Date(startDate.getTime() + Math.random() * dateRange);
-        return {
-          pos_id: Math.floor(Math.random() * 10),
-          ntn: Math.floor(Math.random() * 5),
-          anomaly: Math.floor(Math.random() * 10),
-          created_date_time: randomDate.toISOString(),
-        };
-      });
-
-      setDummyData(dummyData);
+      if(page===1){
+        setResultsFinal(graphData.results)
+    }
+    setLoading(false)
     };
-    generateDummyData();
+    setLoading(true)
+    console.log('i fire once');
+    fetchData();
+    
+     
+      setLoading(false)
   }, []);
+  useEffect(() => {
+
+    setLoading(true)
+    const fetch=async()=>{
+      
+        let page = 1;
+        while (page <= 10) {
+          try {
+            const data=await dispatch(getMissingInvoice(reduxNtn,page))
+            // console.log(results+"oikoio")
+          setMissing(((prevResults) => [...prevResults, ...data.results]))
+          if (data.next) {
+            ++page;
+          } else {
+            break;
+          }
+        } catch (error) {
+          break; // Break the loop if an error occurs
+        }
+      }
+    }
+    fetch()
+    const {
+      averageRate,
+      averageSalesTax,
+      totalSales,
+      averageDelayMinutes
+    } = calculateStatistics(resultsfinal);
+    setAverageRate(averageRate);
+    setDelayAverage(delayAverage);
+    setTotalSales(totalSales);
+    setLoading(false)
+  },[])
+  
+     if(loading){
+        return <Loader/>
+}
+   if(resultsfinal.length===0){
+    
+    return <Loader/>
+   }
+  
 
   return (
     <div className="flex h-screen overflow-hidden">
+
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner greeting={customGreeting} text={customText}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos}/>
+            <div className='flex flex-row space-x-4'>
+              <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
+              <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
+              <DashboardCard title={'Total Sales'} value={totalSales}/>
+              <DashboardCard title={'Average Rate'} value={averageRate}/>
+              </div>
               {/* Other components */}
-              <Card title={"100"} content={"Anomaly"} color="bg-gray-200"/>
-            <TimeSeriesPlot data={dummyData} />
-            <Card title={"100"} content={"Anomaly"} color="bg-gray-200"  />
+            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly}/>
+            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly}/>
 
-            <PiePlot data={dummyData} chartBy="ntn"/>
-            <BarPlot data={dummyData} chartBy="ntn"/>
+            <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
+            <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
             {/* or */}
-            <PiePlot data={dummyData} chartBy="pos_id"/>
-            <BarPlot data={dummyData} chartBy="pos_id"/>
+            <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+            <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
           </div>
         </div>
     </div>
@@ -82,3 +149,25 @@ const Analytics = () => {
 };
 
 export default Analytics;
+const calculateStatistics = (invoices) => {
+  const totalInvoices = invoices.length;
+  const totalSales = invoices.reduce((sum, invoice) => sum + invoice.sales_value, 0);
+  const totalRate = invoices.reduce((sum, invoice) => sum + invoice.rate_value, 0);
+  const totalSalesTax = invoices.reduce((sum, invoice) => sum + invoice.sales_tax, 0);
+
+  const averageRate = totalRate / totalInvoices;
+  const averageSalesTax = totalSalesTax / totalInvoices;
+
+  const averageDelayMinutes = invoices.reduce((sum, invoice) => {
+    const createdTime = new Date(invoice.created_date_time);
+    const invoiceTime = new Date(invoice.invoice_date);
+    const delayInMinutes = (createdTime - invoiceTime) / (1000 * 60); // Convert milliseconds to minutes
+    return sum + delayInMinutes;
+  }, 0) / totalInvoices;
+  return {
+    averageRate,
+    averageSalesTax,
+    totalSales,
+    averageDelayMinutes
+  };
+};

@@ -34,30 +34,36 @@ import reducer from "../redux_store/reducer.js";
       }
     };
 
-  export const getAllInvoice = (anomaly) => async (dispatch) => {
+  export const getAllInvoice = (page,anomaly,date="None") => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getAllInvoice(anomaly);
+      console.log(page)
+      const { data } = await api.getAllInvoice(page,anomaly,date);
         dispatch(endLoading());
+        console.log(data)
         return data;
       } catch (error) {
         console.log(error.message);
       }
     };
-  export const getNtnInvoice = (id,anomaly) => async (dispatch) => {
+  export const getNtnInvoice = (id,page,anomaly,date="None") => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getNtnInvoice(id,anomaly);
+      const { data } = await api.getNtnInvoice(id,page,anomaly,date);
         dispatch(endLoading());
-        return data;
+        console.log(data)
+        return data
       } catch (error) {
         console.log(error.message);
       }
     };
-  export const getPosInvoice = (id,anomaly) => async (dispatch) => {
+  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="None") => async (dispatch) => {
     try {
+      console.log(date)
       dispatch(startLoading());
-      const { data } = await api.getPosInvoice(id,anomaly);
+      const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date);
+      console.log(date)
+      console.log(id)
       console.log(data)
         dispatch(endLoading());
         return data;
@@ -65,11 +71,12 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const getAllNtn = () => async (dispatch) => {
+  export const getAllNtn = (page) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getAllNtn();
+      const { data } = await api.getAllNtn(page);
         dispatch(endLoading());
+        console.log(data)
         return data;
       } catch (error) {
         console.log(error.message);
@@ -85,26 +92,57 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const login = (body) => async (dispatch) => {
+  export const getMissingInvoice = (id="all",page=1) => async (dispatch) => {
     try {
+      let data
       dispatch(startLoading());
-      const { data } = await api.login(body);
+      if(id=="None"){
+          data  = await api.getMissingInvoice("all",page);
+        
+      }else{
+        
+          data  = await api.getMissingInvoice(id,page);
+      }
+        dispatch(endLoading());
+        console.log(data.data)
+        return data.data;
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
+  export const login = (body) => async (dispatch) => {
+    // try {
+      dispatch(startLoading());
+      const  {data}  = await api.login(body);
         dispatch(endLoading());
         console.log(data)
         localStorage.setItem("authToken", JSON.stringify(data.key));
-        return data;
+        return true;
+      // } catch (error) {
+        console.log(error.message);
+      // }
+    };
+  export const register = (body) => async (dispatch) => {
+    try {
+      dispatch(startLoading());
+      const  data  = await api.register(body);
+        dispatch(endLoading());
+        console.log(data)
+        // localStorage.setItem("authToken", JSON.stringify(data.key));
+        return true;
       } catch (error) {
         console.log(error.message);
+        return false
       }
     };
   export const submit_data = (body) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.submit_data(data1);
+      const { data } = await api.submit_data(body);
         dispatch(endLoading());
         console.log(data)
         return data;
       } catch (error) {
-        console.log(error.message);
+        console.log(error);
       }
     };

@@ -1,8 +1,47 @@
-import React from "react";
+import React,{useState} from "react";
 import { TERipple } from "tw-elements-react";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login,submit_data,getMissingInvoice,getAllNtn } from "../action/action";
+import { ToastContainer, toast } from 'react-toastify';
 
 export default function Login(){
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const initialFormState = {
+  
+    email: 'mohib@gmail.com',
+    password: 'polkpolk',
+
+    
+  };
+
+  const [formValues, setFormValues] = useState(initialFormState);
+
+  const handleChange = (event) => {
+      const { name, value } = event.target;
+    
+    setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log('Form submitted:', initialFormState);
+
+    const a= dispatch(login(initialFormState));
+    // const a= dispatch(getAllNtn());
+    // const a= dispatch(submit_data(12));
+
+    // const a= dispatch(getMissingInvoice(55));
+    // if(false){
+    //     navigate('/dashboard');
+    // }else{
+      toast.error('Oops! Something went wrong.');
+    // }
+  };
   return (
+           <>
+           {/* <ToastContainer /> */}
         <div className="flex flex-wrap justify-center h-screen items-center text-neutral-800 dark:text-neutral-200">
             <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
               <div>
@@ -31,6 +70,9 @@ export default function Login(){
                       <input type="text"
                         placeholder="Username"
                         className="mb-4"
+                        value={formValues.email}
+                        name="email"
+                        onChange={handleChange}
                       />
                       </div>
 
@@ -40,6 +82,9 @@ export default function Login(){
                         type="password"
                         placholder="Password"
                         className="mb-5"
+                        value={formValues.password}
+                        name="password"
+                        onChange={handleChange}
                      />
                      </div>
 
@@ -53,6 +98,7 @@ export default function Login(){
                               background:
                                 "linear-gradient(to right, #009739, #006a33, #005c2e, #004726)",
                             }}
+                            onClick={handleSubmit}
                           >
                             Log in
                           </button>
@@ -98,8 +144,10 @@ export default function Login(){
                     </p>
                   </div>
                 </div> */}
+                
               </div>
             </div>
           </div>
+          </>
   );
 }

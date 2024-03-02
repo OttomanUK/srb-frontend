@@ -10,33 +10,34 @@ import {
   Tab,
 } from "@material-tailwind/react";
 import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-
-
-const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,setSearchData}) => {
-  const TABS = [
-    { label: "Anomalous", value: "True" },
-    { label: "Non Anomalous", value: "False" },
-  ];
+import {useDispatch,useSelector} from 'react-redux'
+import { setAnomaly } from '../../redux_store/reducer';
+const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredData, setFilteredData] = useState([]);
+  const dispatch=useDispatch()
+  const {isLoading,data}=useSelector(state=>state.centralStore)
+  const TABS = [
+    { label: "Anomalous", value: 10 },
+    { label: "Non Anomalous", value: 0 },
+  ];
   useEffect(() => {
-    if(tableData==null){
-      return 
-    }
-    // Filter data based on search term
-    const searchResult = tableData.filter(item =>
-      Object.values(item).some(value =>
-        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+    if (Array.isArray(data) && data.length > 0) {
+      // Filter data based on search term
+      const searchResult = data.filter((item) =>
+        Object.values(item).some((value) =>
+          String(value).toLowerCase().includes(searchTerm.toLowerCase())
         )
-        );
-        setFilteredData(searchResult);
-        setSearchData(searchResult)
-      }, [searchTerm]);
+      );
+      setFilteredData(searchResult);
+      setSearchData(searchResult);
+    }
+        }, [searchTerm,data]);
       
       
-      if(tableData==null)
+      if(data.lenght===0)
       {
-        return "hello"
+        return 
       }
   return (
     <CardHeader floated={false} shadow={false} className="rounded-none">
@@ -48,25 +49,33 @@ const DashboardCardHeader = ({ setAnomalous,setTableData,tableData ,searchData,s
           </div>
         </div>
         <div className=" dark:border-slate-700 dark:bg-slate-800 flex flex-col items-center justify-between gap-4 md:flex-row">
-          <Tabs value="all" className="dark:border-slate-700 dark:bg-slate-800 w-full md:w-max">
-          <TabsHeader
-        className="rounded-none bg-transparent p-0 dark:text-white" indicatorProps={{className:"bg-transparent border-b-4 border-gray-900 shadow-none rounded-none",
+          <Tabs value={anomalous} className="dark:border-slate-700 dark:bg-slate-800 w-full md:w-max">
+  <TabsHeader
+    className="rounded-none bg-transparent p-0 dark:text-white" 
+    indicatorProps={{
+      className:"bg-transparent border-b-4 border-gray-900 shadow-none rounded-none",
+    }}
+  >
+    {TABS.map(({ label, value }) => (
+      <Tab 
+        key={value} 
+        value={value} 
+        onClick={() => {
+          if(value===10){
+            dispatch(setAnomaly("Anomaly"))
+          }else{
+            dispatch(setAnomaly("Non-Anomaly"))
+
+          }
+          setAnomalous(value);
         }}
       >
-              {TABS.map(({ label, value }) => (
-                <Tab key={value} value={value} onClick={()=>{
-                  if(anomalous!=value){
-                    setAnomalous(value)
-                  }
+        {label} 
+      </Tab>
+    ))}
+  </TabsHeader>
+</Tabs>
 
-                }
-                }>
-                
-                  {label} 
-                </Tab>
-              ))}
-            </TabsHeader>
-          </Tabs>
           <div className=" mb-8 flex gap-8 mx-3 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
             <Input
               label="Search"

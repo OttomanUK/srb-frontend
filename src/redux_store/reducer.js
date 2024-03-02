@@ -4,7 +4,12 @@ const initialState = {
   cart: JSON.parse(localStorage.getItem("cart")) || [],
   isLoading: false,
   userData: null,
-  productList: [],
+  data: [],
+  anomaly: "Anomaly",
+  reduxPos: "None",
+  graphData: {},
+  reduxNtn:  "None",
+next:null,
 };
 
 export const centralStore = createSlice({
@@ -18,21 +23,33 @@ export const centralStore = createSlice({
       state.isLoading = false;
     },
 
-    addProductQuantity: (state, action) => {
-      const { product } = action.payload;
-      const { quantity } = action.payload;
+    addData: (state, action) => {
+      const data = action.payload;
+      state.data=data
+      
+    },
+    addGraphData: (state, action) => {
+      const data = action.payload;
+      state.graphData=data
+      const dataString = JSON.stringify(data.next);
+      localStorage.setItem('nextUrl', dataString);
+      
+    },
+    setAnomaly: (state, action) => {
+      const data = action.payload;
+      state.anomaly=data
+      
+    },
 
-      const existingProductIndex = state.cart.findIndex(
-        (item) => item.id === product.id
-      );
-      if (existingProductIndex !== -1) {
-        if (quantity > 0) {
-          state.cart[existingProductIndex].quantity = quantity;
-        }
-      } else {
-        product.quantity = quantity;
-        state.cart.push(product);
-      }
+    addNtn: (state, action) => {
+      const data = action.payload;
+      state.reduxNtn=data
+      
+    },
+    addPos: (state, action) => {
+      const data = action.payload;
+      state.reduxPos=data
+      
     },
   
   },
@@ -41,8 +58,11 @@ export const centralStore = createSlice({
 export const {
   startLoading,
   endLoading,
-
-  addProductQuantity,
+  addData,
+  addGraphData,
+  setAnomaly,
+  addNtn,
+  addPos,
 } = centralStore.actions;
 
 export default centralStore.reducer;
