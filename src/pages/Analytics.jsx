@@ -14,6 +14,7 @@ import {getMissingInvoice} from "../action/action.js"
 import { startLoading,endLoading } from '../redux_store/reducer.js';
 import Loader from '../components/utils/Loader.jsx';
 import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
+import MissingBarPlot from '../components/plots/missingbar.jsx';
 // Adjust the path based on your project structure
 // import PiePlot from './pie_plots';
 
@@ -21,11 +22,10 @@ import DashboardCard from '../components/dashboard_components/DashboardCard.jsx'
 const Analytics = () => {
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-    const dispatch=useDispatch()
-    const {isLoading,anomaly}=useSelector(state=>state.centralStore)
+    const {isLoading,anomaly,graphData}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
-   const [loading, setLoading] = useState(true);
    const [nextPage, setNextPage] = useState(1);
+   const [missing, setMissing] = useState([]);
    const [delayAverage, setDelayAverage] = useState(0);
    const [averageRate, setAverageRate] = useState(0);
    const [totalSales,setTotalSales] = useState(0);
@@ -35,26 +35,29 @@ const Analytics = () => {
 
    useEffect(() => {
     const fetchData = async () => {
-      setResultsFinal([]);
-      setLoading(true);
+      // const {results}=await getMissingInvoice(55)
+      // console.log(results+"oikoio")
+      setResultsFinal([])
+      // setMissing(results)
     
       const storedData = localStorage.getItem('nextUrl');
       let nextUrl = JSON.parse(storedData);
       let page = 1;
     
+      console.log(nextUrl)
       while (page <= 5) {
         try {
-          console.log(nextUrl+" "+page)
           const modifiedUrl = new URL(nextUrl);
           modifiedUrl.searchParams.set('page', page.toString());
-    
+          
           const { data } = await API.get(`/filter/${modifiedUrl.search}`);
+          console.log(data)
           setResultsFinal((prevResults) => [...prevResults, ...data.results]);
-    
+          
           if (data.next) {
             nextUrl = data.next;
             setNextPage(data.next);
-            page++;
+            ++page;
           } else {
             break;
           }
@@ -62,8 +65,11 @@ const Analytics = () => {
           break; // Break the loop if an error occurs
         }
       }
-    
-      if (page > 2) {
+      if(page===1){
+        setResultsFinal(graphData.results)
+        
+    }
+      
         const {
           averageRate,
           averageSalesTax,
@@ -73,16 +79,14 @@ const Analytics = () => {
         setAverageRate(averageRate);
         setDelayAverage(delayAverage);
         setTotalSales(totalSales);
-      }
+      
     
-      dispatch(endLoading());
-      setLoading(false);
     };
     console.log('i fire once');
     fetchData();
-    console.log('i fire once');
+  console.log('i fire once');
   }, []);
-     if(loading){
+     if(isLoading){
         return <Loader/>
 }
    if(resultsfinal.length===0){
@@ -114,6 +118,7 @@ const Analytics = () => {
             {/* or */}
             <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
             <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+            {/* <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/> */}
           </div>
         </div>
     </div>

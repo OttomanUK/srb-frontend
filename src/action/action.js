@@ -57,10 +57,12 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const getPosInvoice = (id,ntn,page,anomaly,date="None") => async (dispatch) => {
+  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="2023-11-18") => async (dispatch) => {
     try {
       dispatch(startLoading());
       const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date);
+      console.log(date)
+      console.log(id)
       console.log(data)
         dispatch(endLoading());
         return data;
@@ -89,10 +91,10 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const getMissingInvoice = (id) => async (dispatch) => {
+  export const getMissingInvoice = (id="all",page=1) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getMissingInvoice(id);
+      const { data } = await api.getMissingInvoice(id,page);
         dispatch(endLoading());
         console.log(data)
         return data;
@@ -128,11 +130,11 @@ import reducer from "../redux_store/reducer.js";
   export const submit_data = (body) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.submit_data(data1);
+      const { data } = await api.submit_data(body);
         dispatch(endLoading());
         console.log(data)
         return data;
       } catch (error) {
-        console.log(error.message);
+        console.log(error);
       }
     };

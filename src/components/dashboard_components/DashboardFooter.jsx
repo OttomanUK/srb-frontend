@@ -8,38 +8,21 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 
-const Footer = ({pos,ntn,page,total}) => {
+const Footer = ({pos="None",ntn="None",page=1,total,string="dashboard"}) => {
   const navigate=useNavigate();
 const previous=()=>{
   if(page===1){
     return 
   }
-  if(pos!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
-  return }
-  if(ntn!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
-    return }
-  if(ntn==null){
-    navigate(`/dashboard/?page=${page-1}`)
-    return  } 
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
+  return
 }
 const next=()=>{
   if(page==total){
     return 
   }
-  // console.log("kjer")
-  if(pos!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
-  return }
-  if(ntn!=null){
-    navigate(`/dashboard/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
-    return 
-  }
-  if(ntn==null){
-    navigate(`/dashboard/?page=${page+1}`)
-    return 
-  }
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
+  return 
 }
 return (
     <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

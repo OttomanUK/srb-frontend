@@ -10,8 +10,9 @@ export default function Login(){
   const dispatch = useDispatch();
   const initialFormState = {
   
-    email: '',
-    password: '',
+    email: 'mohib@gmail.com',
+    password: 'polkpolk',
+    username: 'mohib',
 
     
   };
@@ -26,11 +27,11 @@ export default function Login(){
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Form submitted:', formValues);
+    console.log('Form submitted:', initialFormState);
 
-    const a= dispatch(login(formValues));
+    // const a= dispatch(login(initialFormState));
     // const a= dispatch(getAllNtn());
-    // const a= dispatch(submit_data(formValues));
+    const a= dispatch(submit_data(12));
 
     // const a= dispatch(getMissingInvoice(55));
     // if(false){

@@ -36,7 +36,7 @@ function App() {
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/setting" element={<Settings/>} />
         {/* <Route exact path="/" element={<Login/>} /> */}
-        <Route exact path="/missing/:id" element= {<MissingInvoice/>} />
+        <Route exact path="/missing" element= {<MissingInvoice/>} />
         <Route exact path="/Query" element={<Query/>} />
         <Route exact path="/UserProfile" element={<UserProfile/>}/>
         <Route exact path="/register" element={<Register/>} />

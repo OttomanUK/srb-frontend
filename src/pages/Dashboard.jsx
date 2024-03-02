@@ -37,8 +37,8 @@ function Dashboard() {
   const query=useQuery()
   const page=parseInt(query.get('page'))||1
   const date=parseInt(query.get('date'))||"None"
-  const ntn=query.get('ntn')||null
-  const pos=query.get('pos')||null
+  const ntn=query.get('ntn')||"None"
+  const pos=query.get('pos')||"None"
     const dispatch=useDispatch()
     const navigate=useNavigate()
    
@@ -48,15 +48,8 @@ function Dashboard() {
         try {
           let results
           dispatch(addNtn(ntn))
-           if(pos!=null && ntn!=null){   
             results = await dispatch(getPosInvoice(pos,ntn,page,anomalous,date))
-          }
-          else if(ntn!=null){
-            results = await dispatch(getNtnInvoice(ntn,page,anomalous,date))
-      }
-     else if(ntn==null){
-         results = await dispatch(getAllInvoice(page,anomalous,date));  
-      }
+          
       dispatch(addData(results.results))
       dispatch(addGraphData(results))
       setSearch(results.results);
@@ -122,7 +115,7 @@ if(isLoading  ){
 
                 <Card className='dark:border-slate-700 dark:bg-slate-800 w-full min-w-max '>
       <CardBody className="dark:border-slate-700 dark:bg-slate-800 flex items-center justify-center h-24">
-        <div className="text-xl font-bold flex flex-row dark:text-white" onClick={()=>navigate(`/missing/${ntn}`)}>
+        <div className="text-xl font-bold flex flex-row dark:text-white" onClick={()=>navigate(`/missing/?ntn=${ntn}`)}>
           Missing Invoice
         </div>
       </CardBody>
@@ -132,7 +125,7 @@ if(isLoading  ){
               {/* Line chart (Acme Plus) */}
               <DashoardCardHeader setAnomalous={setAnomalous} searchData={search} setSearchData={setSearch} anomalous={anomalous}/>
               <MembersTable tableData={search}/>
-              <Footer pos={pos} ntn={ntn} page={page} total={ Math.ceil(count/2) }/>
+              <Footer pos={pos} ntn={ntn} page={page} total={ Math.ceil(count/2) } string="dashboard"/>
               {/* Line chart (Acme Advanced) */} 
             </div>
 
