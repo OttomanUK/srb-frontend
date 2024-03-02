@@ -3,16 +3,23 @@ import Sidebar from '../components/resuseable_components/Sidebar';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner';
 import Header from '../components/resuseable_components/Header';
 import { Card, CardBody } from '@material-tailwind/react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllNtn } from '../action/action';
 import Loader from '../components/utils/Loader';
-
+import Footer from '../components/dashboard_components/DashboardFooter';
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 function NtnList() {
   const customGreeting = 'NTN Lookup';
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const query =useQuery()
+  const page=parseInt(query.get('page'))||1
+  const ntn=query.get('ntn')||"all"
   const { isLoading } = useSelector(state => state.centralStore);
   const [data, setData] = useState([]);
+  const [count, setCount] = useState(null);
   const [searchInput, setSearchInput] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const dispatch = useDispatch();
@@ -20,12 +27,13 @@ function NtnList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { results } = await dispatch(getAllNtn());
-      setData(results);
+      const {results,count} = await dispatch(getAllNtn(page));
       setFilteredData(results);
+      setData(results);
+      setCount(count)
     };
     fetchData();
-  }, []);
+  }, [page]);
 
     // Filter data based on searchInput
     useEffect(() => {
@@ -75,7 +83,6 @@ function NtnList() {
                       <th className="text-gray-700 dark:text-white font-bold mr-2">Ntn Number</th>
                       <th className="text-gray-700 dark:text-white font-bold mr-2">Company Name</th>
                       <th className="text-gray-700 dark:text-white font-bold mr-2">Address</th>
-                      <th className="text-gray-700 dark:text-white font-bold">POS Number</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -96,6 +103,7 @@ function NtnList() {
                 </table>
               </CardBody>
             </Card>
+            <Footer string="NtnList" total={ Math.ceil(count/2)} page={page}/>
           </div>
         </main>
       </div>

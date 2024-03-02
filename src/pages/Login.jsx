@@ -12,7 +12,6 @@ export default function Login(){
   
     email: 'mohib@gmail.com',
     password: 'polkpolk',
-    username: 'mohib',
 
     
   };
@@ -29,9 +28,9 @@ export default function Login(){
     event.preventDefault();
     console.log('Form submitted:', initialFormState);
 
-    // const a= dispatch(login(initialFormState));
+    const a= dispatch(login(initialFormState));
     // const a= dispatch(getAllNtn());
-    const a= dispatch(submit_data(12));
+    // const a= dispatch(submit_data(12));
 
     // const a= dispatch(getMissingInvoice(55));
     // if(false){

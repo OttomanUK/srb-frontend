@@ -7,7 +7,7 @@ import {store} from "./redux_store/store"
 import { Provider } from 'react-redux';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  // <React.StrictMode>
+  <React.StrictMode>
   <Provider store={store}>
     
     <Router>
@@ -16,5 +16,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </ThemeProvider>
     </Router>
   </Provider>
-  // </React.StrictMode>
+</React.StrictMode>
 );

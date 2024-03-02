@@ -10,8 +10,8 @@ function DashboardCard({ title, value }) {
     return (
       <Card className='dark:border-slate-700 dark:bg-slate-800 w-full min-w-max '>
         <CardBody className="dark:border-slate-700 dark:bg-slate-800 flex items-center justify-center h-24">
-          <div className="text-xl font-bold text-red-500">
-            Error: Invalid value for {title}
+          <div className="text-sm font-bold text-red-500">
+            Error: Null Value
           </div>
         </CardBody>
       </Card>

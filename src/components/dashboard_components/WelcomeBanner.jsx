@@ -53,9 +53,9 @@ function WelcomeBanner({greeting, text,ntn,pos,show=false}) {
         {show && (
   <>
     <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
-      {ntn ? `Ntn Number: ${ntn}` : 'Overall Ntns'}
+      {ntn!="None" ? `Ntn Number: ${ntn}` : 'Overall Ntns'}
     </h1>
-    {pos ? (
+    {pos!="None" ? (
       <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
         Pos Number: {pos}
       </h1>

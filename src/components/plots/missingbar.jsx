@@ -8,44 +8,45 @@ const MissingBarPlot = ({ data, chartBy="null", anomaly1 }) => {
   
   useEffect(() => {
     const generateTopAnomalyData = () => {
-      const invoicesDistribution = data.reduce((acc, entry) => {
-        const key = entry.date; // Assuming the date is the property to group by
-
-        if (!acc[key]) {
-          acc[key] = 0;
-        }
-
-        // Check if entry.invoices is not null before splitting
-        if (entry.invoices) {
-          acc[key] += entry.invoices.split(",").length;
-        }
-
-        return acc;
-      }, {});
-
-      const sortedTopAnomalies = Object.keys(invoicesDistribution)
-        .map((key) => ({ date: key, invoices: invoicesDistribution[key] }))
-        .sort((a, b) => b.invoices - a.invoices)
-        .slice(0, 5);
-
-      const topAnomalyChartData = {
-        type: "bar",
-        x: sortedTopAnomalies.map((entry) => entry.date),
-        y: sortedTopAnomalies.map((entry) => entry.invoices),
-        marker: {
-          color: "rgba(50, 171, 96, 0.6)",
-          line: {
-            color: "rgba(50, 171, 96, 1.0)",
-            width: 2,
+        const invoicesDistribution = data.reduce((acc, entry) => {
+          const key = entry.date; // Assuming the date is the property to group by
+  
+          if (!acc[key]) {
+            acc[key] = 0;
+          }
+  
+          // Check if entry.invoices is not null before splitting
+          if (entry.invoices) {
+            acc[key] += entry.invoices.split(',').length;
+          }
+  
+          return acc;
+        }, {});
+  
+        const sortedTopAnomalies = Object.keys(invoicesDistribution)
+          .map((key) => ({ date: key, invoices: invoicesDistribution[key],ntn: data.find((entry) => entry.date === key)?.ntn || null }))
+          .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date in descending order
+          .slice(0, 5);
+  
+        const topAnomalyChartData = {
+          type: 'bar',
+          x: sortedTopAnomalies.map((entry) => entry.date),
+          y: sortedTopAnomalies.map((entry) => entry.invoices),
+          text: sortedTopAnomalies.map((entry) => "ntn: "+entry.ntn),  
+          marker: {
+            color: 'rgba(50, 171, 96, 0.6)',
+            line: {
+              color: 'rgba(50, 171, 96, 1.0)',
+              width: 2,
+            },
           },
-        },
+        };
+  
+        setTopAnomalyData([topAnomalyChartData]);
       };
-
-      setTopAnomalyData([topAnomalyChartData]);
-    };
-
-    generateTopAnomalyData();
-  }, [data]);
+  
+      generateTopAnomalyData();
+    }, [data]);
 
   return (
     <div>

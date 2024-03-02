@@ -20,10 +20,12 @@ import MissingBarPlot from '../components/plots/missingbar.jsx';
 
 
 const Analytics = () => {
+  const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-    const {isLoading,anomaly,graphData}=useSelector(state=>state.centralStore)
+    const {isLoading,reduxNtn,reduxPos,anomaly,graphData}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
+   const [loading,setLoading]=useState(false)
    const [nextPage, setNextPage] = useState(1);
    const [missing, setMissing] = useState([]);
    const [delayAverage, setDelayAverage] = useState(0);
@@ -35,23 +37,19 @@ const Analytics = () => {
 
    useEffect(() => {
     const fetchData = async () => {
-      // const {results}=await getMissingInvoice(55)
-      // console.log(results+"oikoio")
+      setLoading(true)
       setResultsFinal([])
-      // setMissing(results)
-    
+      
       const storedData = localStorage.getItem('nextUrl');
       let nextUrl = JSON.parse(storedData);
       let page = 1;
-    
-      console.log(nextUrl)
-      while (page <= 5) {
+      
+      while (page <= 10) {
         try {
           const modifiedUrl = new URL(nextUrl);
           modifiedUrl.searchParams.set('page', page.toString());
           
           const { data } = await API.get(`/filter/${modifiedUrl.search}`);
-          console.log(data)
           setResultsFinal((prevResults) => [...prevResults, ...data.results]);
           
           if (data.next) {
@@ -67,31 +65,56 @@ const Analytics = () => {
       }
       if(page===1){
         setResultsFinal(graphData.results)
-        
     }
-      
-        const {
-          averageRate,
-          averageSalesTax,
-          totalSales,
-          averageDelayMinutes
-        } = calculateStatistics(resultsfinal);
-        setAverageRate(averageRate);
-        setDelayAverage(delayAverage);
-        setTotalSales(totalSales);
-      
-    
+    setLoading(false)
     };
+    setLoading(true)
     console.log('i fire once');
     fetchData();
-  console.log('i fire once');
+    
+     
+      setLoading(false)
   }, []);
-     if(isLoading){
+  useEffect(() => {
+
+    setLoading(true)
+    const fetch=async()=>{
+      
+        let page = 1;
+        while (page <= 10) {
+          try {
+            const data=await dispatch(getMissingInvoice(reduxNtn,page))
+            // console.log(results+"oikoio")
+          setMissing(((prevResults) => [...prevResults, ...data.results]))
+          if (data.next) {
+            ++page;
+          } else {
+            break;
+          }
+        } catch (error) {
+          break; // Break the loop if an error occurs
+        }
+      }
+    }
+    fetch()
+    const {
+      averageRate,
+      averageSalesTax,
+      totalSales,
+      averageDelayMinutes
+    } = calculateStatistics(resultsfinal);
+    setAverageRate(averageRate);
+    setDelayAverage(delayAverage);
+    setTotalSales(totalSales);
+    setLoading(false)
+  },[])
+  
+     if(loading){
         return <Loader/>
 }
    if(resultsfinal.length===0){
     
-    return <div>Loading...</div>
+    return <Loader/>
    }
   
 
@@ -102,10 +125,10 @@ const Analytics = () => {
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
-              <DashboardCard title={'Average Delay'} value={delayAverage}/>
+              <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
               <DashboardCard title={'Total Sales'} value={totalSales}/>
               <DashboardCard title={'Average Rate'} value={averageRate}/>
               </div>
@@ -118,7 +141,7 @@ const Analytics = () => {
             {/* or */}
             <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
             <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-            {/* <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/> */}
+            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
           </div>
         </div>
     </div>

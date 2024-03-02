@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 import { useNavigate } from 'react-router-dom';
 function Datepicker({
-  align
+  align,string,ntn,pos
 }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
 const navigate=useNavigate();
@@ -20,17 +20,22 @@ const navigate=useNavigate();
       instance.calendarContainer.classList.add(`flatpickr-${customClass}`);
     },
     onChange: (selectedDates, dateStr, instance) => {
+      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+      const formattedDate = new Intl.DateTimeFormat('en-GB', options).format(selectedDates[0]);
+    
+      const [day, month, year] = formattedDate.split('/');
+      const yyyyMmDdFormat = `${year}-${month}-${day}`;
       
-const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
-const formattedDate = new Intl.DateTimeFormat('en-GB', options).format(selectedDates[0]).replace(/\//g, '-');;
-setSelectedDate(formattedDate);
-console.log(formattedDate)
-const currentUrl = window.location.href;
-const url = new URL(currentUrl);
-const pathAndSearch = url.pathname + url.search;
-    console.log(`${pathAndSearch}&date=${formattedDate}`); // Update selectedDate state
+      setSelectedDate(yyyyMmDdFormat);
+      
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const pathAndSearch = url.pathname + url.search;
+      navigate(`/${string}/?ntn=${ntn}&pos=${pos}&date=${yyyyMmDdFormat}`)
+      // Update selectedDate state
       instance.element.value = dateStr;
     },
+    
   }
 
   return (

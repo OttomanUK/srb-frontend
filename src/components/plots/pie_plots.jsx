@@ -8,26 +8,26 @@ const PiePlot = ({ data, chartBy,anomaly1 }) => {
     if (data.length > 0) {
       const anomalyDistribution = data.reduce((acc, entry) => {
         const key = entry[chartBy];
-
+  
         if (!acc[key]) {
           acc[key] = 0;
         }
-
+  
         acc[key] += entry.anomaly;
         return acc;
       }, {});
-
-      const pieChartData = Object.keys(anomalyDistribution).map((key) => ({
-        labels: [key],
-        values: [anomalyDistribution[key]],
+  
+      const pieChartData = {
+        labels: Object.keys(anomalyDistribution),
+        values: Object.values(anomalyDistribution),
         type: 'pie',
-        name: `${chartBy} ${key}`,
-      }));
-
-      setPieData(pieChartData);
+        name: `${anomaly1} Distribution by ${chartBy}`,
+      };
+  
+      setPieData([pieChartData]);
     }
-  }, [data, chartBy]);
-
+  }, [data, chartBy, anomaly1]);
+  
   return (
     <div>
       <h2>{anomaly1} Pie Plot</h2>

@@ -18,8 +18,8 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
   const dispatch=useDispatch()
   const {isLoading,data}=useSelector(state=>state.centralStore)
   const TABS = [
-    { label: "Anomalous", value: "True" },
-    { label: "Non Anomalous", value: "False" },
+    { label: "Anomalous", value: 10 },
+    { label: "Non Anomalous", value: 0 },
   ];
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
@@ -61,7 +61,7 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
         key={value} 
         value={value} 
         onClick={() => {
-          if(value==="True"){
+          if(value===10){
             dispatch(setAnomaly("Anomaly"))
           }else{
             dispatch(setAnomaly("Non-Anomaly"))

@@ -57,8 +57,9 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="2023-11-18") => async (dispatch) => {
+  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="None") => async (dispatch) => {
     try {
+      console.log(date)
       dispatch(startLoading());
       const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date);
       console.log(date)
@@ -70,10 +71,10 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const getAllNtn = () => async (dispatch) => {
+  export const getAllNtn = (page) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getAllNtn();
+      const { data } = await api.getAllNtn(page);
         dispatch(endLoading());
         console.log(data)
         return data;
@@ -93,11 +94,18 @@ import reducer from "../redux_store/reducer.js";
     };
   export const getMissingInvoice = (id="all",page=1) => async (dispatch) => {
     try {
+      let data
       dispatch(startLoading());
-      const { data } = await api.getMissingInvoice(id,page);
+      if(id=="None"){
+          data  = await api.getMissingInvoice("all",page);
+        
+      }else{
+        
+          data  = await api.getMissingInvoice(id,page);
+      }
         dispatch(endLoading());
-        console.log(data)
-        return data;
+        console.log(data.data)
+        return data.data;
       } catch (error) {
         console.log(error.message);
       }
