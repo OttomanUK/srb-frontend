@@ -152,6 +152,7 @@ function Dashboard() {
                 page={page}
                 total={Math.ceil(count / 2)}
                 string="dashboard"
+                date={date}
               />
               {/* Line chart (Acme Advanced) */}
             </div>

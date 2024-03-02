@@ -8,11 +8,16 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 
-const Footer = ({pos="None",ntn="None",page=1,total,string="dashboard"}) => {
+const Footer = ({pos="None",ntn="None",page=1,total,string="dashboard", date="None"}) => {
   const navigate=useNavigate();
 const previous=()=>{
   if(page===1){
     return 
+  }
+  if(date!="None"){
+  
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&date=${date}`)
+    return
   }
     navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
   return
@@ -21,8 +26,12 @@ const next=()=>{
   if(page==total){
     return 
   }
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
-  return 
+  if(date!="None"){
+
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&date=${date}`)
+    return
+  }
+  navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
 }
 return (
     <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
