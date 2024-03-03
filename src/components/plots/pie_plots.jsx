@@ -29,7 +29,7 @@ const PiePlot = ({ data, chartBy,anomaly1 }) => {
   }, [data, chartBy, anomaly1]);
   
   return (
-    <div>
+    <div className='flex flex-col items-center justify-center'>
       <h2>{anomaly1} Pie Plot</h2>
 
       <Plot 

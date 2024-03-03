@@ -3,6 +3,7 @@ import Sidebar from '../components/resuseable_components/Sidebar';
 import Header from '../components/resuseable_components/Header';
 import error from '../images/error.png'
 
+
 function NotFound(){
     const [sidebarOpen, setSidebarOpen] = useState(false);
     return(

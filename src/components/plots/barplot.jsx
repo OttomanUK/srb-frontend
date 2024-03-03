@@ -29,9 +29,9 @@ const topAnomalyChartData = {
   x: sortedTopAnomalies.map((entry) => entry.key),
   y: sortedTopAnomalies.map((entry) => entry.anomaly), // Use the actual count, not 1 or 0
   marker: {
-    color: 'rgba(50,171,96,0.6)',
+    color: 'rgba(37, 147, 255,0.6)',
     line: {
-      color: 'rgba(50,171,96,1.0)',
+      color: 'rgba(37, 147, 255,1.0)',
       width: 2,
     },
   },
@@ -45,7 +45,7 @@ const topAnomalyChartData = {
   }, [data, chartBy]);
 
   return (
-    <div>
+    <div className='flex flex-col justify-center items-center'>
       <h2>Top 5 {anomaly1} by {chartBy}</h2>
 
       <Plot

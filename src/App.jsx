@@ -13,11 +13,13 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import {data1} from "./data/singleData.js"
 import Query from './pages/Query.jsx';
-import MissingInvoice from './pages/MissingInvoice.jsx';
+import MissingInvoice from './pages/MissingInvoice/MissingInvoice.jsx';
 import UserProfile from './pages/User_Profile/UserProfile.jsx';
 import NtnList from './pages/NtnList.jsx';
 import Loader from './components/utils/Loader.jsx';
 import NotFound from './pages/NotFound.jsx';
+
+
 
 function App() {
  

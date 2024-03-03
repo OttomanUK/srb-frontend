@@ -34,9 +34,9 @@ const MissingBarPlot = ({ data, chartBy="null", anomaly1 }) => {
           y: sortedTopAnomalies.map((entry) => entry.invoices),
           text: sortedTopAnomalies.map((entry) => "ntn: "+entry.ntn),  
           marker: {
-            color: 'rgba(50, 171, 96, 0.6)',
+            color: 'rgba(37, 147, 255,0.6)',
             line: {
-              color: 'rgba(50, 171, 96, 1.0)',
+              color: 'rgba(37, 147, 255,1.0)',
               width: 2,
             },
           },
@@ -49,7 +49,7 @@ const MissingBarPlot = ({ data, chartBy="null", anomaly1 }) => {
     }, [data]);
 
   return (
-    <div>
+    <div className='flex flex-col items-center justify-center'>
       <h2>Top 5 {anomaly1} by {chartBy}</h2>
 
       <Plot

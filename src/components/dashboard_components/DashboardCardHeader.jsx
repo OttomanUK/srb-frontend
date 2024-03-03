@@ -13,10 +13,12 @@ import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import {useDispatch,useSelector} from 'react-redux'
 import { setAnomaly } from '../../redux_store/reducer';
 const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous}) => {
+
+  const dispatch = useDispatch();
+  const { isLoading, data } = useSelector(state => state.centralStore);
+  const initialSearchResult = isLoading ? [] : data;
+  const [filteredData, setFilteredData] = useState(initialSearchResult);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredData, setFilteredData] = useState([]);
-  const dispatch=useDispatch()
-  const {isLoading,data}=useSelector(state=>state.centralStore)
   const TABS = [
     { label: "Anomalous", value: 10 },
     { label: "Non Anomalous", value: 0 },
@@ -32,13 +34,15 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
       setFilteredData(searchResult);
       setSearchData(searchResult);
     }
-        }, [searchTerm,data]);
+        }, [searchTerm,data, setSearchData]);
       
       
-      if(data.lenght===0)
+      if(data.length===0)
       {
         return 
       }
+
+      
   return (
     <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className=" dark:border-slate-700 dark:bg-slate-800 flex justify-evenly">

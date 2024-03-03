@@ -47,7 +47,7 @@ function WelcomeBanner({greeting, text,ntn,pos,show=false}) {
 
       {/* Content */}
       <div className="relative">
-        <div className="flex flex-rows gap-20" >
+        <div className="flex flex-col" >
 
         <h1 className="text-2xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1  mr-px10 flex-2">{greeting}</h1>
         {show && (
