@@ -75,7 +75,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             </h3>
             <ul className="mt-3">
               {/* Dashboard */}
-              <SidebarLinkGroup activecondition={pathname === '/' || pathname.includes('dashboard')}>
+              <SidebarLinkGroup activecondition={pathname === '/' || pathname.includes('dashboard') || pathname.includes('Analytics')  || pathname.includes('NtnList') || pathname.includes('Missing') || pathname.includes('Query')  }>
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
