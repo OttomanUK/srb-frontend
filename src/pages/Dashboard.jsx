@@ -79,6 +79,7 @@ function Dashboard() {
         setTotalPos(totalUniquePosIds);
       } catch (error) {
         console.error("Error fetching data:", error);
+        navigate('/NotFound')
       }
     };
 

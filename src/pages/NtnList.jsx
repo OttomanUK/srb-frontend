@@ -8,6 +8,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getAllNtn } from '../action/action';
 import Loader from '../components/utils/Loader';
 import Footer from '../components/dashboard_components/DashboardFooter';
+import PleaseReload from './PleaseReload';
+import NotFound from './NotFound';
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
@@ -27,12 +29,20 @@ function NtnList() {
 
   useEffect(() => {
     const fetchData = async () => {
-      const {results,count} = await dispatch(getAllNtn(page));
-      setFilteredData(results);
-      setData(results);
-      setCount(count)
+      try {
+        const { results, count } = await dispatch(getAllNtn(page));
+        setFilteredData(results);
+        setData(results);
+        setCount(count);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        navigate('/NotFound'); // Redirect to the not-found page or handle the error appropriately
+      }
     };
-    fetchData();
+  
+    fetchData().catch((error) => {
+      console.error("Error in fetchData function:", error);
+    });
   }, [page]);
 
     // Filter data based on searchInput
@@ -47,9 +57,11 @@ function NtnList() {
         });
         setFilteredData(filteredResults);
       }, [searchInput, data]);
+
   if (isLoading) {
     return <Loader />;
   }
+
 
   return (
     <div className="flex h-screen overflow-hidden">
@@ -87,7 +99,7 @@ function NtnList() {
                   </thead>
                   <tbody>
                     {filteredData.map((item, index) => (
-                      <tr key={index} className="text-center text-gray-700 dark:text-white hover:bg-gray-100 hover:cursor-pointer">
+                      <tr key={index} className="text-center text-gray-700 dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:text-black">
                         <td
                           className="py-2 px-4 border-b cursor-pointer"
                           onClick={() => navigate(`/dashboard?ntn=${item.ntn}`)}

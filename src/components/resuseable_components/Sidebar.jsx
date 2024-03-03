@@ -25,6 +25,22 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
     }
   }, [sidebarExpanded]);
 
+  useEffect(() => {
+    // Fetch the logo image when the component mounts
+    const fetchLogo = async () => {
+      try {
+        const response = await fetch('src/images/srb-logo.png');
+        const blob = await response.blob();
+        const logoUrl = URL.createObjectURL(blob);
+        setLogoSrc(logoUrl);
+      } catch (error) {
+        console.error('Error fetching logo:', error);
+      }
+    };
+  
+    fetchLogo();
+  }, []);
+
   return (
     <div>
       {/* Sidebar backdrop (mobile only) */}
@@ -59,7 +75,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
             </svg>
           </button>
           {/* Logo */}
-         <img src='src\images\srb-logo.png'></img>
+         {logoSrc && <img src={logoSrc} alt="Logo" />}
           
         </div>
 

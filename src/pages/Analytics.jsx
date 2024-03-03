@@ -20,6 +20,7 @@ import MissingBarPlot from '../components/plots/missingbar.jsx';
 
 
 const Analytics = () => {
+  const navigate = useNavigate();
   const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
@@ -60,6 +61,7 @@ const Analytics = () => {
             break;
           }
         } catch (error) {
+          navigate('/NotFound')
           break; // Break the loop if an error occurs
         }
       }
@@ -112,7 +114,7 @@ const Analytics = () => {
      if(loading){
         return <Loader/>
 }
-   if(resultsfinal.length===0){
+   if(resultsfinal.lenght===0){
     
     return <Loader/>
    }
