@@ -61,7 +61,7 @@ const Analytics = () => {
             break;
           }
         } catch (error) {
-          navigate('/NotFound')
+          navigate('./NotFound')
           break; // Break the loop if an error occurs
         }
       }
@@ -126,7 +126,7 @@ const Analytics = () => {
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
@@ -137,12 +137,14 @@ const Analytics = () => {
               {/* Other components */}
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly}/>
-
-            <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-            <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-            {/* or */}
-            <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-            <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+            <div className='lg:flex lg:flex-row'>
+              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
+            </div>
+            <div className='lg:flex lg:flex-row'>
+              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+            </div>
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
           </div>
         </div>
