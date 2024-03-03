@@ -73,10 +73,6 @@ function NtnList() {
                 className="px-3 py-2 border rounded-md w-full"
                 value={searchInput}
                 onChange={e => setSearchInput(e.target.value)}
-                style={{
-              WebkitFilter: darkMode ? "invert(1)" : null,
-              color: darkMode ? "#fff" : "#000", // Adjust the color as needed
-            }}
               />
             </div>
             <Card className="dark:border-slate-700 dark:bg-slate-800">
