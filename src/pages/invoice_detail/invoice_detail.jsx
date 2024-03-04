@@ -8,10 +8,12 @@ import Sidebar from '../../components/resuseable_components/Sidebar';
 import Header from '../../components/resuseable_components/Header';
 import WelcomeBanner from '../../components/dashboard_components/WelcomeBanner';
 import Loader from '../../components/utils/Loader';
+import PleaseReload from '../../pages/PleaseReload';
 
-const InvoiceDetails = ({ data1 }) => {
+const InvoiceDetails = () => {
   const customGreeting = 'Specific Invoice';
   const [data, setData] = useState({});
+  const [error,setError]=useState(false)
   const { isLoading } = useSelector(state => state.centralStore);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -19,25 +21,21 @@ const InvoiceDetails = ({ data1 }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(false)
         const { results: res } = await dispatch(getSingleInvoice(id));
         setData(res[0]);
       } catch (error) {
         console.error('Error fetching invoice:', error);
+        setError(true)
       }
     };
     fetchData();
   }, [id, dispatch]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const fields = [
-    'srb_invoice_id', 'pos_id', 'ntn', 'name', 'invoice_date',
-    'invoice_no', 'rate_value', 'sales_value', 'sales_tax', 'consumer_name',
-    'consumer_ntn', 'consumer_address', 'tariff_code', 'extra_info',
-    'pos_user', 'pos_pass', 'is_active', 'created_date_time',
-    'invoice_type', 'consider_for_Annex'
-  ];
-
+  if(error){
+    return <PleaseReload/>
+  }
   if (isLoading) {
     return <Loader />;
   }

@@ -9,6 +9,7 @@ import {getMissingInvoice} from "../../action/action";
 import Loader from '../../components/utils/Loader';
 import Footer from "../../components/dashboard_components/DashboardFooter";
 import './MissingInvoice.css'
+import PleaseReload from '../PleaseReload'
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);}
@@ -26,6 +27,7 @@ function MissingInvoice(){
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const customGreeting = 'Missing Invoices'
     const [data,setData]=useState([])
+    const [error,setError]=useState(false)
     const [count,setCount]=useState([])
     const [searchInput, setSearchInput] = useState('');
     const [filteredData, setFilteredData] = useState([]);
@@ -40,35 +42,46 @@ function MissingInvoice(){
     useEffect(() => {
       const fetchData = async () => {
         try {
+          setError(false)
           const a = await dispatch(getMissingInvoice(ntn, page));
           setData(a.results);
           setCount(a.count);
           console.log(a);
         } catch (error) {
           console.error("Error fetching data:", error);
-          navigate('/NotFound'); // Redirect to the not-found page or handle the error appropriately
+          setError(true)
         }
       };
-    
-      fetchData().catch((error) => {
-        console.error("Error in fetchData function:", error);
-      });
+      
+      fetchData()
     }, [page, ntn]);
 
     useEffect(() => {
-      // Filter data based on searchInput
-      const filteredResults = data.filter((item) => {
-        const dateString = String(item.date); // Convert ntn to string
-        return (
-          (dateString.toLowerCase().includes(searchInput.toLowerCase()))
-        );
-      });
-      setFilteredData(filteredResults);
+
+      try{
+        setError(false)
+        
+        const filteredResults = data.filter((item) => {
+          const dateString = String(item.date); // Convert ntn to string
+          return (
+            (dateString.toLowerCase().includes(searchInput.toLowerCase()))
+            );
+          } );
+          setFilteredData(filteredResults);
+        }
+        catch (error) {
+          setError(true)
+        }
     }, [searchInput, data]);
 
+    if(error){
+      return <PleaseReload/>
+    }
     if(isLoading){
       return <Loader/>
     }
+    
+
     if(data==null){
       return <><h1>No Data</h1></>
     }
