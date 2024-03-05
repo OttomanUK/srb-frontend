@@ -19,28 +19,35 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
   const initialSearchResult = isLoading ? [] : data;
   const [filteredData, setFilteredData] = useState(initialSearchResult);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedDropdownValue, setSelectedDropdownValue] = useState(1);
   const TABS = [
     { label: "Anomalous", value: 10 },
     { label: "Non Anomalous", value: 0 },
   ];
+
   useEffect(() => {
     if (Array.isArray(data) && data.length > 0) {
-      // Filter data based on search term
+      // Filter data based on search term and selected dropdown value
       const searchResult = data.filter((item) =>
         Object.values(item).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        )
+        ) 
+        && item.anomaly === selectedDropdownValue
       );
-      setFilteredData(searchResult);
+
       setSearchData(searchResult);
+      setFilteredData(searchResult);
     }
-        }, [searchTerm,data, setSearchData]);
+  }, [searchTerm, data, setSearchData, selectedDropdownValue]);
       
+
+     
       
       if(data.length===0)
       {
         return 
       }
+
 
       
   return (
@@ -86,8 +93,21 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
               icon={<MagnifyingGlassIcon className="h-10 w-10" /> }
               onChange={(e) => setSearchTerm(e.target.value)}
             />
+             <label className="text-gray-700 dark:text-white">Filter by Anomaly:</label>
+            <select
+              value={selectedDropdownValue}
+              onChange={(e) => setSelectedDropdownValue(parseInt(e.target.value))}
+              className="border rounded-md dark:text-black"
+            >
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
+                <option key={value} value={value}>
+                  {value}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
+        
       </CardHeader>
       
   );
