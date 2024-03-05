@@ -25,6 +25,7 @@ import {
 import Loader from "../components/utils/Loader";
 import DashboardCard from "../components/dashboard_components/DashboardCard";
 import { Card, CardBody } from "@material-tailwind/react";
+import PleaseReload from '../pages/PleaseReload.jsx'
 
 
 function useQuery() {
@@ -46,6 +47,7 @@ function Dashboard() {
   const [count, setCount] = useState("True");
   const [limit, setLimit] = useState(1);
   // const [pageno,setPageno]=useState(1)
+  const [error,setError]=useState(false)
   const [search, setSearch] = useState([]);
   const query = useQuery();
   const page = parseInt(query.get("page")) || 1;
@@ -59,6 +61,7 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(false)
         let results;
         results = await dispatch(getPosInvoice(pos, ntn, page, anomalous,date));
         dispatch(addData(results.results));
@@ -78,14 +81,16 @@ function Dashboard() {
         const totalUniquePosIds = uniquePosIds.size;
         setTotalPos(totalUniquePosIds);
       } catch (error) {
-        console.error("Error fetching data:", error);
-        navigate('/NotFound')
+        setError(true)
       }
     };
 
     fetchData();
   }, [anomalous, page, ntn, pos, date]);
 
+  if(error){
+    return <PleaseReload/>
+  }
   if (isLoading) {
     return (
       <>
@@ -93,6 +98,7 @@ function Dashboard() {
       </>
     );
   }
+
 
   return (
     <div className="flex h-screen overflow-hidden">

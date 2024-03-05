@@ -35,7 +35,7 @@ function App() {
   return (
       <Routes>
         <Route exact path="/dashboard" element={<Dashboard />} />
-        <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails data1={data1}  />} />
+        <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails />} />
         <Route exact path="/Analytics" element={<Analytics />} />
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/setting" element={<Settings/>} />
@@ -45,8 +45,8 @@ function App() {
         <Route exact path="/UserProfile" element={<UserProfile/>}/>
         <Route exact path="/register" element={<Register/>} />
         <Route exact path="/NtnList" element={<NtnList/>} />
-        <Route exact path="/NotFound" element={<NotFound/>}/> 
-        <Route exact path="/PleaseReload" element={<PleaseReload/>}/> 
+        <Route exact path="/*" element={<NotFound/>}/> 
+        
         {/* <Route exact path="/Loader" element={<Loader/>} /> */}
 
       </Routes>
