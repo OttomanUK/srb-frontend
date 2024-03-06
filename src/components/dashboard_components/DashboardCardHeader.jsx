@@ -31,8 +31,8 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
       const searchResult = data.filter((item) =>
         Object.values(item).some((value) =>
           String(value).toLowerCase().includes(searchTerm.toLowerCase())
-        ) 
-        && item.anomaly === selectedDropdownValue
+        ) &&
+        (selectedDropdownValue === '' || item.anomaly === parseInt(selectedDropdownValue)) // Convert selectedDropdownValue to integer for comparison
       );
 
       setSearchData(searchResult);
@@ -94,17 +94,18 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
               onChange={(e) => setSearchTerm(e.target.value)}
             />
              <label className="text-gray-700 dark:text-white">Filter by Anomaly:</label>
-            <select
-              value={selectedDropdownValue}
-              onChange={(e) => setSelectedDropdownValue(parseInt(e.target.value))}
-              className="border rounded-md dark:text-black"
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
-                <option key={value} value={value}>
-                  {value}
-                </option>
-              ))}
-            </select>
+             <select
+          value={selectedDropdownValue}
+          onChange={(e) => setSelectedDropdownValue(e.target.value)}
+          className="border rounded-md dark:text-black"
+        >
+          <option value="" selected>All</option>
+          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((value) => (
+            <option key={value} value={value}>
+              {value}
+            </option>
+          ))}
+        </select>
           </div>
         </div>
         
