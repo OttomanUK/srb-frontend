@@ -55,7 +55,7 @@ const Analytics = () => {
           const modifiedUrl = new URL(nextUrl);
           modifiedUrl.searchParams.set('page', page.toString());
           
-          const { data } = await API.get(`/filter/${modifiedUrl.search}`);
+          const { data } = await API.get(`/pfilter/${modifiedUrl.search}`);
           setResultsFinal((prevResults) => [...prevResults, ...data.results]);
           
           if (data.next) {
