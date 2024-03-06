@@ -9,6 +9,7 @@ import FilterButton from "../components/resuseable_components/DropdownFilter";
 import Datepicker from "../components/resuseable_components/Datepicker";
 import MembersTable from "../components/dashboard_components/DashboardTable";
 import { useNavigate, useLocation } from "react-router-dom";
+import {pageLimit} from '../api/data.js'
 import {
   getAllInvoice,
   getNtnInvoice,
@@ -159,7 +160,7 @@ function Dashboard() {
                 pos={pos}
                 ntn={ntn}
                 page={page}
-                total={Math.ceil(count / 2)}
+                total={Math.ceil(count / pageLimit)}
                 string="dashboard"
                 date={date}
               />

@@ -1,3 +1,5 @@
+export const pageLimit=200
+
 export const data = {
     data: [
       {

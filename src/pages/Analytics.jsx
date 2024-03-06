@@ -145,17 +145,17 @@ fetchData1()
               <DashboardCard title={'Average Rate'} value={averageRate}/>
               </div>
               {/* Other components */}
+              <div className='flex flex-col items-center justify-center'>
+
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly}/>
-            <div className='lg:flex lg:flex-row'>
+       
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-            </div>
-            <div className='lg:flex lg:flex-row'>
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-            </div>
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
+              </div>
           </div>
         </div>
     </div>

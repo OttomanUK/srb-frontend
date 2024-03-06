@@ -9,6 +9,7 @@ import {getMissingInvoice} from "../../action/action";
 import Loader from '../../components/utils/Loader';
 import Footer from "../../components/dashboard_components/DashboardFooter";
 import './MissingInvoice.css'
+import {pageLimit} from "../../api/data"
 import PleaseReload from '../PleaseReload'
 
 function useQuery() {
@@ -132,7 +133,7 @@ function MissingInvoice(){
         </table>
       </CardBody>
               </Card>
-          <Footer ntn={ntn} string="missing" page={page} total={ Math.ceil(count/2)}/>
+          <Footer ntn={ntn} string="missing" page={page} total={ Math.ceil(count/pageLimit)}/>
             </div>
           </div>
         </div>

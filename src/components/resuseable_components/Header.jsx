@@ -41,7 +41,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
                   />
                 </svg>
               </button>
-              <SearchModal id="search-modal" searchId="search" modalOpen={searchModalOpen} setModalOpen={setSearchModalOpen} />
+              {/* <SearchModal id="search-modal" searchId="search" modalOpen={searchModalOpen} setModalOpen={setSearchModalOpen} /> */}
             </div>
             <Notifications align="right" />
             <Help align="right" />

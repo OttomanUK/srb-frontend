@@ -9,7 +9,7 @@ import { getAllNtn } from '../action/action';
 import Loader from '../components/utils/Loader';
 import Footer from '../components/dashboard_components/DashboardFooter';
 import PleaseReload from './PleaseReload';
-
+import {pageLimit} from "../api/data"
 import NotFound from './NotFound';
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -125,7 +125,7 @@ function NtnList() {
                 </table>
               </CardBody>
             </Card>
-            <Footer string="NtnList" total={ Math.ceil(count/2)} page={page}/>
+            <Footer string="NtnList" total={ Math.ceil(count/pageLimit)} page={page}/>
           </div>
         </main>
       </div>

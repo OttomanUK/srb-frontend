@@ -80,11 +80,12 @@ const DashboardCardHeader = ({ setAnomalous,searchData,setSearchData,anomalous})
   </TabsHeader>
 </Tabs>
 
-          <div className=" mb-8 flex gap-8 mx-3 dark:border-slate-700 dark:bg-slate-800 dark:text-white">
+          <div className=" mt-1 mb-3 flex gap-4 mx-3 dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded">
             <Input
               label="Search"
-              icon={<MagnifyingGlassIcon className="h-10 w-10" /> }
-              onChange={(e) => setSearchTerm(e.target.value)}
+              icon={<MagnifyingGlassIcon className="h-6 w-6" /> }
+              onChange={(e) => setSearchTerm(e.target.value)} 
+              className="h-7 w-8 rounded "
             />
           </div>
         </div>
