@@ -36,7 +36,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
   }, [data, showAnomalyCount]);
 
   return (
-    <div>
+    <div className='flex flex-col items-center justify-center'>
       <h2>{showAnomalyCount ? `${anomaly1}` : 'Sales'} Time Series Plot</h2>
 
       <Plot

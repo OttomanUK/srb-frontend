@@ -15,6 +15,7 @@ import { startLoading,endLoading } from '../redux_store/reducer.js';
 import Loader from '../components/utils/Loader.jsx';
 import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
 import MissingBarPlot from '../components/plots/missingbar.jsx';
+import {analytics,missingAnalytics} from "../action/action.js"
 import PleaseReload from './PleaseReload.jsx';
 // Adjust the path based on your project structure
 // import PiePlot from './pie_plots';
@@ -25,7 +26,7 @@ const Analytics = () => {
   const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-    const {isLoading,reduxNtn,reduxPos,anomaly,graphData}=useSelector(state=>state.centralStore)
+    const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous,graphData}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
    const [error,setError]=useState(false)
    const [loading,setLoading]=useState(false)
@@ -39,89 +40,48 @@ const Analytics = () => {
 
 
    useEffect(() => {
-    const fetchData = async () => {
-      try{
-
-        setLoading(true)
+     const fetchData = async () => {
+       try{
         setError(false)
-        setResultsFinal([])
-      
-      const storedData = localStorage.getItem('nextUrl');
-      let nextUrl = JSON.parse(storedData);
-      let page = 1;
-      
-      while (page <= 10) {
-        try {
-          const modifiedUrl = new URL(nextUrl);
-          modifiedUrl.searchParams.set('page', page.toString());
-          
-          const { data } = await API.get(`/pfilter/${modifiedUrl.search}`);
-          setResultsFinal((prevResults) => [...prevResults, ...data.results]);
-          
-          if (data.next) {
-            nextUrl = data.next;
-            setNextPage(data.next);
-            ++page;
-          } else {
-            break;
-          }
-        } catch (error) {
-          break; // Break the loop if an error occurs
-        }
-      }
-      if(page===1){
-        setResultsFinal(graphData.results)
-      }
+      const data = await dispatch(analytics(reduxPos,reduxNtn,reduxAnomalous,reduxDate,reduxLocation))
+      const {
+        averageSalesTax,
+        totalSales,
+        averageRate,
+        averageDelayMinutes
+      } = calculateStatistics(data);
+      setAverageRate(averageRate);
+      setDelayAverage(averageDelayMinutes);
+      setTotalSales(totalSales);
+      setResultsFinal(data)
 
     }catch(error){
       console.log("There is some error that is "+error)
       setError(true)
-    } finally{
-      setLoading(false)
-    }
+    } 
     };
     console.log('i fire once');
     fetchData();
   }, []);
 
   useEffect(() => {
-
-  setLoading(true)
-  const fetchData1=async()=>{
-    let page = 1;
-    while (page <= 10) {
-      try {
-        const data=await dispatch(getMissingInvoice(reduxNtn,page))
-        setMissing(((prevResults) => [...prevResults, ...data.results]))
-        if (data.next) {
-          ++page;
-        } else {
-          break;
-        }
-      } catch (error) {
-        console.log("There is some Errro"+error)
-        setError(true)
-        break; // Break the loop if an error occurs
-      }
-    }
+    
+    const fetchData1=async()=>{
+    try{
+    const data=await dispatch(missingAnalytics(reduxNtn))
+    setMissing(data)
+  }catch(error){
+    // setError(true)
+  }
   }
 fetchData1()
-    const {
-      averageSalesTax,
-      totalSales,
-      averageRate,
-      averageDelayMinutes
-    } = calculateStatistics(resultsfinal);
-    setAverageRate(averageRate);
-    setDelayAverage(averageDelayMinutes);
-    setTotalSales(totalSales);
-    setLoading(false)
+    
   },[])
   if(error){
     return <PleaseReload/>
 
   }
-     if(loading || isLoading){
+     if(isLoading){
         return <Loader/>
 }
    if(resultsfinal.lenght===0){
@@ -137,7 +97,7 @@ fetchData1()
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
               <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
@@ -145,14 +105,17 @@ fetchData1()
               <DashboardCard title={'Average Rate'} value={averageRate}/>
               </div>
               {/* Other components */}
-              <div className='flex flex-col items-center justify-center'>
+              <div className='flex flex-col items-center justify-center mr-4'>
 
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly}/>
        
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn" location={reduxLocation} ntn={reduxNtn} pos={reduxPos}/>
+              {/* <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" /> */}
+              {/* <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description"/> */}
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
               </div>

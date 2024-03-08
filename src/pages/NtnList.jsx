@@ -111,14 +111,14 @@ function NtnList() {
                     {filteredData.map((item, index) => (
                       <tr key={index} className="text-center text-gray-700 dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:text-black">
                         <td
-                          className="py-2 px-4 border-b cursor-pointer"
+                          className="py-2 px-4 border-b cursor-pointer hover:underline dark:hover:text-black"
                           onClick={() => navigate(`/dashboard?ntn=${item.ntn}`)}
                         >
                           {item.ntn}
                         </td>
                         <td className="py-2 px-4 border-b">{item.name}</td>
-                        <td className="py-2 px-4 border-b">{item.location}</td>
-                        <td className="py-2 px-4 border-b">{item.posNumber}</td>
+                        <td  className="py-2 px-4 border-b cursor-pointer hover:underline dark:hover:text-black"
+                          onClick={() => navigate(`/dashboard?location=${item.location}`)}>{item.location}</td>
                       </tr>
                     ))}
                   </tbody>

@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
+import { useDispatch, useSelector } from "react-redux";
 import { tailwindConfig, hexToRGB } from '../utils/Utils';
-
-const BarPlot = ({ data, chartBy,anomaly1 }) => {
+import { useNavigate } from 'react-router-dom';
+import {addGoToGraph} from "../../redux_store/reducer.js"
+const BarPlot = ({ data, chartBy,anomaly1 ,ntn="None",pos="None",location="None",date="None"}) => {
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
   const [topAnomalyData, setTopAnomalyData] = useState([]);
 
   useEffect(() => {
@@ -43,7 +47,19 @@ const topAnomalyChartData = {
 
     generateTopAnomalyData();
   }, [data, chartBy]);
+  const handleClick = (event) => {
+    const point = event.points[0]; // Get the clicked point
+    const search = point.x; // Assuming x-axis corresponds to anomaly IDs
+    dispatch(addGoToGraph(true))
+    if(chartBy=="location"){
+      navigate(`/dashboard?ntn=${ntn}&pos=${pos}${chartBy}=${search}&date=${date}`);  
 
+    }
+    if(chartBy=="ntn"){
+      navigate(`/dashboard?location=${location}&pos=${pos}&${chartBy}=${search}&date=${date}`);  
+
+    }
+  };
   return (
     <div className='flex flex-col justify-center items-center'>
       <h2>Top 5 {anomaly1} by {chartBy}</h2>
@@ -51,6 +67,7 @@ const topAnomalyChartData = {
       <Plot
         data={topAnomalyData}
         layout={{ title: `Top 5 ${anomaly1} by ${chartBy}`, xaxis: { title: chartBy }, yaxis: { title: `Total ${anomaly1}` }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'  }}
+        onClick={handleClick}
       />
     </div>
   );

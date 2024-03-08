@@ -57,11 +57,11 @@ import reducer from "../redux_store/reducer.js";
         console.log(error.message);
       }
     };
-  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="None") => async (dispatch) => {
+  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="None",location="None") => async (dispatch) => {
     try {
       console.log(date)
       dispatch(startLoading());
-      const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date);
+      const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date,location);
       console.log(date)
       console.log(id)
       console.log(data)
@@ -146,3 +146,47 @@ import reducer from "../redux_store/reducer.js";
         console.log(error);
       }
     };
+
+    export const analytics= (id="None",ntn="None",page=1,anomaly,date="None",location="None") =>async(dispatch)=>{
+      try {
+      dispatch(startLoading())
+    
+    let page = 1;
+    const result=[]
+    while (page <= 10) {
+        const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date,location);
+        result.push(...data.results);
+        console.log(page)
+        if (data.next) {
+          ++page;
+        } else {
+          break;
+        }
+      }  // Break the loop if an error occurs
+      dispatch(endLoading())
+      return result
+      }catch (error) {
+        console.log("error is "+error)
+    }
+    }
+    export const missingAnalytics= (id="all",page=1) =>async(dispatch)=>{ 
+      try {
+        dispatch(startLoading())
+        let page = 1;
+        const result=[]
+        while (page <= 10) {
+          const data=await dispatch(getMissingInvoice(id,page))
+          result.push(data.results)
+          if (data.next) {
+            ++page;
+          } else {
+            break;
+          }
+        } 
+        console.log(result)
+        return result
+      }
+        catch(error) {
+          console.log("There is some Errro"+error)
+        }
+    }

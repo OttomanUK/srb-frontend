@@ -8,7 +8,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 
-const Footer = ({pos="None",ntn="None",page=1,total,string="dashboard", date="None"}) => {
+const Footer = ({pos="None",ntn="None",page=1,total,string="dashboard", date="None",location="None"}) => {
   const navigate=useNavigate();
 const previous=()=>{
   if(page===1){
@@ -16,10 +16,10 @@ const previous=()=>{
   }
   if(date!="None"){
   
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&date=${date}`)
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&date=${date}&location=${location}`)
     return
   }
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&location=${location}`)
   return
 }
 const next=()=>{
@@ -28,10 +28,10 @@ const next=()=>{
   }
   if(date!="None"){
 
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&date=${date}`)
+    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&date=${date}&location=${location}`)
     return
   }
-  navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
+  navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&location=${location}`)
 }
 return (
     <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

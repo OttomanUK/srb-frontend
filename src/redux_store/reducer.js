@@ -9,6 +9,10 @@ const initialState = {
   reduxPos: "None",
   graphData: {},
   reduxNtn:  "None",
+  reduxLocation:  "None",
+  reduxAnomalous:  0,
+  goToGraph:  false,
+  reduxDate:  "None",
 next:null,
 };
 
@@ -46,9 +50,29 @@ export const centralStore = createSlice({
       state.reduxNtn=data
       
     },
+    addDate: (state, action) => {
+      const data = action.payload;
+      state.reduxDate=data
+      
+    },
     addPos: (state, action) => {
       const data = action.payload;
       state.reduxPos=data
+      
+    },
+    addLocation: (state, action) => {
+      const data = action.payload;
+      state.reduxLocation=data
+      
+    },
+    addAnomalous: (state, action) => {
+      const data = action.payload;
+      state.reduxAnomalous=data
+      
+    },
+    addGoToGraph: (state, action) => {
+      const data = action.payload;
+      state.goToGraph=data
       
     },
   
@@ -62,7 +86,11 @@ export const {
   addGraphData,
   setAnomaly,
   addNtn,
+  addLocation,
+  addAnomalous,
   addPos,
+  addDate,
+  addGoToGraph
 } = centralStore.actions;
 
 export default centralStore.reducer;

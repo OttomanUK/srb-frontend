@@ -21,7 +21,11 @@ import {
   addData,
   addGraphData,
   addNtn,
+  addDate,
   addPos,
+  addLocation,
+  addGoToGraph,
+  addAnomalous
 } from "../redux_store/reducer.js";
 import Loader from "../components/utils/Loader";
 import DashboardCard from "../components/dashboard_components/DashboardCard";
@@ -37,10 +41,10 @@ function Dashboard() {
   const customGreeting = "Good Morning, SRB👋";
   const customText = "Here is the latest sales data with anomalies:";
 
-  const { isLoading, data, graphData, reduxNtn } = useSelector(
+  const { isLoading, goToGraph } = useSelector(
     (state) => state.centralStore
   );
-  // const [data,setData]=useState([])
+  const [loading,setLoading]=useState(true)
   const [anomalous, setAnomalous] = useState(10);
   const [totalPos, setTotalPos] = useState(0);
   const [totalNtn, setTotalNtn] = useState(0);
@@ -55,6 +59,7 @@ function Dashboard() {
   const date = query.get("date") || "None";
   const ntn = query.get("ntn") || "None";
   const pos = query.get("pos") || "None";
+  const location = query.get("location") || "None";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -62,14 +67,13 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         setError(false)
         let results;
-        results = await dispatch(getPosInvoice(pos, ntn, page, anomalous,date));
+        results = await dispatch(getPosInvoice(pos, ntn, page, anomalous,date,location));
         dispatch(addData(results.results));
         dispatch(addGraphData(results));
         setSearch(results.results);
-        dispatch(addNtn(ntn));
-        dispatch(addPos(pos));
         setCount(results.count);
         const uniqueNtnIds = new Set(results?.results.map((item) => item.ntn));
         const totalUniqueNtnIds = uniqueNtnIds.size;
@@ -78,26 +82,35 @@ function Dashboard() {
         setTotalAnomaly(results.count);
         const uniquePosIds = new Set(
           results.results?.map((item) => item.pos_id)
-        );
-        const totalUniquePosIds = uniquePosIds.size;
-        setTotalPos(totalUniquePosIds);
-      } catch (error) {
-        setError(true)
+          );
+          const totalUniquePosIds = uniquePosIds.size;
+          setTotalPos(totalUniquePosIds);
+          dispatch(addNtn(ntn));
+          dispatch(addPos(pos));
+          dispatch(addDate(date));
+          dispatch(addLocation(location));
+          dispatch(addAnomalous(anomalous));
+          if(goToGraph){
+            dispatch(addGoToGraph(false))
+            navigate("/Analytics")
+          }
+          setLoading(false)
+        } catch (error) {
+          setError(true)
       }
     };
 
     fetchData();
-  }, [anomalous, page, ntn, pos, date]);
+  }, [anomalous, page, ntn, pos, date,location]);
 
   if(error){
     return <PleaseReload/>
   }
+  if (loading) {
+    return <Loader /> 
+  }
   if (isLoading) {
-    return (
-      <>
-        <Loader />
-      </>
-    );
+    return <Loader /> 
   }
 
 
@@ -118,6 +131,7 @@ function Dashboard() {
               text={customText}
               ntn={ntn}
               pos={pos}
+              location={location}
               show={true}
             />
             {/* Dashboard actions */}
@@ -160,6 +174,7 @@ function Dashboard() {
                 pos={pos}
                 ntn={ntn}
                 page={page}
+                location={location}
                 total={Math.ceil(count / pageLimit)}
                 string="dashboard"
                 date={date}
