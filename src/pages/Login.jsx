@@ -10,8 +10,8 @@ export default function Login(){
   const dispatch = useDispatch();
   const initialFormState = {
   
-    email: 'mohib@gmail.com',
-    password: 'polkpolk',
+    email: '',
+    password: '',
 
     
   };
@@ -26,9 +26,9 @@ export default function Login(){
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Form submitted:', initialFormState);
+    console.log('Form submitted:', formValues);
 
-    const a= dispatch(login(initialFormState));
+    const a= dispatch(login(formValues));
     // const a= dispatch(getAllNtn());
     // const a= dispatch(submit_data(12));
 

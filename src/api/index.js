@@ -1,5 +1,5 @@
 import axios from "axios";
-// export const baseURL = "https://upgraded-space-sniffle-p6g69vv76rx294vp-8000.app.github.dev";
+// export const baseURL = "https://firm-intimate-longhorn.ngrok-free.app/";
 import {data} from "./data"
 export const baseURL = "http://127.0.0.1:8000";
 
@@ -10,6 +10,7 @@ API.interceptors.request.use((req) => {
       localStorage.getItem("authToken")
     )}`;
 
+
     }
   return req;
 });
@@ -19,10 +20,12 @@ export const getAllNtn = async (page) => await API.get(`/filter?ntn=all&page=${p
 export const getPosInvoice = async (id,ntn,page,anomaly,date,location) => await API.get(`/filter?anomaly=${anomaly}&anomaly_by_pos=${id}&anomaly_by_ntn=${ntn}&anomaly_by_date=${date}&page=${page}&anomaly_by_location=${location}`);
 
 export const getNtnPos = async (id) => await API.get(`/NtnPos/${id}`);
-export const getMissingInvoice = async (id,page) => await API.get(`/filter?missing_invoice_by_ntn=${id}&page=${page}`);
+export const getMissingInvoice = async (id,page,date) => await API.get(`/filter?missing_invoice_by_ntn=${id}&page=${page}&missing_invoice_by_date=${date}`);
 export const login = async (body) => await API.post(`/dj-rest-auth/login/`,body);
 export const register = async (body) => await API.post(`/dj-rest-auth/registration/`,body);
 
 
 
 export const submit_data = async (body) =>await API.post("/missing_invoices/",data);
+export const getAnomalyDescription = async () =>await API.get("/filter?anomaly_info=all");
+export const getAllLocation = async () =>await API.get("/filter?location=all");

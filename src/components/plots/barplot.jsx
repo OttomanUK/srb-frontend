@@ -5,8 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { tailwindConfig, hexToRGB } from '../utils/Utils';
 import { useNavigate } from 'react-router-dom';
 import {addGoToGraph} from "../../redux_store/reducer.js"
-const BarPlot = ({ data, chartBy,anomaly1 ,ntn="None",pos="None",location="None",date="None"}) => {
+const BarPlot = ({ data, chartBy,anomaly1 ,ntn="None",pos="None",location="None",date="None",anomalyHashMap={},reduxAnomaly=10}) => {
   const dispatch=useDispatch()
+  const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
   const navigate=useNavigate()
   const [topAnomalyData, setTopAnomalyData] = useState([]);
 
@@ -47,16 +48,32 @@ const topAnomalyChartData = {
 
     generateTopAnomalyData();
   }, [data, chartBy]);
+  const getKeyByValue = (obj, value) => {
+    for (const key in obj) {
+      if (obj[key] === value) {
+        return key;
+      }
+    }
+    return 10; // Return null if the value is not found
+  };
   const handleClick = (event) => {
     const point = event.points[0]; // Get the clicked point
     const search = point.x; // Assuming x-axis corresponds to anomaly IDs
     dispatch(addGoToGraph(true))
     if(chartBy=="location"){
-      navigate(`/dashboard?ntn=${ntn}&pos=${pos}${chartBy}=${search}&date=${date}`);  
+      navigate(`/dashboard?location=${search}&ntn=${reduxNtn}&pos=${reduxPos}&date=${reduxDate}&anomaly=${reduxAnomaly}`);  
 
     }
     if(chartBy=="ntn"){
-      navigate(`/dashboard?location=${location}&pos=${pos}&${chartBy}=${search}&date=${date}`);  
+      navigate(`/dashboard?location=${reduxLocation}&ntn=${search}&pos=${reduxPos}&date=${reduxDate}&anomaly=${reduxAnomaly}`);  
+      
+    }
+    if(chartBy=="pos_id"){
+      navigate(`/dashboard?location=${reduxLocation}&ntn=${reduxNtn}&pos=${search}&date=${reduxDate}&anomaly=${reduxAnomaly}`);  
+      
+    }
+    if(chartBy=="description"){
+      navigate(`/dashboard?anomaly=${getKeyByValue(anomalyHashMap, search)}&location=${reduxLocation}&pos=${reduxPos}&date=${reduxDate}&ntn=${reduxNtn}`);  
 
     }
   };
@@ -80,7 +97,7 @@ BarPlot.propTypes = {
       anomaly: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]), // Accepts either number or boolean
     })
   ).isRequired,
-  chartBy: PropTypes.oneOf(['ntn', 'pos_id']).isRequired,
+  chartBy: PropTypes.oneOf(['ntn', 'pos_id',"location","description"]).isRequired,
 };
 
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-function WelcomeBanner({greeting, text,ntn="None",pos="None",location="None",show=false}) {
+function WelcomeBanner({greeting, text,ntn="None",pos="None",location="None",show=false,date="None",anomaly=10,hash={}}) {
   return (
     <div className="relative bg-indigo-200 dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
@@ -60,9 +60,19 @@ function WelcomeBanner({greeting, text,ntn="None",pos="None",location="None",sho
         Pos Number: {pos}
       </h1>
     ) : null}
+    {date!="None" ? (
+      <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+        Date: {date}
+      </h1>
+    ) : null}
+    {anomaly!="10" ? (
+      <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+        Anomaly: {hash[anomaly]}
+      </h1>
+    ) : null}
     {location!="None" ? (
       <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
-        location: {location}
+        Location: {location}
       </h1>
     ) : null}
   </>

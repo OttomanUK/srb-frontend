@@ -125,7 +125,7 @@ function NtnList() {
                 </table>
               </CardBody>
             </Card>
-            <Footer string="NtnList" total={ Math.ceil(count/pageLimit)} page={page}/>
+            <Footer string="NtnList" total={ Math.ceil(count/pageLimit)} />
           </div>
         </main>
       </div>

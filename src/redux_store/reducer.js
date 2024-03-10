@@ -9,8 +9,10 @@ const initialState = {
   reduxPos: "None",
   graphData: {},
   reduxNtn:  "None",
+  anomalyHashmap:  {"dfd":9},
+  allLocation:[],
   reduxLocation:  "None",
-  reduxAnomalous:  0,
+  reduxAnomalous:  10,
   goToGraph:  false,
   reduxDate:  "None",
 next:null,
@@ -65,6 +67,16 @@ export const centralStore = createSlice({
       state.reduxLocation=data
       
     },
+    addAllLocation: (state, action) => {
+      const data = action.payload;
+      state.allLocation=data
+      
+    },
+    addAnomalyHashmap: (state, action) => {
+      const data = action.payload;
+      state.anomalyHashmap=data
+      
+    },
     addAnomalous: (state, action) => {
       const data = action.payload;
       state.reduxAnomalous=data
@@ -87,6 +99,8 @@ export const {
   setAnomaly,
   addNtn,
   addLocation,
+  addAllLocation,
+  addAnomalyHashmap,
   addAnomalous,
   addPos,
   addDate,

@@ -10,7 +10,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
       const timeSeries = data.map((entry) => ({
         x: new Date(entry.created_date_time),
         y: showAnomalyCount ? entry.anomaly : entry.sales_value,
-        text: `Invoice Number: ${entry.srb_invoice_id}, Ntn : ${entry.ntn} ,POS ID: ${entry.pos_id}`,
+        text: `Invoice Number: ${entry.srb_invoice_id}, Ntn : ${entry.ntn} ,POS ID: ${entry.pos_id}, Anomaly: ${entry.description}`,
       }));
 
       const dailyCounts = data.reduce((acc, entry) => {
@@ -34,7 +34,13 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
       setDailyCountData(dailyCountArray);
     }
   }, [data, showAnomalyCount]);
-
+  const handlePointClick = (event) => {
+    const invoiceId = event.points[0]?.customdata[0];
+    if (invoiceId) {
+      console.log('Clicked Invoice ID:', invoiceId);
+      // You can perform further actions with the invoice ID here
+    }
+  };
   return (
     <div className='flex flex-col items-center justify-center'>
       <h2>{showAnomalyCount ? `${anomaly1}` : 'Sales'} Time Series Plot</h2>
@@ -48,6 +54,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
             name: `Total ${showAnomalyCount ? anomaly1 : 'Sales'} over Time`,
+            customdata: timeSeriesData.map((entry) => entry.customdata), // Add custom data to capture invoice ID
           },
         ]}
         layout={{
@@ -57,7 +64,11 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
           paper_bgcolor: '#EEEEEE',
           plot_bgcolor: '#EEEEEE',
         }}
-      />
+        config={{
+          displayModeBar: true,
+        }}
+        onClick={handlePointClick}
+        />
 
       <Plot
         data={[
@@ -67,6 +78,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1 }) => {
             y: dailyCountData.map((entry) => entry.y),
             // text: dailyCountData.map((entry) => entry.text),
             name: `Total ${showAnomalyCount ? anomaly1 : 'Sales'} per Day`,
+            customdata: timeSeriesData.map((entry) => entry.customdata)
           },
         ]}
         layout={{

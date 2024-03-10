@@ -11,6 +11,7 @@ import Footer from "../../components/dashboard_components/DashboardFooter";
 import './MissingInvoice.css'
 import {pageLimit} from "../../api/data"
 import PleaseReload from '../PleaseReload'
+import Datepicker from "../../components/resuseable_components/Datepicker";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);}
@@ -23,6 +24,7 @@ function MissingInvoice(){
   const date=parseInt(query.get('date'))||"None"
   const ntn=query.get('ntn')||"all"
   const dispatch = useDispatch();
+
   const {id} = useParams();
   const {isLoading} = useSelector(state=>state.centralStore)
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -32,19 +34,12 @@ function MissingInvoice(){
     const [count,setCount]=useState([])
     const [searchInput, setSearchInput] = useState('');
     const [filteredData, setFilteredData] = useState([]);
-    const sampleData = [
-        { date: '2024-02-23', invoiceNumber: '123' },
-        { date: '2024-02-23', invoiceNumber: '124' },
-        { date: '2024-02-24', invoiceNumber: '123' },
-        { date: '2024-02-24', invoiceNumber: '124' },
-        { date: '2024-02-24', invoiceNumber: '125' },
-    ]
 
     useEffect(() => {
       const fetchData = async () => {
         try {
           setError(false)
-          const a = await dispatch(getMissingInvoice(ntn, page));
+          const a = await dispatch(getMissingInvoice(ntn, page,date));
           setData(a.results);
           setCount(a.count);
           console.log(a);
@@ -96,16 +91,8 @@ function MissingInvoice(){
             <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
               <WelcomeBanner greeting={customGreeting} />
               <div className="mb-4">
-              <input
-              type="text"
-              placeholder="Search by Date"
-              className="px-3 py-2 border rounded-md w-full dark:text-black"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onFocus={(e) => (e.target.type = "date")}
-              onBlur={(e) => (e.target.type = "text")}
-              style={{ backgroundColor: 'white' }}
-              />
+              
+              <Datepicker string={"NtnList"}/>
             </div>
               <Card className='dark:border-slate-700 dark:bg-slate-800'>
               <CardBody className="overflow-auto px-0 dark:border-slate-700 dark:bg-slate-800">
@@ -133,7 +120,7 @@ function MissingInvoice(){
         </table>
       </CardBody>
               </Card>
-          <Footer ntn={ntn} string="missing" page={page} total={ Math.ceil(count/pageLimit)}/>
+          <Footer  string="missing"  total={ Math.ceil(count/pageLimit)}/>
             </div>
           </div>
         </div>

@@ -11,8 +11,7 @@ import MembersTable from "../components/dashboard_components/DashboardTable";
 import { useNavigate, useLocation } from "react-router-dom";
 import {pageLimit} from '../api/data.js'
 import {
-  getAllInvoice,
-  getNtnInvoice,
+
   getPosInvoice,
 } from "../action/action.js";
 import Footer from "../components/dashboard_components/DashboardFooter";
@@ -25,7 +24,8 @@ import {
   addPos,
   addLocation,
   addGoToGraph,
-  addAnomalous
+  addAnomalous,
+  addAnomalyHashmap
 } from "../redux_store/reducer.js";
 import Loader from "../components/utils/Loader";
 import DashboardCard from "../components/dashboard_components/DashboardCard";
@@ -41,7 +41,7 @@ function Dashboard() {
   const customGreeting = "Good Morning, SRB👋";
   const customText = "Here is the latest sales data with anomalies:";
 
-  const { isLoading, goToGraph } = useSelector(
+  const { isLoading, goToGraph,anomalyHashMap } = useSelector(
     (state) => state.centralStore
   );
   const [loading,setLoading]=useState(true)
@@ -59,6 +59,8 @@ function Dashboard() {
   const date = query.get("date") || "None";
   const ntn = query.get("ntn") || "None";
   const pos = query.get("pos") || "None";
+  const anomalyParam = query.get("anomaly");
+  const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -70,7 +72,7 @@ function Dashboard() {
         setLoading(true)
         setError(false)
         let results;
-        results = await dispatch(getPosInvoice(pos, ntn, page, anomalous,date,location));
+        results = await dispatch(getPosInvoice(pos, ntn, page, anomaly,date,location));
         dispatch(addData(results.results));
         dispatch(addGraphData(results));
         setSearch(results.results);
@@ -89,7 +91,7 @@ function Dashboard() {
           dispatch(addPos(pos));
           dispatch(addDate(date));
           dispatch(addLocation(location));
-          dispatch(addAnomalous(anomalous));
+          dispatch(addAnomalous(anomaly));
           if(goToGraph){
             dispatch(addGoToGraph(false))
             navigate("/Analytics")
@@ -99,9 +101,8 @@ function Dashboard() {
           setError(true)
       }
     };
-
     fetchData();
-  }, [anomalous, page, ntn, pos, date,location]);
+  }, [anomaly, page, ntn, pos, date,location,anomaly]);
 
   if(error){
     return <PleaseReload/>
@@ -127,7 +128,9 @@ function Dashboard() {
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             {/* Welcome banner */}
             <WelcomeBanner
-            
+            date={date}
+            anomaly={anomaly}
+            hash={anomalyHashMap}
               text={customText}
               ntn={ntn}
               pos={pos}
@@ -140,7 +143,7 @@ function Dashboard() {
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 {/* Filter button */}
                 <FilterButton />
-                <Datepicker string="dashboard" ntn={ntn} pos={pos} />
+                <Datepicker string="dashboard" />
               </div>
             </div>
             {/* Cards */}
@@ -164,20 +167,15 @@ function Dashboard() {
               </div>
               {/* Line chart (Acme Plus) */}
               <DashoardCardHeader
-                setAnomalous={setAnomalous}
                 searchData={search}
                 setSearchData={setSearch}
                 anomalous={anomalous}
               />
               <MembersTable tableData={search} />
               <Footer
-                pos={pos}
-                ntn={ntn}
-                page={page}
-                location={location}
+              
                 total={Math.ceil(count / pageLimit)}
                 string="dashboard"
-                date={date}
               />
               {/* Line chart (Acme Advanced) */}
             </div>

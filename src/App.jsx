@@ -3,9 +3,7 @@ import React, { useEffect } from 'react';
 import {  BrowserRouter as Router,Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import InvoiceDetails from "../src/pages/invoice_detail/invoice_detail.jsx"
 import './css/style.css';
-import './components/charts/ChartjsConfig';
-import Analytics from './pages/Analytics';
-
+import { useDispatch } from 'react-redux';
 import Settings from './pages/Settings';
 // Import pages
 import Dashboard from './pages/Dashboard';
@@ -19,17 +17,29 @@ import NtnList from './pages/NtnList.jsx';
 import Loader from './components/utils/Loader.jsx';
 import NotFound from './pages/NotFound.jsx';
 import PleaseReload from './pages/PleaseReload.jsx';
+import { getAllLocation, getAllNtn, getAnomalyDescription } from './action/action.js';
+import Analytics from './pages/Analytics.jsx';
 
 
 
 function App() {
- 
+ const dispatch=useDispatch()
   const location = useLocation();
 
   useEffect(() => {
+
+    const fetchData=async()=>{
+      await dispatch(getAllLocation())
+      await dispatch(getAnomalyDescription())
+      await dispatch(getAllNtn(1))
+    }
+    
+    fetchData()
     document.querySelector('html').style.scrollBehavior = 'auto'
     window.scroll({ top: 0 })
     document.querySelector('html').style.scrollBehavior = ''
+
+
   }, [location.pathname]); // triggered on route change
 
   return (

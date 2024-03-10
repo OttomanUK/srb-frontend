@@ -31,6 +31,12 @@ const PiePlot = ({ data, chartBy, anomaly1 }) => {
       setPieData([pieChartData]);
     }
   }, [data, chartBy, anomaly1]);
+  const handlePieClick = (event) => {
+    const clickedLabel = event.points[0].label;
+    console.log(`Clicked label: ${clickedLabel}`);
+  };
+
+
 
   return (
     <div className='flex flex-col items-center justify-center'>
@@ -44,6 +50,8 @@ const PiePlot = ({ data, chartBy, anomaly1 }) => {
           paper_bgcolor: '#EEEEEE',
           plot_bgcolor: '#EEEEEE',
         }}
+        onClick={handlePieClick}
+
       />
     </div>
   );

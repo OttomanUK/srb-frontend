@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import Flatpickr from 'react-flatpickr';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
 function Datepicker({
-  align,string,ntn,pos
+  align,string
 }) {
+
+
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const query = useQuery();
+  const page = parseInt(query.get("page")) || 1;
+  const ntn = query.get("ntn") || "None";
+  const pos = query.get("pos") || "None";
+  const anomalyParam = query.get("anomaly");
+  const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
+  const location = query.get("location") || "None";
 const navigate=useNavigate();
   const options = {
     mode: 'single',
@@ -31,7 +44,7 @@ const navigate=useNavigate();
       const currentUrl = window.location.href;
       const url = new URL(currentUrl);
       const pathAndSearch = url.pathname + url.search;
-      navigate(`/${string}/?ntn=${ntn}&pos=${pos}&date=${yyyyMmDdFormat}`)
+      navigate(`/${string}/?ntn=${ntn}&pos=${pos}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomlay}&page=${page}`)
       // Update selectedDate state
       instance.element.value = dateStr;
     },

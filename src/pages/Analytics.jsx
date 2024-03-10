@@ -10,7 +10,7 @@ import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx'
 import {useDispatch,useSelector} from 'react-redux'
 import {useLocation,useNavigate} from 'react-router-dom'
 import {API} from "../api/index.js"
-import {getMissingInvoice} from "../action/action.js"
+import {getAnomalyDescription, getMissingInvoice} from "../action/action.js"
 import { startLoading,endLoading } from '../redux_store/reducer.js';
 import Loader from '../components/utils/Loader.jsx';
 import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
@@ -26,11 +26,10 @@ const Analytics = () => {
   const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-    const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous,graphData}=useSelector(state=>state.centralStore)
+    const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
    const [error,setError]=useState(false)
-   const [loading,setLoading]=useState(false)
-   const [nextPage, setNextPage] = useState(1);
+const [anomalyHashMap,setAnomalyHashMap]=useState({})
    const [missing, setMissing] = useState([]);
    const [delayAverage, setDelayAverage] = useState(0);
    const [averageRate, setAverageRate] = useState(0);
@@ -43,7 +42,7 @@ const Analytics = () => {
      const fetchData = async () => {
        try{
         setError(false)
-      const data = await dispatch(analytics(reduxPos,reduxNtn,reduxAnomalous,reduxDate,reduxLocation))
+      const data = await dispatch(analytics(reduxPos,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
       const {
         averageSalesTax,
         totalSales,
@@ -54,6 +53,8 @@ const Analytics = () => {
       setDelayAverage(averageDelayMinutes);
       setTotalSales(totalSales);
       setResultsFinal(data)
+      const hash=await dispatch(getAnomalyDescription())
+      setAnomalyHashMap(hash)
 
     }catch(error){
       console.log("There is some error that is "+error)
@@ -69,6 +70,7 @@ const Analytics = () => {
     const fetchData1=async()=>{
     try{
     const data=await dispatch(missingAnalytics(reduxNtn))
+    
     setMissing(data)
   }catch(error){
     // setError(true)
@@ -97,7 +99,7 @@ fetchData1()
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous} hash={anomalyHashMap}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
               <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
@@ -112,8 +114,8 @@ fetchData1()
        
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn" location={reduxLocation} ntn={reduxNtn} pos={reduxPos}/>
-              {/* <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" /> */}
-              {/* <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description"/> */}
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" anomalyHashMap={anomalyHashMap}/>
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
