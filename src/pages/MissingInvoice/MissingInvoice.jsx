@@ -92,7 +92,7 @@ function MissingInvoice(){
               <WelcomeBanner greeting={customGreeting} />
               <div className="mb-4">
               
-              <Datepicker string={"NtnList"}/>
+              <Datepicker string={"Missing"}/>
             </div>
               <Card className='dark:border-slate-700 dark:bg-slate-800'>
               <CardBody className="overflow-auto px-0 dark:border-slate-700 dark:bg-slate-800">

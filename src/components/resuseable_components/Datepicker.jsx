@@ -44,7 +44,7 @@ const navigate=useNavigate();
       const currentUrl = window.location.href;
       const url = new URL(currentUrl);
       const pathAndSearch = url.pathname + url.search;
-      navigate(`/${string}/?ntn=${ntn}&pos=${pos}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomlay}&page=${page}`)
+      navigate(`/${string}/?ntn=${ntn}&pos=${pos}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomaly}&page=${page}`)
       // Update selectedDate state
       instance.element.value = dateStr;
     },
