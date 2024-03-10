@@ -50,7 +50,7 @@ function MissingInvoice(){
       };
       
       fetchData()
-    }, [page, ntn]);
+    }, [page, ntn,date]);
 
     useEffect(() => {
 
