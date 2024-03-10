@@ -21,7 +21,7 @@ function MissingInvoice(){
   const navigate = useNavigate();
   const query=useQuery()
   const page=parseInt(query.get('page'))||1
-  const date=parseInt(query.get('date'))||"None"
+  const date=(query.get('date'))||"None"
   const ntn=query.get('ntn')||"all"
   const dispatch = useDispatch();
 
