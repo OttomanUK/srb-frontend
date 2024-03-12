@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import {useSelector,useDispatch} from "react-redux"
+import { useNavigate } from 'react-router-dom';
 import Plot from 'react-plotly.js';
+import { addGoToGraph } from '../../redux_store/reducer';
 
 const PiePlot = ({ data, chartBy, anomaly1 }) => {
   const [pieData, setPieData] = useState([]);
-
+  const dispatch=useDispatch()
+  const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous,anomalyHashMap}=useSelector(state=>state.centralStore)
+  const navigate=useNavigate()
   useEffect(() => {
     if (data.length > 0) {
       const anomalyDistribution = data.reduce((acc, entry) => {
@@ -32,8 +37,21 @@ const PiePlot = ({ data, chartBy, anomaly1 }) => {
     }
   }, [data, chartBy, anomaly1]);
   const handlePieClick = (event) => {
-    const clickedLabel = event.points[0].label;
-    console.log(`Clicked label: ${clickedLabel}`);
+    const search = event.points[0].label;
+    dispatch(addGoToGraph(true))
+    let url = "/dashboard?";
+const params = { location: reduxLocation, ntn: reduxNtn, pos: reduxPos, date: reduxDate, anomaly: reduxAnomalous };
+
+if (chartBy === "description") {
+  params.anomaly = getKeyByValue(anomalyHashMap, search);
+} else {
+  params[chartBy] = search;
+}
+
+url += Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&');
+navigate(url);
+
+    
   };
 
 

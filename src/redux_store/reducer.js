@@ -13,6 +13,7 @@ const initialState = {
   allLocation:[],
   reduxLocation:  "None",
   reduxAnomalous:  10,
+  isAuthorized:  null,
   goToGraph:  false,
   reduxDate:  "None",
 next:null,
@@ -87,6 +88,10 @@ export const centralStore = createSlice({
       state.goToGraph=data
       
     },
+    addIsAuthorized: (state, action) => {
+      const data = action.payload;
+      state.isAuthorized=data
+    },
   
   },
 });
@@ -104,7 +109,9 @@ export const {
   addAnomalous,
   addPos,
   addDate,
+  addIsAuthorized,
   addGoToGraph
+
 } = centralStore.actions;
 
 export default centralStore.reducer;

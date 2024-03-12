@@ -11,7 +11,8 @@ import MembersTable from "../components/dashboard_components/DashboardTable";
 import { useNavigate, useLocation } from "react-router-dom";
 import {pageLimit} from '../api/data.js'
 import {
-
+  getAnomalyDescription,
+  getAllLocation,
   getPosInvoice,
 } from "../action/action.js";
 import Footer from "../components/dashboard_components/DashboardFooter";
@@ -73,6 +74,8 @@ function Dashboard() {
         setError(false)
         let results;
         results = await dispatch(getPosInvoice(pos, ntn, page, anomaly,date,location));
+        await dispatch(getAllLocation())
+        await dispatch(getAnomalyDescription())
         dispatch(addData(results.results));
         dispatch(addGraphData(results));
         setSearch(results.results);

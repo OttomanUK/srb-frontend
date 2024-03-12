@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { tailwindConfig, hexToRGB } from '../utils/Utils';
 import { useNavigate } from 'react-router-dom';
 import {addGoToGraph} from "../../redux_store/reducer.js"
-const BarPlot = ({ data, chartBy,anomaly1 ,ntn="None",pos="None",location="None",date="None",anomalyHashMap={},reduxAnomaly=10}) => {
+const BarPlot = ({ data, chartBy,anomaly1} ) => {
   const dispatch=useDispatch()
-  const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
+  const {reduxNtn,reduxPos,reduxLocation,reduxDate,reduxAnomalous,anomalyHashMap}=useSelector(state=>state.centralStore)
   const navigate=useNavigate()
   const [topAnomalyData, setTopAnomalyData] = useState([]);
 
@@ -60,22 +60,18 @@ const topAnomalyChartData = {
     const point = event.points[0]; // Get the clicked point
     const search = point.x; // Assuming x-axis corresponds to anomaly IDs
     dispatch(addGoToGraph(true))
-    if(chartBy=="location"){
-      navigate(`/dashboard?location=${search}&ntn=${reduxNtn}&pos=${reduxPos}&date=${reduxDate}&anomaly=${reduxAnomaly}`);  
+    let url = "/dashboard?";
+const params = { location: reduxLocation, ntn: reduxNtn, pos: reduxPos, date: reduxDate, anomaly: reduxAnomalous };
 
-    }
-    if(chartBy=="ntn"){
-      navigate(`/dashboard?location=${reduxLocation}&ntn=${search}&pos=${reduxPos}&date=${reduxDate}&anomaly=${reduxAnomaly}`);  
-      
-    }
-    if(chartBy=="pos_id"){
-      navigate(`/dashboard?location=${reduxLocation}&ntn=${reduxNtn}&pos=${search}&date=${reduxDate}&anomaly=${reduxAnomaly}`);  
-      
-    }
-    if(chartBy=="description"){
-      navigate(`/dashboard?anomaly=${getKeyByValue(anomalyHashMap, search)}&location=${reduxLocation}&pos=${reduxPos}&date=${reduxDate}&ntn=${reduxNtn}`);  
+if (chartBy === "description") {
+  params.anomaly = getKeyByValue(anomalyHashMap, search);
+} else {
+  params[chartBy] = search;
+}
 
-    }
+url += Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&');
+navigate(url);
+
   };
   return (
     <div className='flex flex-col justify-center items-center'>

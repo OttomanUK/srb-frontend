@@ -3,7 +3,8 @@ import {
     startLoading,
     endLoading,
     addAnomalyHashmap,
-    addAllLocation
+    addAllLocation,
+    addIsAuthorized
   } from "../redux_store/reducer.js";
   import * as api from "../api/index.js";
   import {data1} from "../data/singleData.js"
@@ -56,7 +57,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
       dispatch(startLoading());
       const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date,location);
         dispatch(endLoading());
-        console.log(data)
+       
         return data;
       } catch (error) {
         console.log(error.message);
@@ -104,19 +105,37 @@ export const getSingleInvoice = (id) => async (dispatch) => {
       dispatch(startLoading());
       const  {data}  = await api.login(body);
         dispatch(endLoading());
-        console.log(data)
+       
         localStorage.setItem("authToken", JSON.stringify(data.key));
         return true;
       // } catch (error) {
         console.log(error.message);
       // }
     };
+  export const getUserRole = () => async (dispatch) => {
+    try {
+      dispatch(startLoading());
+      const  {data}  = await api.getUserRole();
+        dispatch(endLoading());
+       
+        if(data.is_admin || data.is_staff){
+          dispatch(addIsAuthorized(true))
+          return true;
+        }
+        
+        dispatch(addIsAuthorized(false))
+        return true;
+        
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
   export const register = (body) => async (dispatch) => {
     try {
       dispatch(startLoading());
       const  data  = await api.register(body);
         dispatch(endLoading());
-        console.log(data)
+       
         // localStorage.setItem("authToken", JSON.stringify(data.key));
         return true;
       } catch (error) {
@@ -129,7 +148,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
       dispatch(startLoading());
       const { data } = await api.submit_data(body);
         dispatch(endLoading());
-        console.log(data)
+       
         return data;
       } catch (error) {
         console.log(error);

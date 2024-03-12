@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { TERipple } from "tw-elements-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login,submit_data,getMissingInvoice,getAllNtn } from "../action/action";
+import { login,submit_data,getMissingInvoice,getAllNtn, getUserRole } from "../action/action";
 import { ToastContainer, toast } from 'react-toastify';
 
 export default function Login(){
@@ -29,10 +29,10 @@ export default function Login(){
     console.log('Form submitted:', formValues);
 
     const a= dispatch(login(formValues));
-    // const a= dispatch(getAllNtn());
-    // const a= dispatch(submit_data(12));
-
-    // const a= dispatch(getMissingInvoice(55));
+    // const a= dispatch(getUserRole());
+// if(a){
+//   navigate('/dashboard');
+// }
     // if(false){
     //     navigate('/dashboard');
     // }else{

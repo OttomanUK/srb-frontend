@@ -1,24 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
+import DelayTimeSeriesPlot from '../components/plots/delay_time_series.jsx';
 import PiePlot from '../components/plots/pie_plots.jsx';
 import BarPlot from '../components/plots/barplot.jsx';
-import Card from "../components/resuseable_components/card.jsx";
-// import jsonData from  '../data/dummyData.json';
+
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
 import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
 import {useDispatch,useSelector} from 'react-redux'
 import {useLocation,useNavigate} from 'react-router-dom'
-import {API} from "../api/index.js"
 import {getAnomalyDescription, getMissingInvoice} from "../action/action.js"
-import { startLoading,endLoading } from '../redux_store/reducer.js';
 import Loader from '../components/utils/Loader.jsx';
 import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
 import MissingBarPlot from '../components/plots/missingbar.jsx';
 import {analytics,missingAnalytics} from "../action/action.js"
 import PleaseReload from './PleaseReload.jsx';
-// Adjust the path based on your project structure
-// import PiePlot from './pie_plots';
 
 
 const Analytics = () => {
@@ -109,13 +105,15 @@ fetchData1()
               {/* Other components */}
               <div className='flex flex-col items-center justify-center mr-4'>
 
-            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly}/>
-            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly}/>
+            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly} chartBy={"anomaly"}/>
+            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"sales_value"}/>
+            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"rate_value"}/>
+            <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
        
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn" location={reduxLocation} ntn={reduxNtn} pos={reduxPos}/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal}/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" anomalyHashMap={anomalyHashMap}/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>

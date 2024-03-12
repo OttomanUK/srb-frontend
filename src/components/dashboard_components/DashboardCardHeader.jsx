@@ -145,9 +145,9 @@ placeholder='Search Here'
       onChange={(e) => setSelectedLocation(e.target.value)}
       className="border rounded-md dark:text-black"
     >
-      {location1.map((location, index) => (
-        <option key={index} value={location}>
-          {location}
+      {allLocation.map((location, index) => (
+        <option key={index} value={location.location}>
+          {location.location}
         </option>
       ))}
     </select>
