@@ -130,16 +130,17 @@ const sortDataByProperty = (property) => {
             ))}
           </TabsHeader>
         </Tabs>
-<div className="mt-1 mb-3 flex gap-4 mx-3 dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded " >
+<div className="mt-1 mb-3 flex gap-2 mx-2 dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded " >
+  
   <Input
 placeholder='Search Here'
 
     icon={<MagnifyingGlassIcon className="h-10 w-5" />}
     onChange={(e) => setSearchTerm(e.target.value)}
-    className="h-10 w-40 rounded px-5"
+    className="h-10 w-10 rounded px-5"
   />
 
-  <label className="text-gray-700 dark:text-white">Filter by Location:</label>
+  <label className="text-gray-700 dark:text-white ">Filter by Location:</label>
   <select
       value={selectedLocation}
       onChange={(e) => setSelectedLocation(e.target.value)}
@@ -165,17 +166,17 @@ placeholder='Search Here'
     navigate(`/dashboard?ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}&anomaly=${e.target.value}`)}}
     >
     <option value="10">All</option>
-    {[1, 2, 3, 5, 6, 7, 8].map((value) => (
+    {Object.keys(anomalyHashMap).map((value) => (
       <option key={value} value={value}>
         {anomalyHashMap[value]}
       </option>
     ))}
   </select>
     </div>
-</div>
-<div>
-      <label htmlFor="sortProperty">Sort by:</label>
-      <select id="sortProperty" value={sortProperty} onChange={handleSortChange}>
+    <label lassName="text-gray-700 dark:text-white" htmlFor="sortProperty">Sort by:</label>
+<div >
+      
+      <select id="sortProperty" className="border rounded-md dark:text-black w-20" value={sortProperty} onChange={handleSortChange}>
         <option value="All">All</option>
         <option value="rate_value">Rate Value</option>
         <option value="sales_value">Sales Value</option>
@@ -183,8 +184,9 @@ placeholder='Search Here'
         <option value="ntn">NTN</option>
         <option value="pos_id">pos_id ID</option>
       </select>
-
+     
     </div>
+</div>
         </div>
       
       
