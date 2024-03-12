@@ -6,13 +6,13 @@ function Tooltip({
   className,
   bg,
   size,
-  position,
+  pos_idition,
 }) {
 
   const [tooltipOpen, setTooltipOpen] = useState(false);
 
-  const positionOuterClasses = (position) => {
-    switch (position) {
+  const pos_iditionOuterClasses = (pos_idition) => {
+    switch (pos_idition) {
       case 'right':
         return 'left-full top-1/2 -translate-y-1/2';
       case 'left':
@@ -48,8 +48,8 @@ function Tooltip({
     }
   };    
 
-  const positionInnerClasses = (position) => {
-    switch (position) {
+  const pos_iditionInnerClasses = (pos_idition) => {
+    switch (pos_idition) {
       case 'right':
         return 'ml-2';
       case 'left':
@@ -74,11 +74,11 @@ function Tooltip({
           <path d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 12c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1zm1-3H7V4h2v5z" />
         </svg>
       </button>
-      <div className={`z-10 absolute ${positionOuterClasses(position)}`}>
+      <div className={`z-10 absolute ${pos_iditionOuterClasses(pos_idition)}`}>
         <Transition
           show={tooltipOpen}
           tag="div"
-          className={`rounded border overflow-hidden shadow-lg ${sizeClasses(size)} ${colorClasses(bg)} ${positionInnerClasses(position)}`}
+          className={`rounded border overflow-hidden shadow-lg ${sizeClasses(size)} ${colorClasses(bg)} ${pos_iditionInnerClasses(pos_idition)}`}
           enter="transition ease-out duration-200 transform"
           enterStart="opacity-0 -translate-y-2"
           enterEnd="opacity-100 translate-y-0"

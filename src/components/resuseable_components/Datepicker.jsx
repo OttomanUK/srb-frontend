@@ -14,7 +14,7 @@ function Datepicker({
   const query = useQuery();
   const page = parseInt(query.get("page")) || 1;
   const ntn = query.get("ntn") || "None";
-  const pos = query.get("pos") || "None";
+  const pos_id = query.get("pos_id") || "None";
   const anomalyParam = query.get("anomaly");
   const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
@@ -44,7 +44,7 @@ const navigate=useNavigate();
       const currentUrl = window.location.href;
       const url = new URL(currentUrl);
       const pathAndSearch = url.pathname + url.search;
-      navigate(`/${string}/?ntn=${ntn}&pos=${pos}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomaly}&page=${page}`)
+      navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomaly}&page=${page}`)
       // Update selectedDate state
       instance.element.value = dateStr;
     },

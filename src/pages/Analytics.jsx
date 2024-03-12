@@ -25,7 +25,6 @@ const Analytics = () => {
     const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
    const [error,setError]=useState(false)
-const [anomalyHashMap,setAnomalyHashMap]=useState({})
    const [missing, setMissing] = useState([]);
    const [delayAverage, setDelayAverage] = useState(0);
    const [averageRate, setAverageRate] = useState(0);
@@ -49,15 +48,13 @@ const [anomalyHashMap,setAnomalyHashMap]=useState({})
       setDelayAverage(averageDelayMinutes);
       setTotalSales(totalSales);
       setResultsFinal(data)
-      const hash=await dispatch(getAnomalyDescription())
-      setAnomalyHashMap(hash)
+      
 
     }catch(error){
       console.log("There is some error that is "+error)
       setError(true)
     } 
     };
-    console.log('i fire once');
     fetchData();
   }, []);
 
@@ -95,7 +92,7 @@ fetchData1()
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl mx-auto">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous} hash={anomalyHashMap}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
               <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
@@ -111,7 +108,7 @@ fetchData1()
             <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
        
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal}/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
               <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>

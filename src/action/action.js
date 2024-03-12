@@ -51,11 +51,11 @@ export const getSingleInvoice = (id) => async (dispatch) => {
     };
     
   
-  export const getPosInvoice = (id="None",ntn="None",page=1,anomaly,date="None",location="None") => async (dispatch) => {
+  export const getpos_idInvoice = (id="None",ntn="None",page=1,anomaly,date="None",location="None") => async (dispatch) => {
     try {
       console.log(date)
       dispatch(startLoading());
-      const { data } = await api.getPosInvoice(id,ntn,page,anomaly,date,location);
+      const { data } = await api.getpos_idInvoice(id,ntn,page,anomaly,date,location);
         dispatch(endLoading());
        
         return data;
@@ -73,10 +73,10 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         console.log(error.message);
       }
     };
-  export const getNtnPos = (id) => async (dispatch) => {
+  export const getNtnpos_id = (id) => async (dispatch) => {
     try {
       dispatch(startLoading());
-      const { data } = await api.getNtnPos(id);
+      const { data } = await api.getNtnpos_id(id);
         dispatch(endLoading());
         return data;
       } catch (error) {
@@ -164,7 +164,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         console.log(anomaly);
     
         const fetchData = async (currentPage) => {
-          const { data } = await api.getPosInvoice(id, ntn, currentPage, anomaly, date, location);
+          const { data } = await api.getpos_idInvoice(id, ntn, currentPage, anomaly, date, location);
 
           result.push(...data.results);
           if (data.next) {

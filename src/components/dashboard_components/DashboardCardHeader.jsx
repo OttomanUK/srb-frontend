@@ -22,12 +22,12 @@ const DashboardCardHeader = ({searchData,setSearchData,anomalous}) => {
   const page = parseInt(query.get("page")) || 1;
   const date = query.get("date") || "None";
   const ntn = query.get("ntn") || "None";
-  const pos = query.get("pos") || "None";
+  const pos_id = query.get("pos_id") || "None";
   const anomalyParam = query.get("anomaly");
   const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
   const dispatch = useDispatch();
-  const { isLoading, data,anomalyHashmap,allLocation } = useSelector(state => state.centralStore);
+  const { isLoading, data,anomalyHashMap,allLocation } = useSelector(state => state.centralStore);
   const initialSearchResult = isLoading ? [] : data;
   const [filteredData, setFilteredData] = useState(initialSearchResult);
   const [searchTerm, setSearchTerm] = useState('');
@@ -122,7 +122,7 @@ const sortDataByProperty = (property) => {
                     dispatch(setAnomaly("Anomaly"))
                     
                   }
-                  navigate(`/dashboard?anomaly=${value}&ntn=${ntn}&pos=${pos}&page=${page}&date=${date}&location=${location}`)
+                  navigate(`/dashboard?anomaly=${value}&ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}`)
                 }}
               >
                 {label} 
@@ -162,12 +162,12 @@ placeholder='Search Here'
     setSelectedDropdownValue(e.target.value)
     dispatch(setAnomaly("Anomaly"))
     
-    navigate(`/dashboard?ntn=${ntn}&pos=${pos}&page=${page}&date=${date}&location=${location}&anomaly=${e.target.value}`)}}
+    navigate(`/dashboard?ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}&anomaly=${e.target.value}`)}}
     >
     <option value="10">All</option>
     {[1, 2, 3, 5, 6, 7, 8].map((value) => (
       <option key={value} value={value}>
-        {anomalyHashmap[value]}
+        {anomalyHashMap[value]}
       </option>
     ))}
   </select>
@@ -181,7 +181,7 @@ placeholder='Search Here'
         <option value="sales_value">Sales Value</option>
         <option value="sales_tax">Sales Tax</option>
         <option value="ntn">NTN</option>
-        <option value="pos_id">POS ID</option>
+        <option value="pos_id">pos_id ID</option>
       </select>
 
     </div>

@@ -15,7 +15,7 @@ const DelayTimeSeriesPlot = ({ data, anomaly1 }) => {
         return {
           x: createdDate,
           y: delay,
-          text: `Invoice Number: ${entry.srb_invoice_id}, NTN: ${entry.ntn}, POS ID: ${entry.pos_id}, Anomaly: ${entry.description}`,
+          text: `Invoice Number: ${entry.srb_invoice_id}, NTN: ${entry.ntn}, pos_id ID: ${entry.pos_id_id}, Anomaly: ${entry.description}`,
         };
       });
 
@@ -49,13 +49,13 @@ const DelayTimeSeriesPlot = ({ data, anomaly1 }) => {
       const invoiceId = pointData.customdata[0];
       const delay = pointData.customdata[1];
       const ntn = pointData.text.split('NTN: ')[1].split(', ')[0];
-      const posId = pointData.text.split('POS ID: ')[1].split(', ')[0];
+      const pos_idId = pointData.text.split('pos_id ID: ')[1].split(', ')[0];
       const anomalyDescription = pointData.text.split('Anomaly: ')[1];
 
       console.log('Clicked Invoice ID:', invoiceId);
       console.log('Delay:', delay);
       console.log('NTN:', ntn);
-      console.log('POS ID:', posId);
+      console.log('pos_id ID:', pos_idId);
       console.log('Anomaly Description:', anomalyDescription);
 
       // You can perform further actions with the clicked data here

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './invoice_detail.css'; // Import the CSS file
 import InvoiceField from './invoice_field';
 import { useParams } from "react-router-dom";
-import { login, getPosInvoice, submit_data, getSingleInvoice } from "../../action/action";
+import { login, getpos_idInvoice, submit_data, getSingleInvoice } from "../../action/action";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from '../../components/resuseable_components/Sidebar';
 import Header from '../../components/resuseable_components/Header';

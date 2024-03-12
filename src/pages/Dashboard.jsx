@@ -13,7 +13,7 @@ import {pageLimit} from '../api/data.js'
 import {
   getAnomalyDescription,
   getAllLocation,
-  getPosInvoice,
+  getpos_idInvoice,
 } from "../action/action.js";
 import Footer from "../components/dashboard_components/DashboardFooter";
 import { dummy } from "../data/dummyData.js";
@@ -22,7 +22,7 @@ import {
   addGraphData,
   addNtn,
   addDate,
-  addPos,
+  addpos_id,
   addLocation,
   addGoToGraph,
   addAnomalous,
@@ -42,12 +42,12 @@ function Dashboard() {
   const customGreeting = "Good Morning, SRB👋";
   const customText = "Here is the latest sales data with anomalies:";
 
-  const { isLoading, goToGraph,anomalyHashMap } = useSelector(
+  const { isLoading, goToGraph,reduxAnomalous } = useSelector(
     (state) => state.centralStore
   );
   const [loading,setLoading]=useState(true)
   const [anomalous, setAnomalous] = useState(10);
-  const [totalPos, setTotalPos] = useState(0);
+  const [totalpos_id, setTotalpos_id] = useState(0);
   const [totalNtn, setTotalNtn] = useState(0);
   const [totalAnomaly, setTotalAnomaly] = useState(0);
   const [count, setCount] = useState("True");
@@ -59,7 +59,7 @@ function Dashboard() {
   const page = parseInt(query.get("page")) || 1;
   const date = query.get("date") || "None";
   const ntn = query.get("ntn") || "None";
-  const pos = query.get("pos") || "None";
+  const pos_id = query.get("pos_id") || "None";
   const anomalyParam = query.get("anomaly");
   const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
@@ -73,9 +73,10 @@ function Dashboard() {
         setLoading(true)
         setError(false)
         let results;
-        results = await dispatch(getPosInvoice(pos, ntn, page, anomaly,date,location));
+        results = await dispatch(getpos_idInvoice(pos_id, ntn, page, anomaly,date,location));
         await dispatch(getAllLocation())
         await dispatch(getAnomalyDescription())
+
         dispatch(addData(results.results));
         dispatch(addGraphData(results));
         setSearch(results.results);
@@ -85,16 +86,16 @@ function Dashboard() {
         setTotalNtn(totalUniqueNtnIds);
         // Count unique pos_id values
         setTotalAnomaly(results.count);
-        const uniquePosIds = new Set(
+        const uniqueposIds = new Set(
           results.results?.map((item) => item.pos_id)
           );
-          const totalUniquePosIds = uniquePosIds.size;
-          setTotalPos(totalUniquePosIds);
-          dispatch(addNtn(ntn));
-          dispatch(addPos(pos));
-          dispatch(addDate(date));
-          dispatch(addLocation(location));
+          const totalUniqueposIds = uniqueposIds.size;
+          setTotalpos_id(totalUniqueposIds);
           dispatch(addAnomalous(anomaly));
+          dispatch(addNtn(ntn));
+          dispatch(addLocation(location));
+          dispatch(addpos_id(pos_id));
+          dispatch(addDate(date));
           if(goToGraph){
             dispatch(addGoToGraph(false))
             navigate("/Analytics")
@@ -105,7 +106,7 @@ function Dashboard() {
       }
     };
     fetchData();
-  }, [anomaly, page, ntn, pos, date,location,anomaly]);
+  }, [anomaly, page, ntn, pos_id, date,location,anomaly]);
 
   if(error){
     return <PleaseReload/>
@@ -133,10 +134,9 @@ function Dashboard() {
             <WelcomeBanner
             date={date}
             anomaly={anomaly}
-            hash={anomalyHashMap}
               text={customText}
               ntn={ntn}
-              pos={pos}
+              pos_id={pos_id}
               location={location}
               show={true}
             />
@@ -153,7 +153,7 @@ function Dashboard() {
             <div>
               <div className="flex flex-row space-x-4">
                 <DashboardCard title={"Total Anomaly"} value={totalAnomaly} />
-                <DashboardCard title={"Total POS"} value={totalPos} />
+                <DashboardCard title={"Total pos_id"} value={totalpos_id} />
                 <DashboardCard title={"Total NTN"} value={totalNtn} />
                 {ntn != "None" && (
                   <Card className="dark:border-slate-700 dark:bg-slate-800 w-full min-w-max ">

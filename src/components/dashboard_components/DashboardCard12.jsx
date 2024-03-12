@@ -31,7 +31,7 @@ function DashboardCard12() {
                     <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
                       Sara Smith
                     </a>{' '}
-                    in a new post
+                    in a new pos_idt
                   </div>
                   <div className="shrink-0 self-end ml-2">
                     <a className="font-medium text-indigo-500 hover:text-indigo-600 dark:hover:text-indigo-400" href="#0">
@@ -51,9 +51,9 @@ function DashboardCard12() {
               <div className="grow flex items-center border-b border-slate-100 dark:border-slate-700 text-sm py-2">
                 <div className="grow flex justify-between">
                   <div className="self-center">
-                    The post{' '}
+                    The pos_idt{' '}
                     <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
-                      Post Name
+                      pos_idt Name
                     </a>{' '}
                     was removed by{' '}
                     <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
@@ -83,7 +83,7 @@ function DashboardCard12() {
                     </a>{' '}
                     published a new{' '}
                     <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
-                      post
+                      pos_idt
                     </a>
                   </div>
                   <div className="shrink-0 self-end ml-2">
@@ -138,9 +138,9 @@ function DashboardCard12() {
               <div className="grow flex items-center text-sm py-2">
                 <div className="grow flex justify-between">
                   <div className="self-center">
-                    The post{' '}
+                    The pos_idt{' '}
                     <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">
-                      Post Name
+                      pos_idt Name
                     </a>{' '}
                     was suspended by{' '}
                     <a className="font-medium text-slate-800 hover:text-slate-900 dark:text-slate-100 dark:hover:text-white" href="#0">

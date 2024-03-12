@@ -16,7 +16,7 @@ const Footer = ({total,string="dashboard"}) => {
   const page = parseInt(query.get("page")) || 1;
   const date = query.get("date") || "None";
   const ntn = query.get("ntn") || "None";
-  const pos = query.get("pos") || "None";
+  const pos_id = query.get("pos_id") || "None";
   const anomalyParam = query.get("anomaly");
   const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
@@ -26,10 +26,10 @@ const previous=()=>{
   }
   if(date!="None"){
   
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&date=${date}&location=${location}&anomaly=${anomaly}`)
+    navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page-1}&date=${date}&location=${location}&anomaly=${anomaly}`)
     return
   }
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&location=${location}&anomaly=${anomaly}`)
+    navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page-1}&location=${location}&anomaly=${anomaly}`)
   return
 }
 const next=()=>{
@@ -38,10 +38,10 @@ const next=()=>{
   }
   if(date!="None"){
 
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&date=${date}&location=${location}&anomaly=${anomaly}`)
+    navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page+1}&date=${date}&location=${location}&anomaly=${anomaly}`)
     return
   }
-  navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&location=${location}&anomaly=${anomaly}`)
+  navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page+1}&location=${location}&anomaly=${anomaly}`)
 }
 return (
     <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

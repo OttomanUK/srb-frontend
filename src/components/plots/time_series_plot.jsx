@@ -10,7 +10,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
       const timeSeries = data.map((entry) => ({
         x: new Date(entry.created_date_time),
         y: showAnomalyCount ? entry.anomaly : entry[chartBy],
-        text: `Invoice Number: ${entry.srb_invoice_id}, Ntn : ${entry.ntn} ,POS ID: ${entry.pos_id}, Anomaly: ${entry.description}`,
+        text: `Invoice Number: ${entry.srb_invoice_id}, Ntn : ${entry.ntn} ,pos_id ID: ${entry.pos_id}, Anomaly: ${entry.description}`,
       }));
 
       const dailyCounts = data.reduce((acc, entry) => {
@@ -27,7 +27,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
       const dailyCountArray = Object.keys(dailyCounts).map((date) => ({
         x: new Date(date),
         y: dailyCounts[date],
-        text: `Invoice Number: ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.srb_invoice_id},Ntn : ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.ntn} ,POS ID: ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.pos_id}`,
+        text: `Invoice Number: ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.srb_invoice_id},Ntn : ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.ntn} ,pos_id ID: ${data.find(entry => new Date(entry.created_date_time).toLocaleDateString() === date)?.pos_id}`,
       }));
 
       setTimeSeriesData(timeSeries);
