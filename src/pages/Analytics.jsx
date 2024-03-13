@@ -3,7 +3,7 @@ import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
 import DelayTimeSeriesPlot from '../components/plots/delay_time_series.jsx';
 import PiePlot from '../components/plots/pie_plots.jsx';
 import BarPlot from '../components/plots/barplot.jsx';
-
+import VersusPlot from '../components/plots/versus_plot.jsx';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
 import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
@@ -101,19 +101,21 @@ fetchData1()
               </div>
               {/* Other components */}
               <div className='flex flex-col items-center justify-center mr-4'>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
+              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
+              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
+              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
 
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly} chartBy={"anomaly"}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"sales_value"}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"rate_value"}/>
+            <VersusPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} x_axis={"sales_tax"} y_axis={"sales_value"}/>
+
             <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
        
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
               </div>
           </div>

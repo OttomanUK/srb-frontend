@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 
 import {  BrowserRouter as Router,Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import InvoiceDetails from "../src/pages/invoice_detail/invoice_detail.jsx"
@@ -26,9 +26,20 @@ function App() {
   const isAuthorized=useSelector((state) => state.centralStore.isAuthorized)
  const dispatch=useDispatch()
   const location = useLocation();
+  const [isConnected, setIsconnected] = useState(false);
+  const checkUserToken = () => {
 
+    const user = JSON.parse(localStorage.getItem("authToken"));
+    // const username = JSON.parse(localStorage.getItem("user-token")).name;
+    if (user!=null) {
+      setIsconnected(true);
+    } else {
+      setIsconnected(false);
+    }
+};
   useEffect(() => {
-console.log(isAuthorized)
+  checkUserToken();
+
     document.querySelector('html').style.scrollBehavior = 'auto'
     window.scroll({ top: 0 })
     document.querySelector('html').style.scrollBehavior = ''
@@ -38,22 +49,27 @@ console.log(isAuthorized)
 
   return (
       <Routes>
-        <Route exact path="/dashboard" element={<Dashboard />} />
-        <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails />} />
-        <Route exact path="/Analytics" element={<Analytics />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/setting" element={<Settings/>} />
-        {/* <Route exact path="/" element={<Login/>} /> */}
-        <Route exact path="/missing" element= {<MissingInvoice/>} />
-        {isAuthorized &&<Route exact path="/Query" element={<Query/>} />
-        }
+        {isConnected && (
+  <>
+    <Route exact path="/dashboard" element={<Dashboard />} />
+    <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails />} />
+    <Route exact path="/Analytics" element={<Analytics />} />
+    <Route exact path="/missing" element= {<MissingInvoice/>} />
+    {isAuthorized &&<Route exact path="/Query" element={<Query/>} />}
         <Route exact path="/UserProfile" element={<UserProfile/>}/>
-        <Route exact path="/register" element={<Register/>} />
         <Route exact path="/NtnList" element={<NtnList/>} />
-        <Route exact path="/*" element={<NotFound/>}/> 
-        
-        {/* <Route exact path="/Loader" element={<Loader/>} /> */}
+  </>
+)}
+        {isConnected && (
+  <>
 
+<Route exact path="/login" element={<Login />} />
+{/* <Route exact path="/setting" element={<Settings/>} /> */}
+{/* <Route exact path="/" element={<Login/>} /> */}
+<Route exact path="/register" element={<Register/>} />
+     </>
+)}
+        <Route exact path="/*" element={<NotFound/>}/> 
       </Routes>
   );
 }
