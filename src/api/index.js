@@ -22,12 +22,12 @@ export const getpos_idInvoice = async (id,ntn,page,anomaly,date,location) => awa
 export const getNtnpos_id = async (id) => await API.get(`/Ntnpos_id/${id}`);
 export const getUserRole = async () => await API.get(`/get_user_role`);
 export const getMissingInvoice = async (id,page,date) => await API.get(`/filter?missing_invoice_by_ntn=${id}&page=${page}&missing_invoice_by_date=${date}`);
-export const login = async (body) => await API.pos_idt(`/dj-rest-auth/login/`,body);
-export const register = async (body) => await API.pos_idt(`/dj-rest-auth/registration/`,body);
+export const login = async (body) => await API.post(`/dj-rest-auth/login/`,body);
+export const register = async (body) => await API.post(`/dj-rest-auth/registration/`,body);
 export const logout = async () => await API.post(`/dj-rest-auth/logout/`);
 
 
 
-export const submit_data = async (body) =>await API.pos_idt("/missing_invoices/",data);
+export const submit_data = async (body) =>await API.post("/missing_invoices/",data);
 export const getAnomalyDescription = async () =>await API.get("/filter?anomaly_info=all");
 export const getAllLocation = async () =>await API.get("/filter?location=all");

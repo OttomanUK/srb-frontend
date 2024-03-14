@@ -143,7 +143,11 @@ placeholder='Search Here'
   <label className="text-gray-700 dark:text-white ">Filter by Location:</label>
   <select
       value={selectedLocation}
-      onChange={(e) => setSelectedLocation(e.target.value)}
+      onChange={(e) => {
+        setSelectedLocation(e.target.value)
+        navigate(`/dashboard?anomaly=${anomaly}&ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${e.target.value}`)
+      }
+    }
       className="border rounded-md dark:text-black"
     >
       {allLocation.map((location, index) => (

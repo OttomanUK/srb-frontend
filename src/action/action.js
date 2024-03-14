@@ -7,7 +7,6 @@ import {
     addIsAuthorized
   } from "../redux_store/reducer.js";
   import * as api from "../api/index.js";
-  import {data1} from "../data/singleData.js"
   
 export const getAllLocation=()=>async(dispatch)=>{
 try{
@@ -204,3 +203,18 @@ export const getSingleInvoice = (id) => async (dispatch) => {
           console.log("There is some Errro"+error)
         }
     }
+
+    export const logout=()=>async(dispatch)=>{
+      try{
+        if (localStorage.getItem("authToken")) {
+          const { data } = await api.logout(); 
+          localStorage.removeItem("authToken");
+        }
+        return true
+      }catch(err){
+        localStorage.removeItem("authToken");
+    }
+    };
+  
+
+  
