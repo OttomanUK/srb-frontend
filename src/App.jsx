@@ -9,7 +9,6 @@ import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
-import {data1} from "./data/singleData.js"
 import Query from './pages/Query.jsx';
 import MissingInvoice from './pages/MissingInvoice/MissingInvoice.jsx';
 import UserProfile from './pages/User_Profile/UserProfile.jsx';
@@ -17,7 +16,6 @@ import NtnList from './pages/NtnList.jsx';
 import Loader from './components/utils/Loader.jsx';
 import NotFound from './pages/NotFound.jsx';
 import PleaseReload from './pages/PleaseReload.jsx';
-import { getAllLocation, getAllNtn, getAnomalyDescription } from './action/action.js';
 import Analytics from './pages/Analytics.jsx';
 
 
@@ -58,18 +56,13 @@ function App() {
     {isAuthorized &&<Route exact path="/Query" element={<Query/>} />}
         <Route exact path="/UserProfile" element={<UserProfile/>}/>
         <Route exact path="/NtnList" element={<NtnList/>} />
+        <Route exact path="/*" element={<NotFound/>}/> 
   </>
 )}
-        {isConnected && (
-  <>
-
 <Route exact path="/login" element={<Login />} />
 {/* <Route exact path="/setting" element={<Settings/>} /> */}
-{/* <Route exact path="/" element={<Login/>} /> */}
 <Route exact path="/register" element={<Register/>} />
-     </>
-)}
-        <Route exact path="/*" element={<NotFound/>}/> 
+<Route exact path="/*" element={<Login/>}/> 
       </Routes>
   );
 }

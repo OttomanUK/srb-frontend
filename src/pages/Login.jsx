@@ -2,10 +2,8 @@ import React,{useState,useEffect} from "react";
 import { TERipple } from "tw-elements-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login,submit_data,getMissingInvoice,getAllNtn, getUserRole } from "../action/action";
+import { login,submit_data,getMissingInvoice,getAllNtn, getUserRole,logout } from "../action/action";
 import { ToastContainer, toast } from 'react-toastify';
-import { logout } from "../api";
-
 export default function Login(){
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -19,20 +17,11 @@ export default function Login(){
 
   useEffect(()=>{
     const Logout = async () => {
-      if (localStorage.getItem("authToken")) {
-        const { response } = await dispatch(logout());
-        if (response.status === 200) {
-          localStorage.removeItem("authToken");
-        }else{
-          localStorage.removeItem("authToken");
-
-        }
-      }
-    };
-  
-
-logout();
-  },[])
+    
+const out= await dispatch(logout());
+    }
+    Logout();}
+  ,[])
   const [formValues, setFormValues] = useState(initialFormState);
 
   const handleChange = (event) => {
@@ -51,14 +40,7 @@ const b = a && (await dispatch(getUserRole()));
 if (b) {
   navigate('/dashboard');
 }
-// if(a){
-//   navigate('/dashboard');
-// }
-    // if(false){
-    //     navigate('/dashboard');
-    // }else{
       toast.error('Oops! Something went wrong.');
-    // }
   };
   return (
            <>
