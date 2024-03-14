@@ -9,10 +9,11 @@ import FilterButton from "../components/resuseable_components/DropdownFilter";
 import Datepicker from "../components/resuseable_components/Datepicker";
 import MembersTable from "../components/dashboard_components/DashboardTable";
 import { useNavigate, useLocation } from "react-router-dom";
+import {pageLimit} from '../api/data.js'
 import {
-  getAllInvoice,
-  getNtnInvoice,
-  getPosInvoice,
+  getAnomalyDescription,
+  getAllLocation,
+  getpos_idInvoice,
 } from "../action/action.js";
 import Footer from "../components/dashboard_components/DashboardFooter";
 import { dummy } from "../data/dummyData.js";
@@ -20,7 +21,12 @@ import {
   addData,
   addGraphData,
   addNtn,
-  addPos,
+  addDate,
+  addpos_id,
+  addLocation,
+  addGoToGraph,
+  addAnomalous,
+  addAnomalyHashmap
 } from "../redux_store/reducer.js";
 import Loader from "../components/utils/Loader";
 import DashboardCard from "../components/dashboard_components/DashboardCard";
@@ -36,12 +42,12 @@ function Dashboard() {
   const customGreeting = "Good Morning, SRB👋";
   const customText = "Here is the latest sales data with anomalies:";
 
-  const { isLoading, data, graphData, reduxNtn } = useSelector(
+  const { isLoading, goToGraph,reduxAnomalous } = useSelector(
     (state) => state.centralStore
   );
-  // const [data,setData]=useState([])
+  const [loading,setLoading]=useState(true)
   const [anomalous, setAnomalous] = useState(10);
-  const [totalPos, setTotalPos] = useState(0);
+  const [totalpos_id, setTotalpos_id] = useState(0);
   const [totalNtn, setTotalNtn] = useState(0);
   const [totalAnomaly, setTotalAnomaly] = useState(0);
   const [count, setCount] = useState("True");
@@ -53,7 +59,10 @@ function Dashboard() {
   const page = parseInt(query.get("page")) || 1;
   const date = query.get("date") || "None";
   const ntn = query.get("ntn") || "None";
-  const pos = query.get("pos") || "None";
+  const pos_id = query.get("pos_id") || "None";
+  const anomalyParam = query.get("anomaly");
+  const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
+  const location = query.get("location") || "None";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -61,42 +70,52 @@ function Dashboard() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true)
         setError(false)
         let results;
-        results = await dispatch(getPosInvoice(pos, ntn, page, anomalous,date));
+        results = await dispatch(getpos_idInvoice(pos_id, ntn, page, anomaly,date,location));
+        await dispatch(getAllLocation())
+        await dispatch(getAnomalyDescription())
+
         dispatch(addData(results.results));
         dispatch(addGraphData(results));
         setSearch(results.results);
-        dispatch(addNtn(ntn));
-        dispatch(addPos(pos));
         setCount(results.count);
         const uniqueNtnIds = new Set(results?.results.map((item) => item.ntn));
         const totalUniqueNtnIds = uniqueNtnIds.size;
         setTotalNtn(totalUniqueNtnIds);
         // Count unique pos_id values
         setTotalAnomaly(results.count);
-        const uniquePosIds = new Set(
+        const uniqueposIds = new Set(
           results.results?.map((item) => item.pos_id)
-        );
-        const totalUniquePosIds = uniquePosIds.size;
-        setTotalPos(totalUniquePosIds);
-      } catch (error) {
-        setError(true)
+          );
+          const totalUniqueposIds = uniqueposIds.size;
+          setTotalpos_id(totalUniqueposIds);
+          dispatch(addAnomalous(anomaly));
+          dispatch(addNtn(ntn));
+          dispatch(addLocation(location));
+          dispatch(addpos_id(pos_id));
+          dispatch(addDate(date));
+          if(goToGraph){
+            dispatch(addGoToGraph(false))
+            navigate("/Analytics")
+          }
+          setLoading(false)
+        } catch (error) {
+          setError(true)
       }
     };
-
     fetchData();
-  }, [anomalous, page, ntn, pos, date]);
+  }, [anomaly, page, ntn, pos_id, date,location,anomaly]);
 
   if(error){
     return <PleaseReload/>
   }
+  if (loading) {
+    return <Loader /> 
+  }
   if (isLoading) {
-    return (
-      <>
-        <Loader />
-      </>
-    );
+    return <Loader /> 
   }
 
 
@@ -113,10 +132,12 @@ function Dashboard() {
           <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
             {/* Welcome banner */}
             <WelcomeBanner
-            
+            date={date}
+            anomaly={anomaly}
               text={customText}
               ntn={ntn}
-              pos={pos}
+              pos_id={pos_id}
+              location={location}
               show={true}
             />
             {/* Dashboard actions */}
@@ -125,14 +146,14 @@ function Dashboard() {
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 {/* Filter button */}
                 <FilterButton />
-                <Datepicker string="dashboard" ntn={ntn} pos={pos} />
+                <Datepicker string="dashboard" />
               </div>
             </div>
             {/* Cards */}
             <div>
               <div className="flex flex-row space-x-4">
                 <DashboardCard title={"Total Anomaly"} value={totalAnomaly} />
-                <DashboardCard title={"Total POS"} value={totalPos} />
+                <DashboardCard title={"Total pos_id"} value={totalpos_id} />
                 <DashboardCard title={"Total NTN"} value={totalNtn} />
                 {ntn != "None" && (
                   <Card className="dark:border-slate-700 dark:bg-slate-800 w-full min-w-max ">
@@ -149,19 +170,15 @@ function Dashboard() {
               </div>
               {/* Line chart (Acme Plus) */}
               <DashoardCardHeader
-                setAnomalous={setAnomalous}
                 searchData={search}
                 setSearchData={setSearch}
                 anomalous={anomalous}
               />
               <MembersTable tableData={search} />
               <Footer
-                pos={pos}
-                ntn={ntn}
-                page={page}
-                total={Math.ceil(count / 2)}
+              
+                total={Math.ceil(count / pageLimit)}
                 string="dashboard"
-                date={date}
               />
               {/* Line chart (Acme Advanced) */}
             </div>

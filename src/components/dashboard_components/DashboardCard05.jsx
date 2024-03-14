@@ -8,7 +8,7 @@ import { tailwindConfig, hexToRGB } from '../utils/Utils';
 function DashboardCard05() {
 
   // IMPORTANT:
-  // Code below is for demo purpose only, and it's not covered by support.
+  // Code below is for demo purpos_ide only, and it's not covered by support.
   // If you need to replace dummy data with real data,
   // refer to Chart.js documentation: https://www.chartjs.org/docs/latest
 

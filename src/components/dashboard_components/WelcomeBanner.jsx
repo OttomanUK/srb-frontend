@@ -1,6 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
-function WelcomeBanner({greeting, text,ntn,pos,show=false}) {
+function WelcomeBanner({greeting, text,ntn="None",pos_id="None",location="None",show=false,date="None",anomaly=10}) {
+  const {anomalyHashMap} =useSelector(state=>state.centralStore)
   return (
     <div className="relative bg-indigo-200 dark:bg-indigo-500 p-4 sm:p-6 rounded-sm overflow-hidden mb-8">
       {/* Background illustration */}
@@ -55,9 +57,24 @@ function WelcomeBanner({greeting, text,ntn,pos,show=false}) {
     <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
       {ntn!="None" ? `Ntn Number: ${ntn}` : 'Overall Ntns'}
     </h1>
-    {pos!="None" ? (
+    {pos_id!="None" ? (
       <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
-        Pos Number: {pos}
+        pos_id Number: {pos_id}
+      </h1>
+    ) : null}
+    {date!="None" ? (
+      <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+        Date: {date}
+      </h1>
+    ) : null}
+    {anomaly!="10" ? (
+      <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+        Anomaly: {anomalyHashMap[anomaly]}
+      </h1>
+    ) : null}
+    {location!="None" ? (
+      <h1 className="text-3xl md:text-3xl text-slate-800 dark:text-slate-100 font-bold mb-1 flex-2">
+        Location: {location}
       </h1>
     ) : null}
   </>

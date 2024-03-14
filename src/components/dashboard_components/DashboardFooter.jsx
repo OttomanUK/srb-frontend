@@ -5,21 +5,31 @@ import {
   Button,
   CardFooter,
 } from "@material-tailwind/react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 
-
-const Footer = ({pos="None",ntn="None",page=1,total,string="dashboard", date="None"}) => {
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+const Footer = ({total,string="dashboard"}) => {
   const navigate=useNavigate();
+  const query = useQuery();
+  const page = parseInt(query.get("page")) || 1;
+  const date = query.get("date") || "None";
+  const ntn = query.get("ntn") || "None";
+  const pos_id = query.get("pos_id") || "None";
+  const anomalyParam = query.get("anomaly");
+  const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
+  const location = query.get("location") || "None";
 const previous=()=>{
   if(page===1){
     return 
   }
   if(date!="None"){
   
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}&date=${date}`)
+    navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page-1}&date=${date}&location=${location}&anomaly=${anomaly}`)
     return
   }
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page-1}`)
+    navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page-1}&location=${location}&anomaly=${anomaly}`)
   return
 }
 const next=()=>{
@@ -28,10 +38,10 @@ const next=()=>{
   }
   if(date!="None"){
 
-    navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}&date=${date}`)
+    navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page+1}&date=${date}&location=${location}&anomaly=${anomaly}`)
     return
   }
-  navigate(`/${string}/?ntn=${ntn}&pos=${pos}&page=${page+1}`)
+  navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&page=${page+1}&location=${location}&anomaly=${anomaly}`)
 }
 return (
     <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">

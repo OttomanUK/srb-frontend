@@ -1,21 +1,38 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { TERipple } from "tw-elements-react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login,submit_data,getMissingInvoice,getAllNtn } from "../action/action";
+import { login,submit_data,getMissingInvoice,getAllNtn, getUserRole } from "../action/action";
 import { ToastContainer, toast } from 'react-toastify';
+import { logout } from "../api";
 
 export default function Login(){
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const initialFormState = {
   
-    email: 'mohib@gmail.com',
-    password: 'polkpolk',
+    email: '',
+    password: '',
 
     
   };
 
+  useEffect(()=>{
+    const Logout = async () => {
+      if (localStorage.getItem("authToken")) {
+        const { response } = await dispatch(logout());
+        if (response.status === 200) {
+          localStorage.removeItem("authToken");
+        }else{
+          localStorage.removeItem("authToken");
+
+        }
+      }
+    };
+  
+
+logout();
+  },[])
   const [formValues, setFormValues] = useState(initialFormState);
 
   const handleChange = (event) => {
@@ -24,15 +41,19 @@ export default function Login(){
     setFormValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
-    console.log('Form submitted:', initialFormState);
+    console.log('Form submitted:', formValues);
 
-    const a= dispatch(login(initialFormState));
-    // const a= dispatch(getAllNtn());
-    // const a= dispatch(submit_data(12));
+    const a = await dispatch(login(formValues));
+const b = a && (await dispatch(getUserRole()));
 
-    // const a= dispatch(getMissingInvoice(55));
+if (b) {
+  navigate('/dashboard');
+}
+// if(a){
+//   navigate('/dashboard');
+// }
     // if(false){
     //     navigate('/dashboard');
     // }else{

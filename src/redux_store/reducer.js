@@ -6,9 +6,16 @@ const initialState = {
   userData: null,
   data: [],
   anomaly: "Anomaly",
-  reduxPos: "None",
+  reduxpos_id: "None",
   graphData: {},
   reduxNtn:  "None",
+  anomalyHashMap:  {"dfd":9},
+  allLocation:[],
+  reduxLocation:  "None",
+  reduxAnomalous:  10,
+  isAuthorized:  null,
+  goToGraph:  false,
+  reduxDate:  "None",
 next:null,
 };
 
@@ -46,10 +53,45 @@ export const centralStore = createSlice({
       state.reduxNtn=data
       
     },
-    addPos: (state, action) => {
+    addDate: (state, action) => {
       const data = action.payload;
-      state.reduxPos=data
+      state.reduxDate=data
       
+    },
+    addpos_id: (state, action) => {
+      const data = action.payload;
+      state.reduxpos_id=data
+      
+    },
+    addLocation: (state, action) => {
+      const data = action.payload;
+      state.reduxLocation=data
+      
+    },
+    addAllLocation: (state, action) => {
+      const data = action.payload;
+      state.allLocation=data
+      
+    },
+    addAnomalyHashmap: (state, action) => {
+      const data = action.payload;
+      state.anomalyHashMap=data
+      
+    },
+    addAnomalous: (state, action) => {
+      const data = action.payload;
+      state.reduxAnomalous=data
+      console.log(state.reduxAnomalous)
+      
+    },
+    addGoToGraph: (state, action) => {
+      const data = action.payload;
+      state.goToGraph=data
+      
+    },
+    addIsAuthorized: (state, action) => {
+      const data = action.payload;
+      state.isAuthorized=data
     },
   
   },
@@ -62,7 +104,15 @@ export const {
   addGraphData,
   setAnomaly,
   addNtn,
-  addPos,
+  addLocation,
+  addAllLocation,
+  addAnomalyHashmap,
+  addAnomalous,
+  addpos_id,
+  addDate,
+  addIsAuthorized,
+  addGoToGraph
+
 } = centralStore.actions;
 
 export default centralStore.reducer;

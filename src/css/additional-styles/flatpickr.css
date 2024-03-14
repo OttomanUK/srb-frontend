@@ -43,7 +43,7 @@
 }
 
 .flatpickr-calendar.static {
-    position: absolute;
+    pos_idition: absolute;
     top: calc(100% + 4px);
 }
 
@@ -166,7 +166,7 @@
 
 .flatpickr-months .flatpickr-prev-month,
 .flatpickr-months .flatpickr-next-month {
-    position: static;
+    pos_idition: static;
     height: auto;
     @apply text-slate-600 hover:text-slate-900 dark:text-slate-500 dark:hover:text-slate-300;    
 }
@@ -198,7 +198,7 @@
 
 .flatpickr-current-month {
     @apply text-sm font-medium;
-    position: static;
+    pos_idition: static;
     height: auto;
     width: auto;
     left: auto;

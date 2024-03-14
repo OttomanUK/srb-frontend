@@ -9,7 +9,7 @@ import { getAllNtn } from '../action/action';
 import Loader from '../components/utils/Loader';
 import Footer from '../components/dashboard_components/DashboardFooter';
 import PleaseReload from './PleaseReload';
-
+import {pageLimit} from "../api/data"
 import NotFound from './NotFound';
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -111,21 +111,21 @@ function NtnList() {
                     {filteredData.map((item, index) => (
                       <tr key={index} className="text-center text-gray-700 dark:text-white hover:bg-gray-100 hover:cursor-pointer dark:hover:text-black">
                         <td
-                          className="py-2 px-4 border-b cursor-pointer"
+                          className="py-2 px-4 border-b cursor-pointer hover:underline dark:hover:text-black"
                           onClick={() => navigate(`/dashboard?ntn=${item.ntn}`)}
                         >
                           {item.ntn}
                         </td>
                         <td className="py-2 px-4 border-b">{item.name}</td>
-                        <td className="py-2 px-4 border-b">{item.location}</td>
-                        <td className="py-2 px-4 border-b">{item.posNumber}</td>
+                        <td  className="py-2 px-4 border-b cursor-pointer hover:underline dark:hover:text-black"
+                          onClick={() => navigate(`/dashboard?location=${item.location}`)}>{item.location}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </CardBody>
             </Card>
-            <Footer string="NtnList" total={ Math.ceil(count/2)} page={page}/>
+            <Footer string="NtnList" total={ Math.ceil(count/pageLimit)} />
           </div>
         </main>
       </div>

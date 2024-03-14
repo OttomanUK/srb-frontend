@@ -12,9 +12,9 @@ const TableRow = ({ rowData }) => {
         {Object.values(rowData).map((value, index) => (
           <td key={index} className={classes} onClick={() => {
             if (index === 1) {
-              navigate(`/dashboard/?ntn=${rowData.ntn}&pos=${value}`);
+              navigate(`/dashboard/?ntn=${rowData.ntn}&pos_id=${value}`);
             }
-            else if (index === 19) {
+            else if (index === 2) {
               navigate(`/dashboard/?ntn=${value}`);
             }else{
               
