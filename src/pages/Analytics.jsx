@@ -100,7 +100,7 @@ fetchData1()
               <DashboardCard title={'Average Rate'} value={averageRate}/>
               </div>
               {/* Other components */}
-              <div className='flex flex-col items-center justify-center mr-4'>
+              
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
@@ -117,7 +117,7 @@ fetchData1()
             <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
        
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
-              </div>
+              
           </div>
         </div>
     </div>

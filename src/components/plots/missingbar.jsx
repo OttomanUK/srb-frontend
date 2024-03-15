@@ -49,10 +49,11 @@ const MissingBarPlot = ({ data, chartBy="null", anomaly1 }) => {
     }, [data]);
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div>
       <h2>Top 5 {anomaly1} by {chartBy}</h2>
 
       <Plot
+      className='w-full'
         data={topAnomalyData}
         layout={{
           title: `Top 5 ${anomaly1} by ${chartBy}`,

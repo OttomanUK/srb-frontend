@@ -57,10 +57,11 @@ navigate(url);
 
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div>
       <h2>{anomaly1} Pie Plot</h2>
 
       <Plot
+      className='w-full'
         data={pieData}
         layout={{
           title: `${anomaly1} Distribution by ${chartBy}`,

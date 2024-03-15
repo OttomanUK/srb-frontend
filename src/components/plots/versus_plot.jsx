@@ -34,10 +34,11 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
   }, [data]);
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div>
       <h2>{showAnomalyCount ? `${anomaly1}` : `${y_axis} vs ${x_axis} Plot`}</h2>
 
       <Plot
+      className='w-full'
         data={[
           {
             type: 'scatter',

@@ -42,10 +42,11 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
     }
   };
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div>
       <h2>{showAnomalyCount ? `${anomaly1}` : `${chartBy}`} Time Series Plot</h2>
 
       <Plot
+      className='w-full'
         data={[
           {
             type: 'scatter',
@@ -71,6 +72,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
         />
 
       <Plot
+      className='w-1/2 md:w-full'
         data={[
           {
             type: 'bar',
