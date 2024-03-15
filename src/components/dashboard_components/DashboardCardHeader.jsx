@@ -39,6 +39,8 @@ const DashboardCardHeader = ({searchData,setSearchData,anomalous}) => {
   { label: "Anomalous", value: 10 },
   { label: "Non Anomalous", value: 0 },
   ];
+const location2= useLocation()
+const anomalyFromUrl = new URLSearchParams(location2.search).get("anomaly");
 const location1=["New York","Chicago"]
   useEffect(() => {
   if (Array.isArray(data) && data.length > 0) {
@@ -92,6 +94,11 @@ const sortDataByProperty = (property) => {
   return 
   }
 
+  useEffect(() => {
+    if (anomalyFromUrl !== null) {
+      setSelectedDropdownValue(anomalyFromUrl);
+    }
+  }, [anomalyFromUrl]);
 
       
   return (
@@ -160,22 +167,22 @@ placeholder='Search Here'
   <div >
 
   <select
-  className="border rounded-md dark:text-black w-20"
-  value={selectedDropdownValue}
-  onChange={(e) => {
-    e.preventDefault()
-    setSelectedDropdownValue(e.target.value)
-    dispatch(setAnomaly("Anomaly"))
-    
-    navigate(`/dashboard?ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}&anomaly=${e.target.value}`)}}
-    >
-    <option value="10">All</option>
-    {Object.keys(anomalyHashMap).map((value) => (
-      <option key={value} value={value}>
-        {anomalyHashMap[value]}
-      </option>
-    ))}
-  </select>
+          className="border rounded-md dark:text-black w-20"
+          value={selectedDropdownValue}
+          onChange={(e) => {
+            const selectedValue = e.target.value;
+            setSelectedDropdownValue(selectedValue);
+            dispatch(setAnomaly("Anomaly"));
+            navigate(`/dashboard?ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}&anomaly=${selectedValue}`);
+          }}
+        >
+          <option value="10">All</option>
+          {Object.keys(anomalyHashMap).map((value) => (
+            <option key={value} value={value}>
+              {anomalyHashMap[value]}
+            </option>
+          ))}
+        </select>
     </div>
     <label lassName="text-gray-700 dark:text-white" htmlFor="sortProperty">Sort by:</label>
 <div >

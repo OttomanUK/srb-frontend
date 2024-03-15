@@ -36,7 +36,9 @@ const out= await dispatch(logout());
 
     const a = await dispatch(login(formValues));
 const b = a && (await dispatch(getUserRole()));
-
+if (a){
+  navigate('/dashboard')
+}
 if (b) {
   navigate('/dashboard');
 }
