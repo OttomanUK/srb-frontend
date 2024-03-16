@@ -135,39 +135,44 @@ const sortDataByProperty = (property) => {
                 {label} 
               </Tab>
             ))}
+   
           </TabsHeader>
         </Tabs>
-<div className="mt-1 mb-3 flex gap-2 mx-2 dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded " >
-  
-  <Input
-placeholder='Search Here'
+        <div className='h-10 w-80 mr-auto dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded'>
+              <Input
+              placeholder='Search Here'
 
-    icon={<MagnifyingGlassIcon className="h-10 w-5" />}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    className="h-10 w-10 rounded px-5"
-  />
+                icon={<MagnifyingGlassIcon className="h-10 w-5" />}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="h-10 w-5 rounded px-5"
+              />
+            </div>
+        <div className="mt-1 mb-3 flex gap-2 mx-2 dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded " >
 
-  <label className="text-gray-700 dark:text-white ">Filter by Location:</label>
-  <select
-      value={selectedLocation}
-      onChange={(e) => {
-        setSelectedLocation(e.target.value)
-        navigate(`/dashboard?anomaly=${anomaly}&ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${e.target.value}`)
-      }
-    }
-      className="border rounded-md dark:text-black"
-    >
-      {allLocation.map((location, index) => (
-        <option key={index} value={location.location}>
-          {location.location}
-        </option>
-      ))}
-    </select>
+          <div className='flex flex-col px-2'>
+          <label className="text-gray-700 dark:text-white ">Filter by Location</label>
+          <select
+              value={selectedLocation}
+              onChange={(e) => {
+                setSelectedLocation(e.target.value)
+                navigate(`/dashboard?anomaly=${anomaly}&ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${e.target.value}`)
+              }
+            }
+              className="border rounded-md dark:text-black"
+            >
+              {allLocation.map((location, index) => (
+                <option key={index} value={location.location}>
+                  {location.location}
+                </option>
+              ))}
+            </select>
+          </div>
+  <div className='flex flex-col px-2'>
   <label className="text-gray-700 dark:text-white">Filter by Anomaly:</label>
-  <div >
+  
 
   <select
-          className="border rounded-md dark:text-black w-20"
+          className="border rounded-md dark:text-black w-32"
           value={selectedDropdownValue}
           onChange={(e) => {
             const selectedValue = e.target.value;
@@ -184,8 +189,9 @@ placeholder='Search Here'
           ))}
         </select>
     </div>
+    <div className='flex flex-col px-2'>
     <label lassName="text-gray-700 dark:text-white" htmlFor="sortProperty">Sort by:</label>
-<div >
+
       
       <select id="sortProperty" className="border rounded-md dark:text-black w-20" value={sortProperty} onChange={handleSortChange}>
         <option value="All">All</option>
