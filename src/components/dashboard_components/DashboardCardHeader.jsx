@@ -87,12 +87,12 @@ const sortDataByProperty = (property) => {
   return null; // Adjusted to return null instead of an empty div
   }
     
-  if(data.length===0)
+  if(data.length===0 )
   {
   return 
   }
 
-
+    
       
   return (
   <CardHeader floated={false} shadow={false} className="rounded-none">

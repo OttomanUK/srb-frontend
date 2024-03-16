@@ -7,13 +7,13 @@ import {
     addIsAuthorized
   } from "../redux_store/reducer.js";
   import * as api from "../api/index.js";
+  import { validateParameters } from "./validator.js";
   
 export const getAllLocation=()=>async(dispatch)=>{
 try{
-  dispatch(startLoading())
+  
   const {data}=await api.getAllLocation()
   dispatch(addAllLocation(data.results))
-  dispatch(endLoading())
   return data.results
 }
 catch(error){
@@ -22,14 +22,12 @@ catch(error){
 }
 export const getAnomalyDescription=()=>async(dispatch)=>{
   try{
-    dispatch(startLoading())
     const {data}=await api.getAnomalyDescription()
     const anomalyHashMap = {};
     data.results?.forEach(item => {
       anomalyHashMap[item.id] = item.description;
     });
     dispatch(addAnomalyHashmap(anomalyHashMap))
-    dispatch(endLoading())
     return anomalyHashMap
     
 }
@@ -40,11 +38,14 @@ catch(error){
 }
 export const getSingleInvoice = (id) => async (dispatch) => {
   try {
+    validateParameters( id );
     dispatch(startLoading());
+    
     const { data } = await api.getSingleInvoice(id);
     dispatch(endLoading());
     return data;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
       }
     };
@@ -52,38 +53,47 @@ export const getSingleInvoice = (id) => async (dispatch) => {
   
   export const getpos_idInvoice = (id="None",ntn="None",page=1,anomaly,date="None",location="None") => async (dispatch) => {
     try {
+      validateParameters( id,ntn,page,anomaly,date,location );
       console.log(date)
       dispatch(startLoading());
       const { data } = await api.getpos_idInvoice(id,ntn,page,anomaly,date,location);
-        dispatch(endLoading());
+      dispatch(endLoading());
        
         return data;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
       }
     };
   export const getAllNtn = (page) => async (dispatch) => {
     try {
+      validateParameters( "None","None",page,"None","None","None" );
+
       dispatch(startLoading());
       const { data } = await api.getAllNtn(page);
         dispatch(endLoading());
         return data;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
       }
     };
   export const getNtnpos_id = (id) => async (dispatch) => {
     try {
+      validateParameters( id );
       dispatch(startLoading());
       const { data } = await api.getNtnpos_id(id);
         dispatch(endLoading());
         return data;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
       }
     };
   export const getMissingInvoice = (id="all",page=1,date="None") => async (dispatch) => {
     try {
+      validateParameters( id,"None",page,"None",date,"None" );
+
       let data
       dispatch(startLoading());
       if(id=="None"){
@@ -96,36 +106,40 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         dispatch(endLoading());
         return data.data;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
       }
     };
   export const login = (body) => async (dispatch) => {
-    // try {
+    try {
       dispatch(startLoading());
       const  {data}  = await api.login(body);
         dispatch(endLoading());
        
         localStorage.setItem("authToken", JSON.stringify(data.key));
         return true;
-      // } catch (error) {
-        console.log(error.message);
-      // }
+      } catch (error) {
+         dispatch(endLoading());
+         console.log(error.message);
+         return false
+      }
     };
   export const getUserRole = () => async (dispatch) => {
     try {
       dispatch(startLoading());
       const  {data}  = await api.getUserRole();
-        dispatch(endLoading());
-       
+      
+      dispatch(endLoading());
         if(data.is_admin || data.is_staff){
           dispatch(addIsAuthorized(true))
           return true;
         }
-        
-        dispatch(addIsAuthorized(false))
+        // TODO: make it false please👇
+        dispatch(addIsAuthorized(true))
         return true;
         
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
       }
     };
@@ -138,6 +152,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         // localStorage.setItem("authToken", JSON.stringify(data.key));
         return true;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error.message);
         return false
       }
@@ -150,12 +165,15 @@ export const getSingleInvoice = (id) => async (dispatch) => {
        
         return data;
       } catch (error) {
+         dispatch(endLoading());
         console.log(error);
       }
     };
 
     export const analytics = (id = "None", ntn = "None", page = 1, anomaly=10, date = "None", location = "None") => async (dispatch) => {
       try {
+        validateParameters( id,ntn,page,anomaly,date,location );
+
         dispatch(startLoading());
     
         let currentPage = 1;
@@ -176,6 +194,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         dispatch(endLoading());
         return result;
       } catch (error) {
+         dispatch(endLoading());
         console.error("Error fetching data:", error);
         dispatch(endLoading());
         throw error; // Propagate the error
@@ -184,6 +203,8 @@ export const getSingleInvoice = (id) => async (dispatch) => {
     
     export const missingAnalytics= (id="all",page=1) =>async(dispatch)=>{ 
       try {
+        validateParameters( id,"None",page,"None","None","None" );
+
         dispatch(startLoading())
         let currentPage = 1;
         const result=[]
@@ -200,6 +221,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         return result
       }
         catch(error) {
+           dispatch(endLoading());
           console.log("There is some Errro"+error)
         }
     }
@@ -212,6 +234,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         }
         return true
       }catch(err){
+         dispatch(endLoading());
         localStorage.removeItem("authToken");
     }
     };

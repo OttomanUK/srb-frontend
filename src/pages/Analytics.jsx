@@ -63,7 +63,6 @@ const Analytics = () => {
     const fetchData1=async()=>{
     try{
     const data=await dispatch(missingAnalytics(reduxNtn))
-    
     setMissing(data)
   }catch(error){
     // setError(true)

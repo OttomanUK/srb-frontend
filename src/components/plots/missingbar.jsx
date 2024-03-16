@@ -5,50 +5,54 @@ import Plot from 'react-plotly.js';
 const MissingBarPlot = ({ data, chartBy="null", anomaly1 }) => {
   const [topAnomalyData, setTopAnomalyData] = useState([]);
 
-  
   useEffect(() => {
     const generateTopAnomalyData = () => {
-        const invoicesDistribution = data.reduce((acc, entry) => {
-          const key = entry.date; // Assuming the date is the property to group by
+      if (!data || data.length === 0) {
+        // Handle empty data array
+        setTopAnomalyData([]);
+        return;
+      }
   
-          if (!acc[key]) {
-            acc[key] = 0;
-          }
+      const invoicesDistribution = data.reduce((acc, entry) => {
+        const key = entry.date; // Assuming the date is the property to group by
   
-          // Check if entry.invoices is not null before splitting
-          if (entry.invoices) {
-            acc[key] += entry.invoices.split(',').length;
-          }
+        if (!acc[key]) {
+          acc[key] = 0;
+        }
   
-          return acc;
-        }, {});
+        // Check if entry.invoices is not null before splitting
+        if (entry.invoices) {
+          acc[key] += entry.invoices.split(',').length;
+        }
   
-        const sortedTopAnomalies = Object.keys(invoicesDistribution)
-          .map((key) => ({ date: key, invoices: invoicesDistribution[key],ntn: data.find((entry) => entry.date === key)?.ntn || null }))
-          .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date in descending order
-          .slice(0, 5);
+        return acc;
+      }, {});
   
-        const topAnomalyChartData = {
-          type: 'bar',
-          x: sortedTopAnomalies.map((entry) => entry.date),
-          y: sortedTopAnomalies.map((entry) => entry.invoices),
-          text: sortedTopAnomalies.map((entry) => "ntn: "+entry.ntn),  
-          marker: {
-            color: 'rgba(37, 147, 255,0.6)',
-            line: {
-              color: 'rgba(37, 147, 255,1.0)',
-              width: 2,
-            },
+      const sortedTopAnomalies = Object.keys(invoicesDistribution)
+        .map((key) => ({ date: key, invoices: invoicesDistribution[key], ntn: data.find((entry) => entry.date === key)?.ntn || null }))
+        .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by date in descending order
+        .slice(0, 5);
+  
+      const topAnomalyChartData = {
+        type: 'bar',
+        x: sortedTopAnomalies.map((entry) => entry.date),
+        y: sortedTopAnomalies.map((entry) => entry.invoices),
+        text: sortedTopAnomalies.map((entry) => "ntn: " + entry.ntn),
+        marker: {
+          color: 'rgba(37, 147, 255,0.6)',
+          line: {
+            color: 'rgba(37, 147, 255,1.0)',
+            width: 2,
           },
-        };
-  
-        setTopAnomalyData([topAnomalyChartData]);
+        },
       };
   
-      generateTopAnomalyData();
-    }, [data]);
-
-  return (
+      setTopAnomalyData([topAnomalyChartData]);
+    };
+  
+    generateTopAnomalyData();
+  }, [data]);
+    return (
     <div className='flex flex-col items-center justify-center'>
       <h2>Top 5 {anomaly1} by {chartBy}</h2>
 
