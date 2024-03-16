@@ -27,7 +27,7 @@ const BarPlot = ({ data, chartBy,anomaly1} ) => {
       const sortedTopAnomalies = Object.keys(anomalyDistribution)
   .map((key) => ({ key, anomaly: anomalyDistribution[key] }))
   .sort((a, b) => b.anomaly - a.anomaly)
-  .slice(0, 5);
+  .slice(0, 10);
 
 const topAnomalyChartData = {
   type: 'bar',
@@ -79,7 +79,7 @@ navigate(url);
   };
   return (
     <div>
-      <h2>Top 5 {anomaly1} by {chartBy}</h2>
+      <h2>Top 10 {anomaly1} by {chartBy}</h2>
 
         <Plot
         className='w-full'
@@ -87,7 +87,7 @@ navigate(url);
           data={topAnomalyData}
           layout={{
            
-            title: `Top 5 Anomalies by ${chartBy}`,
+            title: `Top 10 Anomalies by ${chartBy}`,
             xaxis: { title: chartBy },
             yaxis: { title: 'Total Anomalies' },
             paper_bgcolor: '#EEEEEE',
