@@ -48,7 +48,7 @@ function App() {
 
   return (
       <Routes>
-        {isConnected && (
+         (
   <>
     <Route exact path="/dashboard" element={<Dashboard />} />
     <Route exact path="/InvoiceDetails/:id" element={<InvoiceDetails />} />
@@ -59,7 +59,7 @@ function App() {
         <Route exact path="/NtnList" element={<NtnList/>} />
         <Route exact path="/*" element={<NotFound/>}/> 
   </>
-)}
+)
 <Route exact path="/login" element={<Login />} />
 {/* <Route exact path="/setting" element={<Settings/>} /> */}
 <Route exact path="/register" element={<Register/>} />

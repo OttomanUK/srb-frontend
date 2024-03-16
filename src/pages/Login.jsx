@@ -39,10 +39,12 @@ export default function Login(){
 
     const a = await dispatch(login(formValues));
 const b = a && (await dispatch(getUserRole()));
-
-if (b) {
-  navigate('/dashboard');
-}
+// if (a){
+//   navigate('/dashboard')
+// }
+// if (b) {
+//   navigate('/dashboard');
+// }
       toast.error('Oops! Something went wrong.');
   };
   if(isLoading){

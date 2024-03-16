@@ -63,10 +63,11 @@ const DelayTimeSeriesPlot = ({ data, anomaly1 }) => {
   };
 
   return (
-    <div className='flex flex-col items-center justify-center'>
+    <div>
       <h2>{anomaly1} Delay Time Series Plot</h2>
 
       <Plot
+      className='w-full'
         data={[
           {
             type: 'scatter',

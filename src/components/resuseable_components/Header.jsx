@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {useNavigate, useLocation } from 'react-router-dom';
 
 import SearchModal from '../resuseable_components/ModalSearch';
 import Notifications from '../resuseable_components/DropdownNotifications';
@@ -8,16 +9,31 @@ import ThemeToggle from '../resuseable_components/ThemeToggle';
 
 function Header({ sidebarOpen, setSidebarOpen }) {
   const [searchModalOpen, setSearchModalOpen] = useState(false);
+  const navigate =useNavigate()
+  const { pathname } = useLocation();
 
   return (
     <header className="sticky top-0 bg-white dark:bg-[#182235] border-b border-slate-200 dark:border-slate-700 z-30">
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 -mb-px">
           {/* Header: Left side */}
-          <div className="flex"></div>
+          {pathname === '/Analytics' && (
+          <div className="flex">
+            <div className="pt-3 lg:inline-flex justify-end mt-auto">
+              <div className="px-3 py-2">
+                <button onClick={() => navigate(-1)}>
+                  <span className="sr-only">Back Button</span>
+                  <svg className="w-6 h-6 fill-current sidebar-expanded:rotate-180" viewBox="0 0 24 24">
+                    <path className="text-slate-400" d="M19.586 11l-5-5L16 4.586 23.414 12 16 19.414 14.586 18l5-5H7v-2z" />
+                    <path className="text-slate-600" d="M3 23H1V1h2z" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>)}
 
           {/* Header: Right side */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3 ml-auto">
             <div>
               <button
                 className={`w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600/80 rounded-full ml-3 ${

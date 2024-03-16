@@ -56,6 +56,10 @@ const topAnomalyChartData = {
     }
     return 10; // Return null if the value is not found
   };
+
+
+
+  
   const handleClick = (event) => {
     const point = event.points[0]; // Get the clicked point
     const search = point.x; // Assuming x-axis corresponds to anomaly IDs
@@ -74,14 +78,24 @@ navigate(url);
 
   };
   return (
-    <div className='flex flex-col justify-center items-center'>
+    <div>
       <h2>Top 5 {anomaly1} by {chartBy}</h2>
 
-      <Plot
-        data={topAnomalyData}
-        layout={{ title: `Top 5 ${anomaly1} by ${chartBy}`, xaxis: { title: chartBy }, yaxis: { title: `Total ${anomaly1}` }, paper_bgcolor: '#EEEEEE', plot_bgcolor: '#EEEEEE'  }}
-        onClick={handleClick}
-      />
+        <Plot
+        className='w-full'
+        
+          data={topAnomalyData}
+          layout={{
+           
+            title: `Top 5 Anomalies by ${chartBy}`,
+            xaxis: { title: chartBy },
+            yaxis: { title: 'Total Anomalies' },
+            paper_bgcolor: '#EEEEEE',
+            plot_bgcolor: '#EEEEEE',
+          }}
+          onClick={handleClick}
+        />
+
     </div>
   );
 };
