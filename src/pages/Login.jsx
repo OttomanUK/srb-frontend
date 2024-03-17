@@ -19,8 +19,9 @@ export default function Login(){
 
   useEffect(()=>{
     const Logout = async () => {
-    console.log("hi")
-// const out= await dispatch(logout());
+    if(window.location.pathname==="/login"){
+      const out= await dispatch(logout());  
+    } 
     }
     Logout();}
   ,[])

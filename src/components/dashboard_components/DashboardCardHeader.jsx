@@ -166,10 +166,10 @@ const sortDataByProperty = (property) => {
                 navigate(`/dashboard?anomaly=${anomaly}&ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${e.target.value}`)
               }
             }
-              className="border rounded-md dark:text-black"
+              className="border rounded  dark:text-black"
             >
               {allLocation.map((location, index) => (
-                <option key={index} value={location.location}>
+                <option key={index} value={location.location} className="rounded  font-bold italic bg-grey-300 text-grey-100 hover:bg-darkblue  border border-grey-500 border-solid">
                   {location.location}
                 </option>
               ))}
@@ -189,9 +189,9 @@ const sortDataByProperty = (property) => {
             navigate(`/dashboard?ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}&anomaly=${selectedValue}`);
           }}
         >
-          <option value="10">All</option>
+          <option value="10" className="rounded-md font-bold italic bg-grey-300 text-grey-200 hover:bg-darkblue  border border-grey-500 border-solid">All</option>
           {Object.keys(anomalyHashMap).map((value) => (
-            <option key={value} value={value}>
+            <option key={value} value={value} className="rounded-md font-bold italic bg-grey-300 text-grey-200 hover:bg-darkblue  border border-grey-500 border-solid">
               {anomalyHashMap[value]}
             </option>
           ))}
@@ -203,7 +203,13 @@ const sortDataByProperty = (property) => {
       
     <select id="sortProperty" className="border rounded-md dark:text-black w-32" value={sortProperty} onChange={handleSortChange}>
   {sortOptions.map(option => (
-    <option key={option.value} value={option.value}>{option.label}</option>
+    <option 
+    key={option.value} 
+    value={option.value} 
+    className="rounded-md font-bold italic bg-grey-300 text-grey-200 hover:bg-darkblue  border border-grey-500 border-solid"
+  >
+    {option.label}
+  </option>
   ))}
 </select>
     </div>

@@ -79,7 +79,7 @@ navigate(url);
   };
   return (
     <div>
-      <h2>Top 10 {anomaly1} by {chartBy}</h2>
+      <h2 className="text-3xl font-bold text-center">Top 10 {anomaly1} by {chartBy}</h2>
 
         <Plot
         className='w-full'
@@ -90,8 +90,12 @@ navigate(url);
             title: `Top 10 Anomalies by ${chartBy}`,
             xaxis: { title: chartBy },
             yaxis: { title: 'Total Anomalies' },
-            paper_bgcolor: '#EEEEEE',
-            plot_bgcolor: '#EEEEEE',
+            paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+    plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+    margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+    hovermode: 'closest', // Adjust hovermode as needed
+    autosize: true, // Adjust autosize as needed
+    showlegend: true, // Adjust showlegend as needed
           }}
           onClick={handleClick}
         />
