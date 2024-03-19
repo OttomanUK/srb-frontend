@@ -63,7 +63,6 @@ const Analytics = () => {
     const fetchData1=async()=>{
     try{
     const data=await dispatch(missingAnalytics(reduxNtn))
-    
     setMissing(data)
   }catch(error){
     // setError(true)
@@ -91,7 +90,7 @@ fetchData1()
       {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+          <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl ">
             <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>

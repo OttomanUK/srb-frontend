@@ -7,13 +7,12 @@ const initialState = {
   data: [],
   anomaly: "Anomaly",
   reduxpos_id: "None",
-  graphData: {},
   reduxNtn:  "None",
-  anomalyHashMap:  {"dfd":9},
+  anomalyHashMap:  {},
   allLocation:[],
   reduxLocation:  "None",
   reduxAnomalous:  10,
-  isAuthorized:  null,
+  isAuthorized:  false,
   goToGraph:  false,
   reduxDate:  "None",
 next:null,
@@ -81,7 +80,6 @@ export const centralStore = createSlice({
     addAnomalous: (state, action) => {
       const data = action.payload;
       state.reduxAnomalous=data
-      console.log(state.reduxAnomalous)
       
     },
     addGoToGraph: (state, action) => {

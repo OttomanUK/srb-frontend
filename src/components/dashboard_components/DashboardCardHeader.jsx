@@ -17,6 +17,14 @@ function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 const DashboardCardHeader = ({searchData,setSearchData,anomalous}) => {
+  const sortOptions = [
+    { value: 'All', label: 'All' },
+    { value: 'rate_value', label: 'Rate Value' },
+    { value: 'sales_value', label: 'Sales Value' },
+    { value: 'sales_tax', label: 'Sales Tax' },
+    { value: 'ntn', label: 'NTN' },
+    { value: 'pos_id', label: 'pos_id ID' },
+  ];
   const query = useQuery();
   const navigate=useNavigate()
   const page = parseInt(query.get("page")) || 1;
@@ -89,7 +97,7 @@ const sortDataByProperty = (property) => {
   return null; // Adjusted to return null instead of an empty div
   }
     
-  if(data.length===0)
+  if(data.length===0 )
   {
   return 
   }
@@ -110,7 +118,7 @@ const sortDataByProperty = (property) => {
           </Typography>
         </div>
       </div>
-      <div className=" dark:border-slate-700 dark:bg-slate-800 flex flex-col items-center justify-between gap-4 md:flex-row">
+      <div className=" dark:border-slate-700 dark:bg-slate-800 flex flex-col items-center justify-around gap-4 md:flex-row">
         <Tabs value={anomaly} className="dark:border-slate-700 dark:bg-slate-800 w-full md:w-max">
           <TabsHeader
             className="rounded-none bg-transparent p-0 dark:text-white" 
@@ -158,16 +166,16 @@ const sortDataByProperty = (property) => {
                 navigate(`/dashboard?anomaly=${anomaly}&ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${e.target.value}`)
               }
             }
-              className="border rounded-md dark:text-black"
+              className="border rounded  dark:text-black"
             >
               {allLocation.map((location, index) => (
-                <option key={index} value={location.location}>
+                <option key={index} value={location.location} className="rounded  font-bold italic bg-grey-300 text-grey-100 hover:bg-darkblue  border border-grey-500 border-solid">
                   {location.location}
                 </option>
               ))}
             </select>
           </div>
-  <div className='flex flex-col px-2'>
+  <div className='flex flex-col px-2 '>
   <label className="text-gray-700 dark:text-white">Filter by Anomaly:</label>
   
 
@@ -181,27 +189,29 @@ const sortDataByProperty = (property) => {
             navigate(`/dashboard?ntn=${ntn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}&anomaly=${selectedValue}`);
           }}
         >
-          <option value="10">All</option>
+          <option value="10" className="rounded-md font-bold italic bg-grey-300 text-grey-200 hover:bg-darkblue  border border-grey-500 border-solid">All</option>
           {Object.keys(anomalyHashMap).map((value) => (
-            <option key={value} value={value}>
+            <option key={value} value={value} className="rounded-md font-bold italic bg-grey-300 text-grey-200 hover:bg-darkblue  border border-grey-500 border-solid">
               {anomalyHashMap[value]}
             </option>
           ))}
         </select>
     </div>
-    <div className='flex flex-col px-2'>
+    <div className='flex flex-col px-2  mr-20'>
     <label lassName="text-gray-700 dark:text-white" htmlFor="sortProperty">Sort by:</label>
 
       
-      <select id="sortProperty" className="border rounded-md dark:text-black w-20" value={sortProperty} onChange={handleSortChange}>
-        <option value="All">All</option>
-        <option value="rate_value">Rate Value</option>
-        <option value="sales_value">Sales Value</option>
-        <option value="sales_tax">Sales Tax</option>
-        <option value="ntn">NTN</option>
-        <option value="pos_id">pos_id ID</option>
-      </select>
-     
+    <select id="sortProperty" className="border rounded-md dark:text-black w-32" value={sortProperty} onChange={handleSortChange}>
+  {sortOptions.map(option => (
+    <option 
+    key={option.value} 
+    value={option.value} 
+    className="rounded-md font-bold italic bg-grey-300 text-grey-200 hover:bg-darkblue  border border-grey-500 border-solid"
+  >
+    {option.label}
+  </option>
+  ))}
+</select>
     </div>
 </div>
         </div>

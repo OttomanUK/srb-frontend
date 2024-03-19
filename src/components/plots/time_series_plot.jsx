@@ -43,7 +43,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
   };
   return (
     <div>
-      <h2>{showAnomalyCount ? `${anomaly1}` : `${chartBy}`} Time Series Plot</h2>
+      <h2 className="text-3xl font-bold text-center">{showAnomalyCount ? `${anomaly1}` : `${chartBy}`} Time Series Plot</h2>
 
       <Plot
       className='w-full'
@@ -51,6 +51,12 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
           {
             type: 'scatter',
             mode: 'markers',
+            marker: {
+              color: 'rgba(37, 147, 255,0.6)',
+              line: {
+                color: 'rgba(37, 147, 255,1.0)',
+                width: 1,
+              },},
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
@@ -62,8 +68,19 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
           title: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} over Time`,
           xaxis: { title: 'Time' },
           yaxis: { title: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`}` },
-          paper_bgcolor: '#EEEEEE',
-          plot_bgcolor: '#EEEEEE',
+          marker: {
+            color: 'rgba(37, 147, 255,0.6)',
+            line: {
+              color: 'rgba(37, 147, 255,1.0)',
+              width: 2,
+            },
+          },
+          paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+    plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+    margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+    hovermode: 'closest', // Adjust hovermode as needed
+    autosize: true, // Adjust autosize as needed
+    showlegend: true, // Adjust showlegend as needed
         }}
         config={{
           displayModeBar: true,
@@ -80,15 +97,32 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy }) => {
             y: dailyCountData.map((entry) => entry.y),
             // text: dailyCountData.map((entry) => entry.text),
             name: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} per Day`,
-            customdata: timeSeriesData.map((entry) => entry.customdata)
+            customdata: timeSeriesData.map((entry) => entry.customdata),
+            marker: {
+              color: 'rgba(37, 147, 255,0.6)',
+              line: {
+                color: 'rgba(37, 147, 255,1.0)',
+                width: 1,
+              },},
           },
         ]}
         layout={{
           title: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} per Day`,
           xaxis: { title: 'Day' },
           yaxis: { title: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`}` },
-          paper_bgcolor: '#EEEEEE',
-          plot_bgcolor: '#EEEEEE',
+          paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+          plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+          marker: {
+            color: 'rgba(37, 147, 255,0.6)',
+            line: {
+              color: 'rgba(37, 147, 255,1.0)',
+              width: 2,
+            },
+          },
+          margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+          hovermode: 'closest', // Adjust hovermode as needed
+          autosize: true, // Adjust autosize as needed
+          showlegend: true, // Adjust showlegend as needed
         }}
       />
     </div>

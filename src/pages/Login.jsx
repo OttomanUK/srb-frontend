@@ -1,10 +1,12 @@
 import React,{useState,useEffect} from "react";
 import { TERipple } from "tw-elements-react";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
+import Loader from "../components/utils/Loader";
 import { useNavigate } from "react-router-dom";
 import { login,submit_data,getMissingInvoice,getAllNtn, getUserRole,logout } from "../action/action";
 import { ToastContainer, toast } from 'react-toastify';
 export default function Login(){
+  const {isLoading} =useSelector(state=>state.centralStore)
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const initialFormState = {
@@ -17,11 +19,13 @@ export default function Login(){
 
   useEffect(()=>{
     const Logout = async () => {
-    
-const out= await dispatch(logout());
+    if(window.location.pathname==="/login"){
+      const out= await dispatch(logout());  
+    } 
     }
     Logout();}
   ,[])
+
   const [formValues, setFormValues] = useState(initialFormState);
 
   const handleChange = (event) => {
@@ -44,9 +48,12 @@ const b = a && (await dispatch(getUserRole()));
 // }
       toast.error('Oops! Something went wrong.');
   };
+  if(isLoading){
+    return <Loader/>
+  }
   return (
            <>
-           {/* <ToastContainer /> */}
+           <ToastContainer />
         <div className="flex flex-wrap justify-center h-screen items-center text-neutral-800 dark:text-neutral-200">
             <div className="block rounded-lg bg-white shadow-lg dark:bg-neutral-800">
               <div>

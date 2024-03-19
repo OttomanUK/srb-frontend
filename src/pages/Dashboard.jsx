@@ -19,7 +19,6 @@ import Footer from "../components/dashboard_components/DashboardFooter";
 import { dummy } from "../data/dummyData.js";
 import {
   addData,
-  addGraphData,
   addNtn,
   addDate,
   addpos_id,
@@ -42,7 +41,7 @@ function Dashboard() {
   const customGreeting = "Good Morning, SRB👋";
   const customText = "Here is the latest sales data with anomalies:";
 
-  const { isLoading, goToGraph,reduxAnomalous } = useSelector(
+  const { isLoading, goToGraph,reduxAnomalous,allLocation,anomalyHashMap } = useSelector(
     (state) => state.centralStore
   );
   const [loading,setLoading]=useState(true)
@@ -73,12 +72,13 @@ function Dashboard() {
         setLoading(true)
         setError(false)
         let results;
+        if (!allLocation?.length || !Object.keys(anomalyHashMap ?? {}).length) {
+          await Promise.all([dispatch(getAllLocation()), dispatch(getAnomalyDescription())]);
+        }
+        
         results = await dispatch(getpos_idInvoice(pos_id, ntn, page, anomaly,date,location));
-        await dispatch(getAllLocation())
-        await dispatch(getAnomalyDescription())
 
         dispatch(addData(results.results));
-        dispatch(addGraphData(results));
         setSearch(results.results);
         setCount(results.count);
         const uniqueNtnIds = new Set(results?.results.map((item) => item.ntn));

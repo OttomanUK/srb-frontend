@@ -12,7 +12,9 @@ function Query() {
         userName: '',
         password: '',
         query1: '',
-        query2: ''
+        query2: '',
+        contamination: 0.05,
+        MinCluster: 10,
     });
     const dispatch = useDispatch();
 

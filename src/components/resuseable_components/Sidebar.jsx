@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
 import { NavLink, Navigate, useLocation, useNavigate } from 'react-router-dom';
 
 import SidebarLinkGroup from './SidebarLinkGroup';
@@ -11,7 +12,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
   const { pathname } = location;
   const navigate =useNavigate()
   const [logoSrc, setLogoSrc] = useState(null);
-
+const dispatch=useDispatch()
   const trigger = useRef(null);
   const sidebar = useRef(null);
 
@@ -349,9 +350,8 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
                           <li className="mb-1 last:mb-0">
                               <span className="text-sm font-medium lg:opacity-0 lg:sidebar-expanded:opacity-100 2xl:opacity-100 duration-200 'text-indigo-500' : 'text-slate-400 hover:text-slate-200 cursor-pointer " onClick={
                                 async () => {
+                                  navigate("/login")
                                   const out= await dispatch(logout());
-                                  console.log("jh9")
-                                    navigate("/login")
                                   
                                 }
                               }>
@@ -386,7 +386,7 @@ function Sidebar({ sidebarOpen, setSidebarOpen }) {
      
         <div className="pt-3 lg:inline-flex justify-end mt-auto">
           <div className="px-3 py-2">
-            <button onClick={() => navigate(-1)}>
+            <button >
               <span className="sr-only">Expand / collapse sidebar</span>
               <svg className="w-6 h-6 fill-current sidebar-expanded:rotate-180" viewBox="0 0 24 24">
                 <path className="text-slate-400" d="M19.586 11l-5-5L16 4.586 23.414 12 16 19.414 14.586 18l5-5H7v-2z" />

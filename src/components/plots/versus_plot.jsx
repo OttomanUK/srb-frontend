@@ -35,7 +35,7 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
 
   return (
     <div>
-      <h2>{showAnomalyCount ? `${anomaly1}` : `${y_axis} vs ${x_axis} Plot`}</h2>
+      <h2 className="text-3xl font-bold text-center">{showAnomalyCount ? `${anomaly1}` : `${y_axis} vs ${x_axis} Plot`}</h2>
 
       <Plot
       className='w-full'
@@ -43,6 +43,12 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
           {
             type: 'scatter',
             mode: 'markers',
+            marker: {
+              color: 'rgba(37, 147, 255,0.6)',
+              line: {
+                color: 'rgba(37, 147, 255,1.0)',
+                width: 1,
+              },},
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
@@ -53,8 +59,12 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
           title: `${y_axis} vs ${x_axis} Time Series Plot`,
           xaxis: { title: `${x_axis}` },
           yaxis: { title: `${y_axis}` },
-          paper_bgcolor: '#EEEEEE',
-          plot_bgcolor: '#EEEEEE',
+          paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+    plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+    margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+    hovermode: 'closest', // Adjust hovermode as needed
+    autosize: true, // Adjust autosize as needed
+    showlegend: true, // Adjust showlegend as needed
         }}
         config={{
           displayModeBar: true,

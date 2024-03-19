@@ -25,17 +25,18 @@ function App() {
  const dispatch=useDispatch()
   const location = useLocation();
   const [isConnected, setIsconnected] = useState(false);
-  const checkUserToken = () => {
-
-    const user = JSON.parse(localStorage.getItem("authToken"));
-    // const username = JSON.parse(localStorage.getItem("user-token")).name;
-    if (user!=null) {
-      setIsconnected(true);
-    } else {
-      setIsconnected(false);
-    }
-};
+ 
   useEffect(() => {
+    const checkUserToken = async() => {
+
+      const user = await JSON.parse(localStorage.getItem("authToken"));
+      // const username = JSON.parse(localStorage.getItem("user-token")).name;
+      if (user!=null) {
+        setIsconnected(true);
+      } else {
+        setIsconnected(false);
+      }
+  };
   checkUserToken();
 
     document.querySelector('html').style.scrollBehavior = 'auto'

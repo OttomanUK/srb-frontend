@@ -64,7 +64,7 @@ const DelayTimeSeriesPlot = ({ data, anomaly1 }) => {
 
   return (
     <div>
-      <h2>{anomaly1} Delay Time Series Plot</h2>
+      <h2 className="text-3xl font-bold text-center">{anomaly1} Delay Time Series Plot</h2>
 
       <Plot
       className='w-full'
@@ -72,19 +72,30 @@ const DelayTimeSeriesPlot = ({ data, anomaly1 }) => {
           {
             type: 'scatter',
             mode: 'markers',
+            marker: {
+              color: 'rgba(37, 147, 255,0.6)',
+              line: {
+                color: 'rgba(37, 147, 255,1.0)',
+                width: 1,
+              },},
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
             name: `${anomaly1} Delay over Time`,
             customdata: timeSeriesData.map((entry) => [entry.x, entry.y]),
+
           },
         ]}
         layout={{
           title: `${anomaly1} Delay over Time`,
           xaxis: { title: 'Time' },
           yaxis: { title: `${anomaly1} Delay (Minutes)` },
-          paper_bgcolor: '#EEEEEE',
-          plot_bgcolor: '#EEEEEE',
+          paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+          plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+          margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+          hovermode: 'closest', // Adjust hovermode as needed
+          autosize: true, // Adjust autosize as needed
+          showlegend: true, // Adjust showlegend as needed
         }}
         config={{
           displayModeBar: true,
