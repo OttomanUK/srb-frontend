@@ -79,7 +79,7 @@ navigate(url);
   };
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center">Top 10 {anomaly1} by {chartBy}</h2>
+      <h2 className="text-3xl font-bold text-center dark:text-white">Top 10 {anomaly1} by {chartBy}</h2>
 
         <Plot
         className='w-full'

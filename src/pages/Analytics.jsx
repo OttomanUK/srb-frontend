@@ -4,6 +4,7 @@ import DelayTimeSeriesPlot from '../components/plots/delay_time_series.jsx';
 import PiePlot from '../components/plots/pie_plots.jsx';
 import BarPlot from '../components/plots/barplot.jsx';
 import VersusPlot from '../components/plots/versus_plot.jsx';
+import Datepicker from '../components/resuseable_components/Datepicker.jsx';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
 import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
@@ -98,6 +99,13 @@ fetchData1()
               <DashboardCard title={'Total Sales'} value={totalSales}/>
               <DashboardCard title={'Average Rate'} value={averageRate}/>
               </div>
+            <div className="sm:flex sm:justify-between sm:items-center mb-8 mt-5">
+              {/* Right: Actions */}
+              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                {/* Filter button */}
+                <Datepicker string="analytics" />
+              </div>
+            </div>
               {/* Other components */}
               
               <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
@@ -116,9 +124,10 @@ fetchData1()
             <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
        
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
+            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="pos_id"/>
               
           </div>
-        </div>
+        </div>  
     </div>
   );
 };

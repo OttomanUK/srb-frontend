@@ -90,7 +90,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         console.log(error.message);
       }
     };
-  export const getMissingInvoice = (id="all",page=1,date="None") => async (dispatch) => {
+  export const getMissingInvoice = (id="all",page=1,date="None",pos="None",location="None") => async (dispatch) => {
     try {
       validateParameters( id,"None",page,"None",date,"None" );
 
@@ -201,7 +201,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
       }
     };
     
-    export const missingAnalytics= (id="all",page=1) =>async(dispatch)=>{ 
+    export const missingAnalytics= (id="all",page=1,date="None",pos="None",location="None") =>async(dispatch)=>{ 
       try {
         validateParameters( id,"None",page,"None","None","None" );
 
@@ -209,7 +209,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         let currentPage = 1;
         const result=[]
         const fetchData = async (currentPage) => {
-          const data=await dispatch(getMissingInvoice(id,page))
+          const data=await dispatch(getMissingInvoice(id,page,date,pos,location))
           result.push(data.results)
           if (data.next) {
             await fetchData(currentPage + 1); // Recursive call for the next page

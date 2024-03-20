@@ -23,6 +23,8 @@ function MissingInvoice(){
   const page=parseInt(query.get('page'))||1
   const date=(query.get('date'))||"None"
   const ntn=query.get('ntn')||"all"
+  const pos_id=query.get('pos_id')||"None"
+  const location=query.get('location')||"None"
   const dispatch = useDispatch();
 
   const {id} = useParams();
@@ -39,7 +41,7 @@ function MissingInvoice(){
       const fetchData = async () => {
         try {
           setError(false)
-          const a = await dispatch(getMissingInvoice(ntn, page,date));
+          const a = await dispatch(getMissingInvoice(ntn, page,date,pos_id,location));
           setData(a.results);
           setCount(a.count);
           console.log(a);
@@ -112,6 +114,8 @@ function MissingInvoice(){
                   <td>{item.date}</td>
                 
                 <td>{item.ntn}</td>
+                <td>{item.pos_id}</td>
+                <td>{item.location}</td>
                 <td>{item.invoices}</td>
                 <td>{(item.invoices.match(/,/g) || []).length + 1}</td>
               </tr>

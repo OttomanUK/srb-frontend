@@ -35,7 +35,7 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center">{showAnomalyCount ? `${anomaly1}` : `${y_axis} vs ${x_axis} Plot`}</h2>
+      <h2 className="text-3xl font-bold text-center dark:text-white">{showAnomalyCount ? `${anomaly1}` : `${y_axis} vs ${x_axis} Plot`}</h2>
 
       <Plot
       className='w-full'

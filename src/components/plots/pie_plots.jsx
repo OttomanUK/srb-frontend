@@ -58,7 +58,7 @@ navigate(url);
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center">{anomaly1} Pie Plot</h2>
+      <h2 className="text-3xl font-bold text-center dark:text-white">{anomaly1} Pie Plot</h2>
 
       <Plot
       className='w-full'
