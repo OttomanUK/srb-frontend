@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
 import DelayTimeSeriesPlot from '../components/plots/delay_time_series.jsx';
-import PiePlot from '../components/plots/pie_plots.jsx';
-import BarPlot from '../components/plots/barplot.jsx';
+import BarPlotAndPiePlot from '../components/plots/barplot.jsx';
 import VersusPlot from '../components/plots/versus_plot.jsx';
 import Datepicker from '../components/resuseable_components/Datepicker.jsx';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
@@ -14,6 +13,7 @@ import {getAnomalyDescription, getMissingInvoice} from "../action/action.js"
 import Loader from '../components/utils/Loader.jsx';
 import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
 import MissingBarPlot from '../components/plots/missingbar.jsx';
+import CombinePlot from '../components/plots/combineplot.jsx';
 import {analytics,missingAnalytics} from "../action/action.js"
 import PleaseReload from './PleaseReload.jsx';
 
@@ -38,6 +38,9 @@ const Analytics = () => {
      const fetchData = async () => {
        try{
         setError(false)
+        const data1=await dispatch(missingAnalytics(reduxNtn,1,reduxDate,reduxPos,reduxLocation))
+        setMissing(data1)
+        console.log(missing)
       const data = await dispatch(analytics(reduxPos,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
       const {
         averageSalesTax,
@@ -59,19 +62,7 @@ const Analytics = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    
-    const fetchData1=async()=>{
-    try{
-    const data=await dispatch(missingAnalytics(reduxNtn))
-    setMissing(data)
-  }catch(error){
-    // setError(true)
-  }
-  }
-fetchData1()
-    
-  },[])
+
   if(error){
     return <PleaseReload/>
 
@@ -108,13 +99,10 @@ fetchData1()
             </div>
               {/* Other components */}
               
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
 
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly} chartBy={"anomaly"}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"sales_value"}/>
@@ -125,6 +113,7 @@ fetchData1()
        
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="pos_id"/>
+            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="location"/>
               
           </div>
         </div>  

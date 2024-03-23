@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
 
-const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy,hue="ntn" }) => {
+const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1, chartBy, hue = "ntn" }) => {
   const [timeSeriesData, setTimeSeriesData] = useState([]);
   const [dailyCountData, setDailyCountData] = useState([]);
 
@@ -35,6 +35,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy,hue="ntn" }) 
       setDailyCountData(dailyCountArray);
     }
   }, [data, showAnomalyCount]);
+
   const handlePointClick = (event) => {
     const invoiceId = event.points[0]?.customdata[0];
     if (invoiceId) {
@@ -42,12 +43,13 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy,hue="ntn" }) 
       // You can perform further actions with the invoice ID here
     }
   };
+
   return (
     <div>
       <h2 className="text-3xl font-bold text-center dark:text-white">{showAnomalyCount ? `${anomaly1}` : `${chartBy}`} Time Series Plot</h2>
 
       <Plot
-      className='w-full'
+        className='w-full'
         data={[
           {
             type: 'scatter',
@@ -57,7 +59,8 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy,hue="ntn" }) 
               line: {
                 color: 'rgba(37, 147, 255,1.0)',
                 width: 1,
-              },},
+              },
+            },
             x: timeSeriesData.map((entry) => entry.x),
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
@@ -69,43 +72,38 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy,hue="ntn" }) 
           title: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} over Time`,
           xaxis: { title: 'Time' },
           yaxis: { title: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`}` },
-          marker: {
-            color: timeSeriesData.map((entry) => entry.marker.color),
-            line: {
-              color: 'rgba(37, 147, 255,1.0)',
-              width: 2,
-            },
-          },
           paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-    plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-    margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
-    hovermode: 'closest', // Adjust hovermode as needed
-    autosize: true, // Adjust autosize as needed
-    showlegend: true, // Adjust showlegend as needed
+          plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
+          margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+          hovermode: 'closest', // Adjust hovermode as needed
+          autosize: true, // Adjust autosize as needed
+          showlegend: true, // Adjust showlegend as needed
+          legend: { title: { text: "Legend Title" }, traceorder: 'reversed' } // Customize legend
         }}
         config={{
           displayModeBar: true,
         }}
         onClick={handlePointClick}
-        />
-{chartBy!=="rate_value" &&
+      />
+      {chartBy !== "rate_value" &&
 
-      <Plot
-      className='w-1/2 md:w-full'
-      data={[
-        {
-          type: 'bar',
-          x: dailyCountData.map((entry) => entry.x),
-          y: dailyCountData.map((entry) => entry.y),
-            // text: dailyCountData.map((entry) => entry.text),
-            name: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} per Day`,
-            customdata: timeSeriesData.map((entry) => entry.customdata),
-            marker: {
-              color: 'rgba(37, 147, 255,0.6)',
-              line: {
-                color: 'rgba(37, 147, 255,1.0)',
-                width: 1,
-              },},
+        <Plot
+          className='w-1/2 md:w-full'
+          data={[
+            {
+              type: 'bar',
+              x: dailyCountData.map((entry) => entry.x),
+              y: dailyCountData.map((entry) => entry.y),
+              // text: dailyCountData.map((entry) => entry.text),
+              name: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} per Day`,
+              customdata: timeSeriesData.map((entry) => entry.customdata),
+              marker: {
+                color: 'rgba(37, 147, 255,0.6)',
+                line: {
+                  color: 'rgba(37, 147, 255,1.0)',
+                  width: 1,
+                },
+              },
             },
           ]}
           layout={{
@@ -117,15 +115,16 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1,chartBy,hue="ntn" }) 
             marker: {
               color: 'rgba(37, 147, 255,0.6)',
               line: {
-              color: 'rgba(37, 147, 255,1.0)',
-              width: 2,
+                color: 'rgba(37, 147, 255,1.0)',
+                width: 2,
+              },
             },
-          },
-          margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
-          hovermode: 'closest', // Adjust hovermode as needed
-          autosize: true, // Adjust autosize as needed
-          showlegend: true, // Adjust showlegend as needed
-        }}
+            margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
+            hovermode: 'closest', // Adjust hovermode as needed
+            autosize: true, // Adjust autosize as needed
+            showlegend: true, // Adjust showlegend as needed
+            legend: { title: { text: "Legend Title" }, traceorder: 'reversed' } // Customize legend
+          }}
         />
       }
     </div>

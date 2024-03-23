@@ -2,124 +2,119 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
 
-const MissingBarPlot = ({ data, chartBy = "null", anomaly1 }) => {
-  const [topAnomalyData, setTopAnomalyData] = useState([]);
-  const [pieChartData, setPieChartData] = useState([]);
+const MissingBarPlot = ({ data, chartBy = "ntn", anomaly1 }) => {
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const generateTopAnomalyData = () => {
+    const generateChartData = () => {
       if (!data || data.length === 0) {
-        setTopAnomalyData([]);
+        setChartData([]);
         return;
       }
 
-      const distributionByChartBy = data.reduce((acc, entry) => {
+      const distributionByChartBy = data[0].reduce((acc, entry) => {
         const key = entry[chartBy];
 
         if (!acc[key]) {
-          acc[key] = 0;
+          acc[key] = {
+            missingInvoices: 0,
+          };
         }
 
-        if (entry.anomaly) {
-          acc[key] += 1;
-        }
+        acc[key].missingInvoices += calculateMissingInvoiceCount(entry.invoices);
 
         return acc;
       }, {});
 
-      const sortedTopAnomalies = Object.keys(distributionByChartBy)
-        .map((key) => ({ chartByValue: key, anomalies: distributionByChartBy[key] }))
-        .sort((a, b) => b.anomalies - a.anomalies)
-        .slice(0, 5);
+      const sortedChartData = Object.keys(distributionByChartBy)
+        .map((key) => ({ chartByValue: key, missingInvoices: distributionByChartBy[key].missingInvoices }))
+        .sort((a, b) => b.missingInvoices - a.missingInvoices);
 
-      const topAnomalyChartData = {
-        type: 'bar',
-        x: sortedTopAnomalies.map((entry) => entry.chartByValue),
-        y: sortedTopAnomalies.map((entry) => entry.anomalies),
-        text: sortedTopAnomalies.map((entry) => `${chartBy}: ${entry.chartByValue}`),
-        marker: {
-          color: 'rgba(37, 147, 255,0.6)',
-          line: {
-            color: 'rgba(37, 147, 255,1.0)',
-            width: 2,
-          },
-        },
-        paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-        plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-        margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
-        hovermode: 'closest', // Adjust hovermode as needed
-        autosize: true, // Adjust autosize as needed
-        showlegend: true, // Adjust showlegend as needed
-      };
-
-      setTopAnomalyData([topAnomalyChartData]);
-
-      // Generate pie chart data
-      const pieChartValues = Object.values(distributionByChartBy);
-      const pieChartData = {
-        type: 'pie',
-        values: pieChartValues,
-        labels: Object.keys(distributionByChartBy),
-        textinfo: 'label+percent',
-        insidetextorientation: 'radial',
-        hoverinfo: 'percent+label',
-        marker: {
-          colors: pieChartValues.map((value) => `rgba(37, 147, 255, ${value / pieChartValues.length})`),
-        },
-        paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-        plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-        margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
-        hovermode: 'closest', // Adjust hovermode as needed
-        autosize: true, // Adjust autosize as needed
-        showlegend: true, // Adjust showlegend as needed
-      };
-
-      setPieChartData([pieChartData]);
+      setChartData(sortedChartData);
     };
 
-    generateTopAnomalyData();
+    generateChartData();
   }, [data, chartBy]);
+
+  const calculateMissingInvoiceCount = (invoices) => {
+    if (!invoices) {
+      return 0;
+    }
+    const invoiceRanges = invoices.split(',');
+    let missingCount = 0;
+    invoiceRanges.forEach((range) => {
+      if (range.includes('-')) {
+        const [start, end] = range.split('-').map(Number);
+        missingCount += end - start + 1;
+      } else {
+        missingCount++;
+      }
+    });
+    return missingCount;
+  };
 
   const handlePieClick = (event) => {
     const chartByValue = event.points[0]?.label;
     if (chartByValue) {
-      console.log(`${chartBy} clicked:`, chartByValue);
+      console.log(chartByValue)
     }
   };
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center dark:text-white">Top 5 {anomaly1} by {chartBy}</h2>
+      <h2 className="text-3xl font-bolds text-center dark:text-white">Top 10 Missing{anomaly1} by {chartBy}</h2>
 
       <Plot
         className='w-full'
-        data={topAnomalyData}
+        data={[
+          {
+            type: 'bar',
+            x: chartData.slice(0, 10).map((entry) => entry.chartByValue),
+            y: chartData.slice(0, 10).map((entry) => entry.missingInvoices),
+            text: chartData.map((entry) => `${chartBy}: ${entry.chartByValue}`),
+            marker: {
+              color: 'rgba(37, 147, 255,0.6)',
+              line: {
+                color: 'rgba(37, 147, 255,1.0)',
+                width: 2,
+              },
+            }
+          }
+        ]}
         layout={{
-          title: `Top 5 ${anomaly1} by ${chartBy}`,
-          xaxis: { title: `${chartBy.charAt(0).toUpperCase() + chartBy.slice(1)}` }, // Capitalize the first letter of chartBy for axis title
-          yaxis: { title: 'Total Anomalies' },
-          paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-          plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-          margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
-          hovermode: 'closest', // Adjust hovermode as needed
-          autosize: true, // Adjust autosize as needed
-          showlegend: true, // Adjust showlegend as needed
+          title: `Top 10 ${anomaly1} by ${chartBy}`,
+          xaxis: { title: `${chartBy.charAt(0).toUpperCase() + chartBy.slice(1)}` },
+          yaxis: { title: 'Total Missing Invoices' },
+          paper_bgcolor: 'rgba(255, 255, 255, 0)',
+          plot_bgcolor: 'rgba(255, 255, 255, 0)',
+          margin: { t: 50, r: 50, l: 50, b: 50 },
+          hovermode: 'closest',
+          autosize: true,
+          showlegend: true,
         }}
       />
 
-      <h2 className="text-3xl font-bold text-center dark:text-white">Anomaly Distribution by {chartBy}</h2>
+      <h2 className="text-3xl font-bold text-center dark:text-white">Missing Anomaly Distribution by {chartBy}</h2>
 
       <Plot
         className='w-full'
-        data={pieChartData}
+        data={[
+          {
+            type: 'pie',
+            values: chartData.map((entry) => entry.missingInvoices),
+            labels: chartData.map((entry) => entry.chartByValue),
+            hoverinfo: 'percent+label',
+            textinfo: 'none',
+          }
+        ]}
         layout={{
           title: `Anomaly Distribution by ${chartBy}`,
-          paper_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-          plot_bgcolor: 'rgba(255, 255, 255, 0)', // Transparent background
-          margin: { t: 50, r: 50, l: 50, b: 50 }, // Adjust margins as needed
-          hovermode: 'closest', // Adjust hovermode as needed
-          autosize: true, // Adjust autosize as needed
-          showlegend: true, // Adjust showlegend as needed
+          paper_bgcolor: 'rgba(255, 255, 255, 0)',
+          plot_bgcolor: 'rgba(255, 255, 255, 0)',
+          margin: { t: 50, r: 50, l: 50, b: 50 },
+          hovermode: 'closest',
+          autosize: true,
+          showlegend: true,
         }}
         onClick={handlePieClick}
       />
@@ -129,14 +124,16 @@ const MissingBarPlot = ({ data, chartBy = "null", anomaly1 }) => {
 
 MissingBarPlot.propTypes = {
   data: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number,
-      invoices: PropTypes.string,
-      date: PropTypes.string,
-      ntn: PropTypes.number,
-      pos_id: PropTypes.number,
-      anomaly: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
-    })
+    PropTypes.arrayOf(
+      PropTypes.shape({
+        id: PropTypes.number,
+        invoices: PropTypes.string,
+        date: PropTypes.string,
+        ntn: PropTypes.number,
+        pos_id: PropTypes.number,
+        anomaly: PropTypes.oneOfType([PropTypes.number, PropTypes.bool]),
+      })
+    )
   ).isRequired,
   chartBy: PropTypes.oneOf(['ntn', 'pos_id']).isRequired,
   anomaly1: PropTypes.string.isRequired,

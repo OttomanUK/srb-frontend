@@ -4,6 +4,7 @@ import {
   CardHeader,
   Input,
   Typography,
+Button,
   CardBody,
   Tabs,
   TabsHeader,
@@ -39,6 +40,7 @@ const DashboardCardHeader = ({searchData,setSearchData,anomalous}) => {
   const initialSearchResult = isLoading ? [] : data;
   const [filteredData, setFilteredData] = useState(initialSearchResult);
   const [searchTerm, setSearchTerm] = useState('');
+  const [searchNtn, setSearchNtn] = useState('');
   const [sortProperty, setSortProperty] = useState('rate_value');
   const [sortedData, setSortedData] = useState(data);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState('All');
@@ -146,7 +148,7 @@ const sortDataByProperty = (property) => {
    
           </TabsHeader>
         </Tabs>
-        <div className='h-10 w-80 mr-auto dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded'>
+        <div className='h-10 w-60  dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded flex items-center justify-center'>
               <Input
               placeholder='Search Here'
 
@@ -154,6 +156,18 @@ const sortDataByProperty = (property) => {
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="h-10 w-5 rounded px-5"
               />
+              <Input
+              type="number"
+              placeholder='Search Ntn Here'
+
+                icon={<MagnifyingGlassIcon className=" ml-2 h-10 w-3" />}
+                onChange={(e) => setSearchNtn(e.target.value)}
+                className="h-10 w-3 rounded px-3"
+              />
+              <Button variant="primary" onClick={()=>{
+                navigate(`/dashboard?anomaly=${anomaly}&ntn=${searchNtn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}`)
+              }}>Ntn</Button>
+
             </div>
         <div className="mt-1 mb-3 flex gap-2 mx-2 dark:border-slate-500 dark:bg-slate-800 dark:text-white rounded " >
 

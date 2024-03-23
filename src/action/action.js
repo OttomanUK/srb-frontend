@@ -97,11 +97,11 @@ export const getSingleInvoice = (id) => async (dispatch) => {
       let data
       dispatch(startLoading());
       if(id=="None"){
-          data  = await api.getMissingInvoice("all",page,date);
+          data  = await api.getMissingInvoice("all",page,date,pos,location);
         
       }else{
         
-          data  = await api.getMissingInvoice(id,page,date);
+          data  = await api.getMissingInvoice(id,page,date,pos,location);
       }
         dispatch(endLoading());
         return data.data;
