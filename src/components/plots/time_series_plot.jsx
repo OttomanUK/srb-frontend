@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
+import { useNavigate } from 'react-router-dom';
 
 const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1, chartBy, hue = "ntn" }) => {
   const [timeSeriesData, setTimeSeriesData] = useState([]);
   const [dailyCountData, setDailyCountData] = useState([]);
+  const navigate=useNavigate()
 
   useEffect(() => {
     if (data.length > 0) {
@@ -37,9 +39,9 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1, chartBy, hue = "ntn"
   }, [data, showAnomalyCount]);
 
   const handlePointClick = (event) => {
-    const invoiceId = event.points[0]?.customdata[0];
+    const invoiceId = event.points[0]?.customdata.split(",")[0];
     if (invoiceId) {
-      console.log('Clicked Invoice ID:', invoiceId);
+      navigate(`/InvoiceDetails/${invoiceId}`)
       // You can perform further actions with the invoice ID here
     }
   };
@@ -65,7 +67,7 @@ const TimeSeriesPlot = ({ data, showAnomalyCount, anomaly1, chartBy, hue = "ntn"
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
             name: `Total ${showAnomalyCount ? anomaly1 : `${chartBy}`} over Time`,
-            customdata: timeSeriesData.map((entry) => entry.customdata), // Add custom data to capture invoice ID
+            customdata: timeSeriesData.map((entry) => entry.text.split(": ")[1]) // Add custom data to capture invoice ID
           },
         ]}
         layout={{

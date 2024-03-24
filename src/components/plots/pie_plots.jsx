@@ -7,7 +7,7 @@ import { addGoToGraph } from '../../redux_store/reducer';
 const PiePlot = ({ data, chartBy, anomaly1 }) => {
   const [pieData, setPieData] = useState([]);
   const dispatch=useDispatch()
-  const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous,anomalyHashMap}=useSelector(state=>state.centralStore)
+  const {isLoading,reduxNtn,reduxPos_id,anomaly,reduxLocation,reduxDate,reduxAnomalous,anomalyHashMap}=useSelector(state=>state.centralStore)
   const navigate=useNavigate()
   useEffect(() => {
     if (data.length > 0) {
@@ -40,7 +40,7 @@ const PiePlot = ({ data, chartBy, anomaly1 }) => {
     const search = event.points[0].label;
     dispatch(addGoToGraph(true))
     let url = "/dashboard?";
-const params = { location: reduxLocation, ntn: reduxNtn, pos: reduxPos, date: reduxDate, anomaly: reduxAnomalous };
+const params = { location: reduxLocation, ntn: reduxNtn, pos_id: reduxPos_id, date: reduxDate, anomaly: reduxAnomalous };
 
 if (chartBy === "description") {
   params.anomaly = getKeyByValue(anomalyHashMap, search);

@@ -26,7 +26,7 @@ function MissingInvoice(){
   const pos_id=query.get('pos_id')||"None"
   const location=query.get('location')||"None"
   const dispatch = useDispatch();
-  const {allLocation} =useSelector(state=>state.centralStore)
+  const {allLocation,allNtn} =useSelector(state=>state.centralStore)
 
   const {id} = useParams();
   const {isLoading} = useSelector(state=>state.centralStore)
@@ -37,6 +37,7 @@ function MissingInvoice(){
     const [count,setCount]=useState([])
     const [searchInput, setSearchInput] = useState('');
     const [selectedLocation,setSelectedLocation ] = useState('');
+    const [selectedNtn,setSelectedNtn ] = useState('');
     const [filteredData, setFilteredData] = useState([]);
 
     useEffect(() => {
@@ -116,6 +117,24 @@ function MissingInvoice(){
               ))}
             </select>
           </div>
+          <label className="text-gray-700 dark:text-white ">Filter by Location</label>
+          <select
+              value={selectedNtn}
+              onChange={(e) => {
+                console.log(e)
+                setSelectedNtn(e.target.value)
+                navigate(`/Missing?&ntn=${e.target.value}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}`)
+              }
+            }
+              className="border rounded  dark:text-black"
+            >
+              {allNtn.map((ntn, index) => (
+                <option key={index} value={ntn} className="rounded  font-bold italic bg-grey-300 text-grey-100 hover:bg-darkblue  border border-grey-500 border-solid">
+                  {ntn}
+                </option>
+              ))}
+            </select>
+          
             </div>
               <Card className='dark:border-slate-700 dark:bg-slate-800'>
               <CardBody className="overflow-auto px-0 dark:border-slate-700 dark:bg-slate-800">

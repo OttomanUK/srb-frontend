@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Plot from 'react-plotly.js';
+import {useDispatch,useSelector} from 'react-redux'
+import { addGoToGraph } from '../../redux_store/reducer';
+import { useNavigate } from 'react-router-dom';
 
 const MissingBarPlot = ({ data, chartBy = "ntn", anomaly1 }) => {
   const [chartData, setChartData] = useState([]);
-
+const dispatch=useDispatch()
+const navigate=useNavigate()
+const {reduxNtn,reduxpos_id,reduxLocation,reduxDate,reduxAnomalous,anomalyHashMap}=useSelector(state=>state.centralStore)
   useEffect(() => {
     const generateChartData = () => {
       if (!data || data.length === 0) {
@@ -60,7 +65,7 @@ const MissingBarPlot = ({ data, chartBy = "ntn", anomaly1 }) => {
     dispatch(addGoToGraph(true));
 
     let url = "/dashboard?";
-    const params = { location: reduxLocation, ntn: reduxNtn, pos: reduxPos, date: reduxDate, anomaly: reduxAnomalous };
+    const params = { location: reduxLocation, ntn: reduxNtn, pos_id: reduxpos_id, date: reduxDate, anomaly: reduxAnomalous };
 
     if (chartBy === "description") {
       params.anomaly = getKeyByValue(anomalyHashMap, search);

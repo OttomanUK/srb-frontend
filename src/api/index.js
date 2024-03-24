@@ -14,7 +14,7 @@ API.interceptors.request.use((req) => {
     }
   return req;
 });
-export const getSingleInvoice = async (id) => await API.get(`/filter?anomaly=10&anomaly_by_srb_invoice_id=${id}`);
+export const getSingleInvoice = async (id) => await API.get(`/filter?anomaly_by_srb_invoice_id=${id}`);
 export const getAllNtn = async (page) => await API.get(`/filter?ntn=all&page=${page}`);
 
 export const getpos_idInvoice = async (id,ntn,page,anomaly,date,location) => await API.get(`/filter?anomaly=${anomaly}&anomaly_by_pos=${id}&anomaly_by_ntn=${ntn}&anomaly_by_date=${date}&page=${page}&anomaly_by_location=${location}`);

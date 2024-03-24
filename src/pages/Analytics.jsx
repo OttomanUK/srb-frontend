@@ -23,7 +23,7 @@ const Analytics = () => {
   const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-    const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
+    const {isLoading,reduxNtn,reduxpos_id,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
    const [error,setError]=useState(false)
    const [missing, setMissing] = useState([]);
@@ -38,10 +38,10 @@ const Analytics = () => {
      const fetchData = async () => {
        try{
         setError(false)
-        const data1=await dispatch(missingAnalytics(reduxNtn,1,reduxDate,reduxPos,reduxLocation))
+        const data1=await dispatch(missingAnalytics(reduxNtn,1,reduxDate,reduxpos_id,reduxLocation))
         setMissing(data1)
         console.log(missing)
-      const data = await dispatch(analytics(reduxPos,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
+      const data = await dispatch(analytics(reduxpos_id,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
       const {
         averageSalesTax,
         totalSales,
@@ -83,7 +83,7 @@ const Analytics = () => {
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl ">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos_id={reduxpos_id} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
               <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>

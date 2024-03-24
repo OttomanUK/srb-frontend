@@ -8,6 +8,7 @@ import { addGoToGraph } from '../../redux_store/reducer';
 const CombinedPlot = ({ data, chartBy, anomaly1, plotType }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {reduxNtn,reduxpos_id,reduxLocation,reduxDate,reduxAnomalous,anomalyHashMap}=useSelector(state=>state.centralStore)
 
   const [plotData, setPlotData] = useState([]);
   useEffect(() => {
@@ -59,7 +60,7 @@ const CombinedPlot = ({ data, chartBy, anomaly1, plotType }) => {
     dispatch(addGoToGraph(true));
 
     let url = "/dashboard?";
-    const params = { location: reduxLocation, ntn: reduxNtn, pos: reduxPos, date: reduxDate, anomaly: reduxAnomalous };
+    const params = { location: reduxLocation, ntn: reduxNtn, pos_id: reduxpos_id, date: reduxDate, anomaly: reduxAnomalous };
 
     if (chartBy === "description") {
       params.anomaly = getKeyByValue(anomalyHashMap, search);

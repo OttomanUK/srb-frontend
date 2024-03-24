@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import Plot from 'react-plotly.js';
+import { useNavigate } from 'react-router-dom';
 
 const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
   const [timeSeriesData, setTimeSeriesData] = useState([]);
   const [dailyCountData, setDailyCountData] = useState([]);
+  const navigate=useNavigate()
 
   useEffect(() => {
     if (data.length > 0) {
@@ -32,6 +34,13 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
       setDailyCountData(dailyCountArray);
     }
   }, [data]);
+  const handlePointClick = (event) => {
+    console.log(invoiceId)
+    if (invoiceId) {
+      navigate(`/InvoiceDetails/${invoiceId}`)
+      // You can perform further actions with the invoice ID here
+    }
+  };
 
   return (
     <div>
@@ -53,6 +62,7 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
             y: timeSeriesData.map((entry) => entry.y),
             text: timeSeriesData.map((entry) => entry.text),
             name: `${y_axis} vs ${x_axis}`,
+            customdata: timeSeriesData.map((entry) => entry.text.split(":")[1])
           },
         ]}
         layout={{
@@ -69,6 +79,8 @@ const VersusPlot = ({ data, showAnomalyCount, anomaly1, x_axis, y_axis }) => {
         config={{
           displayModeBar: true,
         }}
+        
+        onClick={handlePointClick}
       />
 
     </div>

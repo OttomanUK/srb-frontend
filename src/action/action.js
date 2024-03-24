@@ -43,6 +43,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
     dispatch(startLoading());
     
     const { data } = await api.getSingleInvoice(id);
+    console.log(data)
     dispatch(endLoading());
     return data;
       } catch (error) {
@@ -212,6 +213,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
           const { data } = await api.getpos_idInvoice(id, ntn, currentPage, anomaly, date, location);
 
           result.push(...data.results);
+          return result
           if (data.next) {
             await fetchData(currentPage + 1); // Recursive call for the next page
           }
