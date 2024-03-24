@@ -36,15 +36,16 @@ const DashboardCardHeader = ({searchData,setSearchData,anomalous}) => {
   const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
   const dispatch = useDispatch();
-  const { isLoading, data,anomalyHashMap,allLocation } = useSelector(state => state.centralStore);
+  const { isLoading, data,anomalyHashMap,allLocation,allNtn } = useSelector(state => state.centralStore);
   const initialSearchResult = isLoading ? [] : data;
   const [filteredData, setFilteredData] = useState(initialSearchResult);
   const [searchTerm, setSearchTerm] = useState('');
-  const [searchNtn, setSearchNtn] = useState('');
+  const [searchPos, setSearchPos] = useState('');
   const [sortProperty, setSortProperty] = useState('rate_value');
   const [sortedData, setSortedData] = useState(data);
   const [selectedDropdownValue, setSelectedDropdownValue] = useState('All');
   const [selectedLocation, setSelectedLocation] = useState('All'); 
+  const [selectedNtn, setSelectedNtn] = useState('All'); 
   const TABS = [
   { label: "Anomalous", value: 10 },
   { label: "Non Anomalous", value: 0 },
@@ -66,7 +67,7 @@ const location1=["New York","Chicago"]
     setSearchData(searchResult);
     setFilteredData(searchResult);
   }
-  }, [searchTerm, data, setSearchData, selectedDropdownValue, selectedLocation]);
+  }, [searchTerm, data, setSearchData, selectedDropdownValue, ]);
 
 const handleSortChange = (e) => {
   setSortProperty(e.target.value);
@@ -158,14 +159,14 @@ const sortDataByProperty = (property) => {
               />
               <Input
               type="number"
-              placeholder='Search Ntn Here'
+              placeholder='Search Pos Here'
 
                 icon={<MagnifyingGlassIcon className=" ml-2 h-10 w-3" />}
-                onChange={(e) => setSearchNtn(e.target.value)}
+                onChange={(e) => setSearchPos(e.target.value)}
                 className="h-10 w-3 rounded px-3"
               />
               <Button variant="primary" onClick={()=>{
-                navigate(`/dashboard?anomaly=${anomaly}&ntn=${searchNtn}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}`)
+                navigate(`/dashboard?anomaly=${anomaly}&ntn=${ntn}&pos_id=${searchPos}&page=${page}&date=${date}&location=${location}`)
               }}>Ntn</Button>
 
             </div>
@@ -185,6 +186,24 @@ const sortDataByProperty = (property) => {
               {allLocation.map((location, index) => (
                 <option key={index} value={location.location} className="rounded  font-bold italic bg-grey-300 text-grey-100 hover:bg-darkblue  border border-grey-500 border-solid">
                   {location.location}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className='flex flex-col px-2'>
+          <label className="text-gray-700 dark:text-white ">Filter by Location</label>
+          <select
+              value={selectedNtn}
+              onChange={(e) => {
+                setSelectedLocation(e.target.value)
+                navigate(`/dashboard?anomaly=${anomaly}&ntn=${e.target.value}&pos_id=${pos_id}&page=${page}&date=${date}&location=${location}`)
+              }
+            }
+              className="border rounded  dark:text-black"
+            >
+              {allNtn.map((ntn, index) => (
+                <option key={index} value={ntn} className="rounded  font-bold italic bg-grey-300 text-grey-100 hover:bg-darkblue  border border-grey-500 border-solid">
+                  {ntn}
                 </option>
               ))}
             </select>

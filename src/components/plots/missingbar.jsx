@@ -53,12 +53,25 @@ const MissingBarPlot = ({ data, chartBy = "ntn", anomaly1 }) => {
     return missingCount;
   };
 
-  const handlePieClick = (event) => {
-    const chartByValue = event.points[0]?.label;
-    if (chartByValue) {
-      console.log(chartByValue)
+  const handleClick = (event) => {
+    const point = event.points[0];
+    const search = point.label || point.x;
+
+    dispatch(addGoToGraph(true));
+
+    let url = "/dashboard?";
+    const params = { location: reduxLocation, ntn: reduxNtn, pos: reduxPos, date: reduxDate, anomaly: reduxAnomalous };
+
+    if (chartBy === "description") {
+      params.anomaly = getKeyByValue(anomalyHashMap, search);
+    } else {
+      params[chartBy] = search;
     }
+
+    url += Object.entries(params).map(([key, value]) => `${key}=${value}`).join('&');
+    navigate(url);
   };
+
 
   return (
     <div>
@@ -92,6 +105,8 @@ const MissingBarPlot = ({ data, chartBy = "ntn", anomaly1 }) => {
           autosize: true,
           showlegend: true,
         }}
+        onClick={handleClick}
+
       />
 
       <h2 className="text-3xl font-bold text-center dark:text-white">Missing Anomaly Distribution by {chartBy}</h2>
@@ -116,7 +131,7 @@ const MissingBarPlot = ({ data, chartBy = "ntn", anomaly1 }) => {
           autosize: true,
           showlegend: true,
         }}
-        onClick={handlePieClick}
+        onClick={handleClick}
       />
     </div>
   );

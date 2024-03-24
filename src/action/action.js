@@ -4,7 +4,8 @@ import {
     endLoading,
     addAnomalyHashmap,
     addAllLocation,
-    addIsAuthorized
+    addIsAuthorized,
+    addAllNtn
   } from "../redux_store/reducer.js";
   import * as api from "../api/index.js";
   import { validateParameters } from "./validator.js";
@@ -65,19 +66,46 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         console.log(error.message);
       }
     };
-  export const getAllNtn = (page) => async (dispatch) => {
-    try {
-      validateParameters( "None","None",page,"None","None","None" );
-
-      dispatch(startLoading());
+    export const getAllNtn = (page, all = false) => async (dispatch) => {
+      try {
+        console.log(all)
+        validateParameters("None", "None", page, "None", "None", "None");
+    
+        dispatch(startLoading());   
+    if(all){
+      let uniqueNtnSet=new Set()
+      let nextPage = page; // Initialize nextPage with the provided page number
+      while (nextPage) {
+        const { data } = await api.getAllNtn(nextPage);
+       // Accumulate results
+        data.results.forEach(result => {
+          uniqueNtnSet.add(result.ntn);
+        });
+        
+        if (data.next) {
+          nextPage = nextPage + 1; // Move to the next page
+        } else {
+          nextPage = null; // Set nextPage to null to exit the loop
+        }
+      }
+      const uniqueNtnList = [...uniqueNtnSet];
+      dispatch(addAllNtn(uniqueNtnList));
+      dispatch(endLoading());
+      return ;
+      
+    } else{
       const { data } = await api.getAllNtn(page);
-        dispatch(endLoading());
-        return data;
+      dispatch(endLoading());
+      return data;
+
+    }   
+        
       } catch (error) {
-         dispatch(endLoading());
+        dispatch(endLoading());
         console.log(error.message);
       }
     };
+    
   export const getNtnpos_id = (id) => async (dispatch) => {
     try {
       validateParameters( id );
