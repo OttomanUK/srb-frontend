@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 import { useNavigate,useLocation } from 'react-router-dom';
+import { useSelector,useDispatch } from 'react-redux';
+import { addGoToGraph } from '../../redux_store/reducer';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 function Datepicker({
-  align,string
+
+  align,string,reduxNtn="None",reduxLocation="None",reduxPos="None",reduxAnomalous=10
 }) {
 
 
   const [selectedDate, setSelectedDate] = useState(new Date());
+const dispatch=useDispatch()
+
   const query = useQuery();
   const page = parseInt(query.get("page")) || 1;
   const ntn = query.get("ntn") || "None";
@@ -20,10 +25,15 @@ function Datepicker({
   const location = query.get("location") || "None";
 const navigate=useNavigate();
   const options = {
-    mode: 'single',
-    static: true,
-    monthSelectorType: 'static',
-    dateFormat: 'M j, Y',
+    altInput: true,
+    altFormat: "F j, Y",
+    dateFormat: "Y-m-d",
+    // mode:"range",
+    // static: true,
+    // monthSelectorType: 'static',
+    // dateFormat: 'M j, Y',
+    showMonths: true, // Display month selector
+  showYears: true, 
     defaultDate: [selectedDate],
     prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
     nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
@@ -44,6 +54,12 @@ const navigate=useNavigate();
       const currentUrl = window.location.href;
       const url = new URL(currentUrl);
       const pathAndSearch = url.pathname + url.search;
+      if(string=="analytics"){
+        dispatch(addGoToGraph(true))
+        navigate(`/$dashboard/?ntn=${reduxNtn}&pos_id=${reduxPos}&date=${yyyyMmDdFormat}&location=${reduxLocation}&anomaly=${reduxAnomalous}`)
+        instance.element.value = dateStr;
+        return 
+      }
       navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomaly}&page=${page}`)
       // Update selectedDate state
       instance.element.value = dateStr;

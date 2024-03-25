@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
 import DelayTimeSeriesPlot from '../components/plots/delay_time_series.jsx';
-import PiePlot from '../components/plots/pie_plots.jsx';
-import BarPlot from '../components/plots/barplot.jsx';
+import BarPlotAndPiePlot from '../components/plots/barplot.jsx';
 import VersusPlot from '../components/plots/versus_plot.jsx';
+import Datepicker from '../components/resuseable_components/Datepicker.jsx';
 import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
 import Header from '../components/resuseable_components/Header.jsx';
 import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
@@ -13,6 +13,7 @@ import {getAnomalyDescription, getMissingInvoice} from "../action/action.js"
 import Loader from '../components/utils/Loader.jsx';
 import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
 import MissingBarPlot from '../components/plots/missingbar.jsx';
+import CombinePlot from '../components/plots/combineplot.jsx';
 import {analytics,missingAnalytics} from "../action/action.js"
 import PleaseReload from './PleaseReload.jsx';
 
@@ -22,7 +23,7 @@ const Analytics = () => {
   const dispatch=useDispatch()
   const customGreeting = 'Analytics'
   const customText = 'Gather insights'
-    const {isLoading,reduxNtn,reduxPos,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
+    const {isLoading,reduxNtn,reduxpos_id,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
    const [resultsfinal, setResultsFinal] = useState([]);
    const [error,setError]=useState(false)
    const [missing, setMissing] = useState([]);
@@ -37,7 +38,10 @@ const Analytics = () => {
      const fetchData = async () => {
        try{
         setError(false)
-      const data = await dispatch(analytics(reduxPos,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
+        const data1=await dispatch(missingAnalytics(reduxNtn,1,reduxDate,reduxpos_id,reduxLocation))
+        setMissing(data1)
+        console.log(missing)
+      const data = await dispatch(analytics(reduxpos_id,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
       const {
         averageSalesTax,
         totalSales,
@@ -58,19 +62,7 @@ const Analytics = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    
-    const fetchData1=async()=>{
-    try{
-    const data=await dispatch(missingAnalytics(reduxNtn))
-    setMissing(data)
-  }catch(error){
-    // setError(true)
-  }
-  }
-fetchData1()
-    
-  },[])
+
   if(error){
     return <PleaseReload/>
 
@@ -91,22 +83,26 @@ fetchData1()
         <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
           <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
           <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl ">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos={reduxPos} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
+            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos_id={reduxpos_id} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
             <div className='flex flex-row space-x-4'>
               <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
               <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
               <DashboardCard title={'Total Sales'} value={totalSales}/>
               <DashboardCard title={'Average Rate'} value={averageRate}/>
               </div>
+            <div className="sm:flex sm:justify-between sm:items-center mb-8 mt-5">
+              {/* Right: Actions */}
+              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                {/* Filter button */}
+                <Datepicker string="analytics" />
+              </div>
+            </div>
               {/* Other components */}
               
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
-              <BarPlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="ntn"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-              <PiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location"/>
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
+              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
 
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly} chartBy={"anomaly"}/>
             <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"sales_value"}/>
@@ -116,9 +112,11 @@ fetchData1()
             <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
        
             <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
+            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="pos_id"/>
+            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="location"/>
               
           </div>
-        </div>
+        </div>  
     </div>
   );
 };

@@ -14,6 +14,7 @@ import {
   getAnomalyDescription,
   getAllLocation,
   getpos_idInvoice,
+  getAllNtn,
 } from "../action/action.js";
 import Footer from "../components/dashboard_components/DashboardFooter";
 import { dummy } from "../data/dummyData.js";
@@ -41,7 +42,7 @@ function Dashboard() {
   const customGreeting = "Good Morning, SRB👋";
   const customText = "Here is the latest sales data with anomalies:";
 
-  const { isLoading, goToGraph,reduxAnomalous,allLocation,anomalyHashMap } = useSelector(
+  const { isLoading, goToGraph,reduxAnomalous,allLocation,anomalyHashMap,allNtn } = useSelector(
     (state) => state.centralStore
   );
   const [loading,setLoading]=useState(true)
@@ -72,10 +73,9 @@ function Dashboard() {
         setLoading(true)
         setError(false)
         let results;
-        if (!allLocation?.length || !Object.keys(anomalyHashMap ?? {}).length) {
-          await Promise.all([dispatch(getAllLocation()), dispatch(getAnomalyDescription())]);
+        if (!allLocation?.length || !Object.keys(anomalyHashMap ?? {}).length || !allNtn?.length)  {
+          await Promise.all([dispatch(getAllLocation()), dispatch(getAnomalyDescription()),dispatch(getAllNtn(1,true))]);
         }
-        
         results = await dispatch(getpos_idInvoice(pos_id, ntn, page, anomaly,date,location));
 
         dispatch(addData(results.results));
@@ -145,7 +145,6 @@ function Dashboard() {
               {/* Right: Actions */}
               <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
                 {/* Filter button */}
-                <FilterButton />
                 <Datepicker string="dashboard" />
               </div>
             </div>

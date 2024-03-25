@@ -64,7 +64,7 @@ const DelayTimeSeriesPlot = ({ data, anomaly1 }) => {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold text-center">{anomaly1} Delay Time Series Plot</h2>
+      <h2 className="text-3xl font-bold text-center dark:text-white">{anomaly1} Delay Time Series Plot</h2>
 
       <Plot
       className='w-full'

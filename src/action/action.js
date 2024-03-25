@@ -4,7 +4,8 @@ import {
     endLoading,
     addAnomalyHashmap,
     addAllLocation,
-    addIsAuthorized
+    addIsAuthorized,
+    addAllNtn
   } from "../redux_store/reducer.js";
   import * as api from "../api/index.js";
   import { validateParameters } from "./validator.js";
@@ -42,6 +43,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
     dispatch(startLoading());
     
     const { data } = await api.getSingleInvoice(id);
+    console.log(data)
     dispatch(endLoading());
     return data;
       } catch (error) {
@@ -65,19 +67,46 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         console.log(error.message);
       }
     };
-  export const getAllNtn = (page) => async (dispatch) => {
-    try {
-      validateParameters( "None","None",page,"None","None","None" );
-
-      dispatch(startLoading());
+    export const getAllNtn = (page, all = false) => async (dispatch) => {
+      try {
+        console.log(all)
+        validateParameters("None", "None", page, "None", "None", "None");
+    
+        dispatch(startLoading());   
+    if(all){
+      let uniqueNtnSet=new Set()
+      let nextPage = page; // Initialize nextPage with the provided page number
+      while (nextPage) {
+        const { data } = await api.getAllNtn(nextPage);
+       // Accumulate results
+        data.results.forEach(result => {
+          uniqueNtnSet.add(result.ntn);
+        });
+        
+        if (data.next) {
+          nextPage = nextPage + 1; // Move to the next page
+        } else {
+          nextPage = null; // Set nextPage to null to exit the loop
+        }
+      }
+      const uniqueNtnList = [...uniqueNtnSet];
+      dispatch(addAllNtn(uniqueNtnList));
+      dispatch(endLoading());
+      return ;
+      
+    } else{
       const { data } = await api.getAllNtn(page);
-        dispatch(endLoading());
-        return data;
+      dispatch(endLoading());
+      return data;
+
+    }   
+        
       } catch (error) {
-         dispatch(endLoading());
+        dispatch(endLoading());
         console.log(error.message);
       }
     };
+    
   export const getNtnpos_id = (id) => async (dispatch) => {
     try {
       validateParameters( id );
@@ -90,18 +119,18 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         console.log(error.message);
       }
     };
-  export const getMissingInvoice = (id="all",page=1,date="None") => async (dispatch) => {
+  export const getMissingInvoice = (id="all",page=1,date="None",pos="None",location="None") => async (dispatch) => {
     try {
       validateParameters( id,"None",page,"None",date,"None" );
 
       let data
       dispatch(startLoading());
       if(id=="None"){
-          data  = await api.getMissingInvoice("all",page,date);
+          data  = await api.getMissingInvoice("all",page,date,pos,location);
         
       }else{
         
-          data  = await api.getMissingInvoice(id,page,date);
+          data  = await api.getMissingInvoice(id,page,date,pos,location);
       }
         dispatch(endLoading());
         return data.data;
@@ -184,6 +213,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
           const { data } = await api.getpos_idInvoice(id, ntn, currentPage, anomaly, date, location);
 
           result.push(...data.results);
+          return result
           if (data.next) {
             await fetchData(currentPage + 1); // Recursive call for the next page
           }
@@ -201,7 +231,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
       }
     };
     
-    export const missingAnalytics= (id="all",page=1) =>async(dispatch)=>{ 
+    export const missingAnalytics= (id="all",page=1,date="None",pos="None",location="None") =>async(dispatch)=>{ 
       try {
         validateParameters( id,"None",page,"None","None","None" );
 
@@ -209,7 +239,7 @@ export const getSingleInvoice = (id) => async (dispatch) => {
         let currentPage = 1;
         const result=[]
         const fetchData = async (currentPage) => {
-          const data=await dispatch(getMissingInvoice(id,page))
+          const data=await dispatch(getMissingInvoice(id,page,date,pos,location))
           result.push(data.results)
           if (data.next) {
             await fetchData(currentPage + 1); // Recursive call for the next page

@@ -10,6 +10,7 @@ const initialState = {
   reduxNtn:  "None",
   anomalyHashMap:  {},
   allLocation:[],
+  allNtn:[],
   reduxLocation:  "None",
   reduxAnomalous:  10,
   isAuthorized:  false,
@@ -72,6 +73,11 @@ export const centralStore = createSlice({
       state.allLocation=data
       
     },
+    addAllNtn: (state, action) => {
+      const data = action.payload;
+      state.allNtn=data
+      
+    },
     addAnomalyHashmap: (state, action) => {
       const data = action.payload;
       state.anomalyHashMap=data
@@ -109,7 +115,8 @@ export const {
   addpos_id,
   addDate,
   addIsAuthorized,
-  addGoToGraph
+  addGoToGraph,
+  addAllNtn
 
 } = centralStore.actions;
 
