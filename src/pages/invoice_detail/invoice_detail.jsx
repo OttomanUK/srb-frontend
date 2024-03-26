@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './invoice_detail.css'; // Import the CSS file
-import InvoiceField from './invoice_field';
 import { useParams } from "react-router-dom";
-import { login, getpos_idInvoice, submit_data, getSingleInvoice } from "../../action/action";
+import { getSingleInvoice } from "../../action/action";
 import { useDispatch, useSelector } from "react-redux";
 import Sidebar from '../../components/resuseable_components/Sidebar';
 import Header from '../../components/resuseable_components/Header';
@@ -13,7 +11,7 @@ import PleaseReload from '../../pages/PleaseReload';
 const InvoiceDetails = () => {
   const customGreeting = 'Specific Invoice';
   const [data, setData] = useState({});
-  const [error,setError]=useState(false)
+  const [error, setError] = useState(false);
   const { isLoading } = useSelector(state => state.centralStore);
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -21,27 +19,32 @@ const InvoiceDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setError(false)
+        setError(false);
         const { results: res } = await dispatch(getSingleInvoice(id));
         setData(res[0]);
       } catch (error) {
         console.error('Error fetching invoice:', error);
-        setError(true)
+        setError(true);
       }
     };
     fetchData();
   }, [id, dispatch]);
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  if(error){
-    return <PleaseReload/>
+  if (error) {
+    return <PleaseReload />;
   }
   if (isLoading) {
     return <Loader />;
   }
 
+  // Check if data is null or an empty object
+  if (!data || Object.keys(data).length === 0) {
+    return <div className="grid place-items-center  text-3xl w-full h-full"> No Data Found</div>;
+  }
+
   // Extract key-value pairs and display them
   const keyValuePairs = Object.entries(data);
+
 
   return (
     <div className="flex h-screen overflow-hidden">

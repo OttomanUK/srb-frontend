@@ -1,80 +1,64 @@
 import React, { useState } from 'react';
-import Flatpickr from 'react-flatpickr';
-import { useNavigate,useLocation } from 'react-router-dom';
-import { useSelector,useDispatch } from 'react-redux';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import {
+  Input,
+  Popover,
+  PopoverHandler,
+  PopoverContent,
+} from "@material-tailwind/react";
+import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { addGoToGraph } from '../../redux_store/reducer';
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
+
 function Datepicker({
-
-  align,string,reduxNtn="None",reduxLocation="None",reduxPos="None",reduxAnomalous=10
+  align, string, reduxNtn = "None", reduxLocation = "None", reduxPos = "None", reduxAnomalous = 10
 }) {
-
-
-  const [selectedDate, setSelectedDate] = useState(new Date());
-const dispatch=useDispatch()
-
+  const dispatch = useDispatch();
+  
   const query = useQuery();
   const page = parseInt(query.get("page")) || 1;
   const ntn = query.get("ntn") || "None";
   const pos_id = query.get("pos_id") || "None";
   const anomalyParam = query.get("anomaly");
+  const date = query.get("date")|| new Date();
+  const [selectedDate, setSelectedDate] = useState('');
   const anomaly = isNaN(parseInt(anomalyParam)) ? 10 : parseInt(anomalyParam);
   const location = query.get("location") || "None";
-const navigate=useNavigate();
-  const options = {
-    altInput: true,
-    altFormat: "F j, Y",
-    dateFormat: "Y-m-d",
-    // mode:"range",
-    // static: true,
-    // monthSelectorType: 'static',
-    // dateFormat: 'M j, Y',
-    showMonths: true, // Display month selector
-  showYears: true, 
-    defaultDate: [selectedDate],
-    prevArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M5.4 10.8l1.4-1.4-4-4 4-4L5.4 0 0 5.4z" /></svg>',
-    nextArrow: '<svg class="fill-current" width="7" height="11" viewBox="0 0 7 11"><path d="M1.4 10.8L0 9.4l4-4-4-4L1.4 0l5.4 5.4z" /></svg>',
-    onReady: (selectedDates, dateStr, instance) => {
-      instance.element.value = dateStr;
-      const customClass = (align) ? align : '';
-      instance.calendarContainer.classList.add(`flatpickr-${customClass}`);
-    },
-    onChange: (selectedDates, dateStr, instance) => {
-      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-      const formattedDate = new Intl.DateTimeFormat('en-GB', options).format(selectedDates[0]);
-    
-      const [day, month, year] = formattedDate.split('/');
-      const yyyyMmDdFormat = `${year}-${month}-${day}`;
-      
-      setSelectedDate(yyyyMmDdFormat);
-      
-      const currentUrl = window.location.href;
-      const url = new URL(currentUrl);
-      const pathAndSearch = url.pathname + url.search;
-      if(string=="analytics"){
-        dispatch(addGoToGraph(true))
-        navigate(`/$dashboard/?ntn=${reduxNtn}&pos_id=${reduxPos}&date=${yyyyMmDdFormat}&location=${reduxLocation}&anomaly=${reduxAnomalous}`)
-        instance.element.value = dateStr;
-        return 
-      }
-      navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&date=${yyyyMmDdFormat}&location=${location}&anomaly=${anomaly}&page=${page}`)
-      // Update selectedDate state
-      instance.element.value = dateStr;
-    },
-    
-  }
+  const navigate = useNavigate();
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    const formattedDate = date.toISOString().split('T')[0];
+    if (string === "analytics") {
+      dispatch(addGoToGraph(true));
+      navigate(`/$dashboard/?ntn=${reduxNtn}&pos_id=${reduxPos}&date=${formattedDate}&location=${reduxLocation}&anomaly=${reduxAnomalous}`);
+    } else {
+      navigate(`/${string}/?ntn=${ntn}&pos_id=${pos_id}&date=${formattedDate}&location=${location}&anomaly=${anomaly}&page=${page}`);
+    }
+  };
 
   return (
     <div className="relative">
-      <Flatpickr className="form-input pl-9 dark:bg-slate-800 text-slate-500 hover:text-slate-600 dark:text-slate-300 dark:hover:text-slate-200 font-medium w-[15.5rem]" options={options} />
-      <div className="absolute inset-0 right-auto flex items-center pointer-events-none">
-        <svg className="w-4 h-4 fill-current text-slate-500 dark:text-slate-400 ml-3" viewBox="0 0 16 16">
-          <path d="M15 2h-2V0h-2v2H9V0H7v2H5V0H3v2H1a1 1 0 00-1 1v12a1 1 0 001 1h14a1 1 0 001-1V3a1 1 0 00-1-1zm-1 12H2V6h12v8z" />
-        </svg>
-      </div>
+        <DatePicker
+      selected={date}
+      onChange={handleDateChange}
+      showMonthDropdown
+      showYearDropdown
+      dropdownMode="select"
+      dateFormat="yyyy-MM-dd"
+      className="text-blue-700 border border-blue-500 rounded-md px-3 py-2 focus:outline-none"
+      calendarClassName="bg-blue-900 text-gray-200 shadow-lg rounded-md p-4"
+      style={{ fontSize: '1rem', fontFamily: 'Mulish' }}
+      dayClassName={() => 'text-blue-700'}
+      monthClassName={() => 'text-blue-700'}
+      yearClassName={() => 'text-blue-700'}
+    />
     </div>
   );
 }
