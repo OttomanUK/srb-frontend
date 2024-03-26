@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, CardBody } from "@material-tailwind/react";
+import { Card, CardBody,Radio } from "@material-tailwind/react";
 import Sidebar from "../../components/resuseable_components/Sidebar";
 import Header from "../../components/resuseable_components/Header";
 import WelcomeBanner from "../../components/dashboard_components/WelcomeBanner";
@@ -72,18 +72,17 @@ function MissingInvoice() {
     }
   }, [searchInput, data]);
 
-  const handleSort = () => {
+  const handleSort = (order) => {
     const sortedData = [...filteredData];
-    if (sortOrder === 'asc') {
+    if (order === 'asc') {
       sortedData.sort((a, b) => calculateMissingInvoiceCount(a.invoices) - calculateMissingInvoiceCount(b.invoices));
-      setSortOrder('desc');
+      setSortOrder('asc');
     } else {
       sortedData.sort((a, b) => calculateMissingInvoiceCount(b.invoices) - calculateMissingInvoiceCount(a.invoices));
-      setSortOrder('asc');
+      setSortOrder('desc');
     }
     setFilteredData(sortedData);
   };
-
   if (error) {
     return <PleaseReload />
   }
@@ -137,10 +136,26 @@ function MissingInvoice() {
               ))}
             </select>
           </div>
-          <button onClick={handleSort} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-4">
-            Sort by Missing Count
-          </button>
-              <Card className='dark:border-slate-700 dark:bg-slate-800'>
+          <div>
+  <label className="text-gray-700 dark:text-white">Sort by Missing Count:</label>
+  <div className="flex items-center space-x-4">
+    <Radio
+      id="asc"
+      color="lightBlue"
+      checked={sortOrder === 'asc'}
+      onChange={() => handleSort('asc')}
+    />
+    <label htmlFor="asc" className="text-gray-700 dark:text-white">Ascending</label>
+    <Radio
+      id="desc"
+      color="lightBlue"
+      checked={sortOrder === 'desc'}
+      onChange={() => handleSort('desc')}
+    />
+    <label htmlFor="desc" className="text-gray-700 dark:text-white">Descending</label>
+  </div>
+</div>
+                       <Card className='dark:border-slate-700 dark:bg-slate-800'>
               <CardBody className="overflow-auto px-0 dark:border-slate-700 dark:bg-slate-800">
         <table className="w-full">
           <thead>
