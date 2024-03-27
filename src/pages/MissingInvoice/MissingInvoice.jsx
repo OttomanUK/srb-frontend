@@ -134,7 +134,7 @@ function MissingInvoice() {
           <WelcomeBanner greeting={customGreeting} />
           <div className="mb-4">
             <div className="flex justify-between">
-              <div>
+              <div className="mt-3">
                 <Datepicker
                   string={"Missing"}
                   style={{ display: "inline-block" }}
@@ -181,11 +181,13 @@ function MissingInvoice() {
           </div>
 
           <div>
+          
+            <div className="flex items-center">
             <label className="text-gray-700 dark:text-white">
               Sort by Missing Count:
             </label>
-            <div className="flex items-center space-x-4">
               <Radio
+                className="px-0"
                 id="asc"
                 color="lightBlue"
                 checked={sortOrder === "asc"}
