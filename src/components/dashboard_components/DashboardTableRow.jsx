@@ -8,7 +8,7 @@ const TableRow = ({ rowData }) => {
     const classes = "p-4 border-b border-blue-gray-50";
   
     return (
-      <tr className='dark:text-white'>
+      <tr className='dark:text-white hover:bg-black hover:text-white'>
         {Object.values(rowData).map((value, index) => (
           <td key={index} className={classes} onClick={() => {
             if (index === 1) {
