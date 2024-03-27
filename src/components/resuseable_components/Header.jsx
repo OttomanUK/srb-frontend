@@ -32,7 +32,7 @@ function Header({ sidebarOpen, setSidebarOpen }) {
                     <path className="text-slate-600" d="M3 23H1V1h2z" />
                   </svg>
                   <span className="ml-2">
-                    back to Dashboard
+                    Back to dashboard
                     </span>
                 </div>
                 </button>

@@ -1,122 +1,184 @@
-import React, { useEffect, useState } from 'react';
-import TimeSeriesPlot from '../components/plots/time_series_plot.jsx';
-import DelayTimeSeriesPlot from '../components/plots/delay_time_series.jsx';
-import BarPlotAndPiePlot from '../components/plots/barplot.jsx';
-import VersusPlot from '../components/plots/versus_plot.jsx';
-import Datepicker from '../components/resuseable_components/Datepicker.jsx';
-import Sidebar from '../components/resuseable_components/Sidebar.jsx';  
-import Header from '../components/resuseable_components/Header.jsx';
-import WelcomeBanner from '../components/dashboard_components/WelcomeBanner.jsx';
-import {useDispatch,useSelector} from 'react-redux'
-import {useLocation,useNavigate} from 'react-router-dom'
-import {getAnomalyDescription, getMissingInvoice} from "../action/action.js"
-import Loader from '../components/utils/Loader.jsx';
-import DashboardCard from '../components/dashboard_components/DashboardCard.jsx';
-import MissingBarPlot from '../components/plots/missingbar.jsx';
-import CombinePlot from '../components/plots/combineplot.jsx';
-import {analytics,missingAnalytics} from "../action/action.js"
-import PleaseReload from './PleaseReload.jsx';
-
+import React, { useEffect, useState } from "react";
+import TimeSeriesPlot from "../components/plots/time_series_plot.jsx";
+import DelayTimeSeriesPlot from "../components/plots/delay_time_series.jsx";
+import BarPlotAndPiePlot from "../components/plots/barplot.jsx";
+import VersusPlot from "../components/plots/versus_plot.jsx";
+import Datepicker from "../components/resuseable_components/Datepicker.jsx";
+import Sidebar from "../components/resuseable_components/Sidebar.jsx";
+import Header from "../components/resuseable_components/Header.jsx";
+import WelcomeBanner from "../components/dashboard_components/WelcomeBanner.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getAnomalyDescription, getMissingInvoice } from "../action/action.js";
+import Loader from "../components/utils/Loader.jsx";
+import DashboardCard from "../components/dashboard_components/DashboardCard.jsx";
+import MissingBarPlot from "../components/plots/missingbar.jsx";
+import CombinePlot from "../components/plots/combineplot.jsx";
+import { analytics, missingAnalytics } from "../action/action.js";
+import PleaseReload from "./PleaseReload.jsx";
 
 const Analytics = () => {
   const navigate = useNavigate();
-  const dispatch=useDispatch()
-  const customGreeting = 'Analytics'
-  const customText = 'Gather insights'
-    const {isLoading,reduxNtn,reduxpos_id,anomaly,reduxLocation,reduxDate,reduxAnomalous}=useSelector(state=>state.centralStore)
-   const [resultsfinal, setResultsFinal] = useState([]);
-   const [error,setError]=useState(false)
-   const [missing, setMissing] = useState([]);
-   const [delayAverage, setDelayAverage] = useState(0);
-   const [averageRate, setAverageRate] = useState(0);
-   const [totalSales,setTotalSales] = useState(0);
-   
-   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const dispatch = useDispatch();
+  const customGreeting = "Analytics";
+  const customText = "Gather insights";
+  const {
+    isLoading,
+    reduxNtn,
+    reduxpos_id,
+    anomaly,
+    reduxLocation,
+    reduxDate,
+    reduxAnomalous,
+  } = useSelector((state) => state.centralStore);
+  const [resultsfinal, setResultsFinal] = useState([]);
+  const [error, setError] = useState(false);
+  const [missing, setMissing] = useState([]);
+  const [delayAverage, setDelayAverage] = useState(0);
+  const [averageRate, setAverageRate] = useState(0);
+  const [totalSales, setTotalSales] = useState(0);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
-   useEffect(() => {
-     const fetchData = async () => {
-       try{
-        setError(false)
-        const data1=await dispatch(missingAnalytics(reduxNtn,1,reduxDate,reduxpos_id,reduxLocation))
-        setMissing(data1)
-        console.log(missing)
-      const data = await dispatch(analytics(reduxpos_id,reduxNtn,1,reduxAnomalous,reduxDate,reduxLocation))
-      const {
-        averageSalesTax,
-        totalSales,
-        averageRate,
-        averageDelayMinutes
-      } = calculateStatistics(data);
-      setAverageRate(averageRate);
-      setDelayAverage(averageDelayMinutes);
-      setTotalSales(totalSales);
-      setResultsFinal(data)
-      
-
-    }catch(error){
-      console.log("There is some error that is "+error)
-      setError(true)
-    } 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setError(false);
+        const data1 = await dispatch(
+          missingAnalytics(reduxNtn, 1, reduxDate, reduxpos_id, reduxLocation)
+        );
+        setMissing(data1);
+        console.log(missing);
+        const data = await dispatch(
+          analytics(
+            reduxpos_id,
+            reduxNtn,
+            1,
+            reduxAnomalous,
+            reduxDate,
+            reduxLocation
+          )
+        );
+        const {
+          averageSalesTax,
+          totalSales,
+          averageRate,
+          averageDelayMinutes,
+        } = calculateStatistics(data);
+        setAverageRate(averageRate);
+        setDelayAverage(averageDelayMinutes);
+        setTotalSales(totalSales);
+        setResultsFinal(data);
+      } catch (error) {
+        console.log("There is some error that is " + error);
+        setError(true);
+      }
     };
     fetchData();
   }, []);
 
-
-  if(error){
-    return <PleaseReload/>
-
+  if (error) {
+    return <PleaseReload />;
   }
-     if(isLoading){
-        return <Loader/>
-}
-   if(resultsfinal.lenght===0){
-    
-    return <Loader/>
-   }
-  
+  if (isLoading) {
+    return <Loader />;
+  }
+  if (resultsfinal.lenght === 0) {
+    return <Loader />;
+  }
 
   return (
     <div className="flex h-screen overflow-hidden">
-
       {/* <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
-        <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
-          <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          <div className="px-4 sm:px-4 lg:px-8 py-8 w-full max-w-9xl ">
-            <WelcomeBanner greeting={customGreeting} text={customText} show={true} ntn={reduxNtn} pos_id={reduxpos_id} location={reduxLocation} date={reduxDate}  anomaly={reduxAnomalous}/>
-            <div className='flex flex-row space-x-4'>
-              <DashboardCard title={'Total Anomaly'} value={resultsfinal.length}/>
-              <DashboardCard title={'Avg Delay(Minutes)'} value={delayAverage}/>
-              <DashboardCard title={'Total Sales'} value={totalSales}/>
-              <DashboardCard title={'Average Rate'} value={averageRate}/>
-              </div>
-            <div className="sm:flex sm:justify-between sm:items-center mb-8 mt-5">
-              {/* Right: Actions */}
-              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-                {/* Filter button */}
-                <Datepicker string="analytics" />
-              </div>
-            </div>
-              {/* Other components */}
-              
-              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy='ntn'/>
-              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="location" />
-              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="description" />
-              <BarPlotAndPiePlot anomaly1={anomaly} data={resultsfinal} chartBy="pos_id"/>
-
-            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={true} anomaly1={anomaly} chartBy={"anomaly"}/>
-            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"sales_value"}/>
-            <TimeSeriesPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} chartBy={"rate_value"}/>
-            <VersusPlot data={resultsfinal} showAnomalyCount={false} anomaly1={anomaly} x_axis={"sales_tax"} y_axis={"sales_value"}/>
-
-            <DelayTimeSeriesPlot data={resultsfinal}  anomaly1={anomaly} />
-       
-            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn"/>
-            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="pos_id"/>
-            <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="location"/>
-              
+      <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
+        <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+        <div className="px-4 sm:px-4 lg:px-8 py-8 w-full flex-col justify-center items-center ">
+          <WelcomeBanner
+            greeting={customGreeting}
+            text={customText}
+            show={true}
+            ntn={reduxNtn}
+            pos_id={reduxpos_id}
+            location={reduxLocation}
+            date={reduxDate}
+            anomaly={reduxAnomalous}
+          />
+          <div className="flex flex-row space-x-4">
+            <DashboardCard
+              title={"Total Anomaly"}
+              value={resultsfinal.length}
+            />
+            <DashboardCard title={"Avg Delay(Minutes)"} value={delayAverage} />
+            <DashboardCard title={"Total Sales"} value={totalSales} />
+            <DashboardCard title={"Average Rate"} value={averageRate} />
           </div>
-        </div>  
+          <div className="sm:flex sm:justify-between sm:items-center mb-8 mt-5">
+            {/* Right: Actions */}
+            <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+              {/* Filter button */}
+              <Datepicker string="analytics" />
+            </div>
+          </div>
+          {/* Other components */}
+
+          <BarPlotAndPiePlot
+            anomaly1={anomaly}
+            data={resultsfinal}
+            chartBy="ntn"
+          />
+          <BarPlotAndPiePlot
+            anomaly1={anomaly}
+            data={resultsfinal}
+            chartBy="location"
+          />
+          <BarPlotAndPiePlot
+            anomaly1={anomaly}
+            data={resultsfinal}
+            chartBy="description"
+          />
+          <BarPlotAndPiePlot
+            anomaly1={anomaly}
+            data={resultsfinal}
+            chartBy="pos_id"
+          />
+
+          <TimeSeriesPlot
+            data={resultsfinal}
+            showAnomalyCount={true}
+            anomaly1={anomaly}
+            chartBy={"anomaly"}
+          />
+          <TimeSeriesPlot
+            data={resultsfinal}
+            showAnomalyCount={false}
+            anomaly1={anomaly}
+            chartBy={"sales_value"}
+          />
+          <TimeSeriesPlot
+            data={resultsfinal}
+            showAnomalyCount={false}
+            anomaly1={anomaly}
+            chartBy={"rate_value"}
+          />
+          <VersusPlot
+            data={resultsfinal}
+            showAnomalyCount={false}
+            anomaly1={anomaly}
+            x_axis={"sales_tax"}
+            y_axis={"sales_value"}
+          />
+
+          <DelayTimeSeriesPlot data={resultsfinal} anomaly1={anomaly} />
+
+          <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="ntn" />
+          <MissingBarPlot anomaly1={anomaly} data={missing} chartBy="pos_id" />
+          <MissingBarPlot
+            anomaly1={anomaly}
+            data={missing}
+            chartBy="location"
+          />
+        </div>
+      </div>
     </div>
   );
 };
@@ -124,25 +186,35 @@ const Analytics = () => {
 export default Analytics;
 const calculateStatistics = (invoices) => {
   const totalInvoices = invoices.length;
-  const totalSales = invoices.reduce((sum, invoice) => sum + invoice.sales_value, 0);
-  const totalRate = invoices.reduce((sum, invoice) => sum + invoice.rate_value, 0);
-  const totalSalesTax = invoices.reduce((sum, invoice) => sum + invoice.sales_tax, 0);
+  const totalSales = invoices.reduce(
+    (sum, invoice) => sum + invoice.sales_value,
+    0
+  );
+  const totalRate = invoices.reduce(
+    (sum, invoice) => sum + invoice.rate_value,
+    0
+  );
+  const totalSalesTax = invoices.reduce(
+    (sum, invoice) => sum + invoice.sales_tax,
+    0
+  );
 
   const averageRate = (totalRate / totalInvoices).toFixed(1);
   const averageSalesTax = (totalSalesTax / totalInvoices).toFixed(1);
 
-  const averageDelayMinutes = (invoices.reduce((sum, invoice) => {
-    const createdTime = new Date(invoice.created_date_time);
-    const invoiceTime = new Date(invoice.invoice_date);
-    const delayInMinutes = (createdTime - invoiceTime) / (1000 * 60); // Convert milliseconds to minutes
-    return sum + delayInMinutes;
-  }, 0) / totalInvoices).toFixed(1);
+  const averageDelayMinutes = (
+    invoices.reduce((sum, invoice) => {
+      const createdTime = new Date(invoice.created_date_time);
+      const invoiceTime = new Date(invoice.invoice_date);
+      const delayInMinutes = (createdTime - invoiceTime) / (1000 * 60); // Convert milliseconds to minutes
+      return sum + delayInMinutes;
+    }, 0) / totalInvoices
+  ).toFixed(1);
 
   return {
     averageRate: parseFloat(averageRate),
     averageSalesTax: parseFloat(averageSalesTax),
-    totalSales:parseFloat(totalSales).toFixed(1),
-    averageDelayMinutes: parseFloat(averageDelayMinutes)
+    totalSales: parseFloat(totalSales).toFixed(1),
+    averageDelayMinutes: parseFloat(averageDelayMinutes),
   };
 };
-

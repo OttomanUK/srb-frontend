@@ -12,3 +12,4 @@
 td{
     padding: 16px;
 }
+input[type='text']:focus { box-shadow: none; }

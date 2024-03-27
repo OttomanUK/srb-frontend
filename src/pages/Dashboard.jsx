@@ -150,7 +150,7 @@ function Dashboard() {
             </div>
             {/* Cards */}
             <div>
-              <div className="flex flex-row space-x-4">
+              <div className="flex flex-row space-x-4 my-2">
                 <DashboardCard title={"Total Anomaly"} value={totalAnomaly} />
                 <DashboardCard title={"Total pos_id"} value={totalpos_id} />
                 <DashboardCard title={"Total NTN"} value={totalNtn} />
